@@ -1,0 +1,45 @@
+name: Boeing 747-400F
+description: A large, long-range wide-body airliner, and probably the most iconic jet aircraft ever made.
+
+emptyWeight: 182840
+maxTakeoffWeight: 396890
+maxLandingWeight: 295740
+cruiseSpeed: 933
+range: 14200
+length: 70.66
+emptyCgX: 0
+emptyCgY: 32
+cgTolerance: 0.33
+fuelConsumption: 10230
+fuelTypeName: Jet A-1
+
+cargoAreas:
+  - name: Front Lower-Deck Compartment
+    maxSize: 8
+    maxWeight: 30000
+    x: 0
+    y: 18
+  - name: Aft Lower-Deck Compartment
+    maxSize: 8
+    maxWeight: 30000
+    x: 0
+    y: 45
+  - name: Upper-Deck Main Compartment
+    maxSize: 15
+    maxWeight: 80000
+    x: 0
+    y: 25
+
+fuelTanks:
+  - name: Left Wing Main Tank
+    capacity: 85000
+    x: -15
+    y: 37
+  - name: Right Wing Main Tank
+    capacity: 85000
+    x: 15
+    y: 37
+  - name: Tail Stabilizer Reserve
+    capacity: 4000
+    x: 0
+    y: 55

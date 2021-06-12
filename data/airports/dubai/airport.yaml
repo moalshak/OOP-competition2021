@@ -1,0 +1,6 @@
+name: Dubai International Airport
+geographicCoordinates:
+  latitude: 25.2532
+  longitude: 55.3657
+aircraftCapacity: 5 # max planes that can be here
+description: Dubai International Airport is the primary international airport serving Dubai, United Arab Emirates, and is the world's busiest airport by international passenger traffic. It is also the fourth-busiest airport in the world by passenger traffic, the seventh-busiest cargo airport in the world, the busiest airport for Airbus A380 and Boeing 777 movements, and the airport with the highest average number of passengers per flight.

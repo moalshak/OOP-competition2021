@@ -1,0 +1,6 @@
+name: Cape Town International Airport
+geographicCoordinates:
+  latitude: -33.9715
+  longitude: 18.6021
+aircraftCapacity: 12 # max planes that can be here
+description: The airport has direct flights from South Africa's other two main urban areas, Johannesburg and Durban, as well as flights to smaller centres in South Africa. Internationally, it has direct flights to several destinations in Africa, the Middle East, Asia, Europe and the United States. The air route between Cape Town and Johannesburg was the world's ninth-busiest air route in 2011 with an estimated 4.5 million passengers.

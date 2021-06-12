@@ -1,0 +1,45 @@
+name: Boeing 737-800BCF Freighter
+description: The cargo variant of the world's most popular commercial aircraft, capable of mid-size cargo capacities and trans-atlantic flights.
+
+emptyWeight: 44677
+maxTakeoffWeight: 85100
+maxLandingWeight: 68361
+cruiseSpeed: 838
+range: 5575
+length: 42
+emptyCgX: 0
+emptyCgY: 19
+cgTolerance: 0.18
+fuelConsumption: 1724
+fuelTypeName: Jet A-1
+
+cargoAreas:
+  - name: Front Lower-Deck Compartment
+    maxSize: 8
+    maxWeight: 30000
+    x: 0
+    y: 10
+  - name: Aft Lower-Deck Compartment
+    maxSize: 8
+    maxWeight: 30000
+    x: 0
+    y: 20
+  - name: Upper-Deck Main Compartment
+    maxSize: 7
+    maxWeight: 80000
+    x: 0
+    y: 30
+
+fuelTanks:
+  - name: Left Wing Main Tank
+    capacity: 12293
+    x: -11
+    y: 22
+  - name: Right Wing Main Tank
+    capacity: 12293
+    x: 11
+    y: 22
+  - name: Central Tank
+    capacity: 8000
+    x: 0
+    y: 18

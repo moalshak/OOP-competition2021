@@ -1,0 +1,41 @@
+name: Grand Caravan 208B
+description: A single-engine utility aircraft produced by Cessna typically used on cargo feeder routes.
+
+emptyWeight: 2145
+maxTakeoffWeight: 3629
+maxLandingWeight: 3538
+cruiseSpeed: 344
+range: 1982
+length: 9
+emptyCgX: 0
+emptyCgY: 4
+cgTolerance: 0.75
+
+cargoAreas:
+  - name: Central Aft Compartment
+    maxSize: 2.5
+    maxWeight: 300
+    x: 0
+    y: 6
+  - name: Undercarriage Compartment Left
+    maxSize: 1.2
+    maxWeight: 200
+    x: -0.5
+    y: 3
+  - name: Undercarriage Compartment Right
+    maxSize: 1.2
+    maxWeight: 200
+    x: 0.5
+    y: 3
+
+fuelConsumption: 132.18
+fuelTypeName: AvGas
+fuelTanks:
+  - name: Left Wing Tank
+    capacity: 504
+    x: -2
+    y: 3.8
+  - name: Right Wing Tank
+    capacity: 504
+    x: 2
+    y: 3.8

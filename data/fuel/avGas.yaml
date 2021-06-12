@@ -1,0 +1,5 @@
+name: AvGas
+description: Aviation Gasoline is used by smaller aircraft, with a slightly higher octane rating that automobile gasoline.
+density: 0.719 # in Kg/L
+specificEnergy: 44.650e6 # in J/Kg
+basePricePerKg: 3.85

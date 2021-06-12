@@ -1,0 +1,5 @@
+name: Jet A-1
+description: The most common variant of Jet fuel for most turboprop airliners, which is produced according to strict international specifications.
+density: 0.804
+specificEnergy: 43.150e6
+basePricePerKg: 2.11

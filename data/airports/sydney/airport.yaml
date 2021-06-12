@@ -1,0 +1,6 @@
+name: Sydney Kingsford Smith Airport
+geographicCoordinates:
+  latitude: -33.9399
+  longitude: 151.1753
+aircraftCapacity: 10 # max planes that can be here
+description: Sydney Airport is one of the world's longest continuously operated commercial airports and the busiest airport in Australia, handling 42.6 million passengers and 348,904 aircraft movements in 2016–17. It was the 38th busiest airport in the world in 2016. Currently 46 domestic and 43 international destinations are served to Sydney directly.

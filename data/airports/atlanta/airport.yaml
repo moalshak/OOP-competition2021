@@ -1,0 +1,6 @@
+name: Hartsfield-Jackson Atlanta International Airport
+geographicCoordinates:
+  latitude: 33.6407
+  longitude: -84.4277
+aircraftCapacity: 10 # max planes that can be here
+description: Hartsfield–Jackson is the primary hub of Delta Air Lines, and is a focus city for low-cost carriers Frontier Airlines and Southwest Airlines. With just over 1,000 flights a day to 225 domestic and international destinations, the Delta hub is the world's largest airline hub.

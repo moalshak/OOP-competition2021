@@ -1,0 +1,6 @@
+name: Haneda Airport
+geographicCoordinates:
+  latitude: 35.5494
+  longitude: 139.7798
+aircraftCapacity: 5 # max planes that can be here
+description: Haneda handled 87,098,683 passengers in 2018; by passenger throughput, it was the third-busiest airport in Asia and the fourth-busiest in the world, after Hartsfield–Jackson Atlanta International Airport, Beijing Capital International Airport (Asia's busiest), and Dubai International Airport. It is able to handle 90 million passengers per year following its expansion in 2018. With Haneda and Narita combined, Tokyo has the third-busiest city airport system in the world, after London and New York City.

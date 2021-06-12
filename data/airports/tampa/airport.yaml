@@ -1,0 +1,6 @@
+name: Tampa International Airport
+geographicCoordinates:
+  latitude: 27.979722
+  longitude: -82.534722
+aircraftCapacity: 10 # max planes that can be here
+description: Tampa Bay is the birthplace of commercial aviation, hosting the first scheduled commercial airline flight in the world in 1914. The airport was constructed originally as "Drew Field" in 1928, and served as a municipal and military airfield during the second world war. Today, the airport is consistently ranked as one of the best in the United States and the world, and often praised for its architecture and landside/airside design featuring a central terminal and four satellite terminals with access to gates. Many of the different areas of the airport are named after aviation and aerospace pioneers, such as Neil Armstrong, Igor Sikorsky, Chuck Yeager, and Tony Jannus.
