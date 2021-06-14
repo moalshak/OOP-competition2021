@@ -83,8 +83,6 @@ public class CargoConfigPanel {
         FuelConfigPanel.setLayoutOfDisplayPanel(displayPanel, c);
         displayPanel.add(new JLabel("<html><h1>Updating</b> "+ selectedCargoArea.getName() +"</h1></html>"), c);
 
-        //TODO: maybe a method for the stuff below ?
-
         //import demands button
         c.ipady = 5;
         c.gridx = 0;
