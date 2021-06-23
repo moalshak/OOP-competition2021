@@ -34,6 +34,8 @@ public class World {
     private WorldDimensions dimensions;
 
     @Getter
+    private static WorldDimensions staticDimensions;
+    @Getter
     private final WorldSelectionModel selectionModel;
 
     public World(Set<Airport> airports, Set<AircraftType> aircraftTypes, Set<FuelType> fuelTypes, Set<CargoType> cargoTypes, WorldDimensions dimensions) {
@@ -42,6 +44,7 @@ public class World {
         this.fuelTypes = setToMap(fuelTypes, FuelType::getName);
         this.cargoTypes = setToMap(cargoTypes, CargoType::getName);
         this.dimensions = dimensions;
+        staticDimensions = dimensions;
         this.selectionModel = new WorldSelectionModel();
     }
 

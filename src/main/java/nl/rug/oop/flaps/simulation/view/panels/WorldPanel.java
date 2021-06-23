@@ -1,8 +1,11 @@
 package nl.rug.oop.flaps.simulation.view.panels;
-
+import java.util.ArrayList;
+import java.util.List;
+import lombok.Getter;
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.simulation.controller.AirportSelectionController;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
+import nl.rug.oop.flaps.simulation.model.trips.Trip;
 import nl.rug.oop.flaps.simulation.model.world.World;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModelListener;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
@@ -12,8 +15,6 @@ import nl.rug.oop.flaps.simulation.model.map.coordinates.ProjectionMapping;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -27,7 +28,7 @@ import java.nio.file.Path;
  * @author T.O.W.E.R.
  */
 @Log
-public class WorldPanel extends JPanel implements WorldSelectionModelListener, ActionListener {
+public class WorldPanel extends JPanel implements WorldSelectionModelListener {
     public static final double INDICATOR_SIZE = 8;
 
     private final BufferedImage worldMapImage;
@@ -35,12 +36,10 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener, A
 
     private Image cachedWorldMapImage;
 
-    private Point2D takeOffPlace = new Point2D.Double();
-    private Point2D landingPlace = new Point2D.Double();
-    private Airport currentDest = new Airport();
-    private Airport currentStart = new Airport();
-    private Timer timer = new Timer(1, this);;
-    private double velocity = 0.5;
+    @Getter
+    public static WorldPanel worldPanel;
+    @Getter
+    private List<Trip> currentTrips;
 
     public WorldPanel(World world) {
         this.world = world;
@@ -54,6 +53,27 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener, A
         addMouseMotionListener(selectionController);
         addMouseListener(selectionController);
         this.world.getSelectionModel().addListener(this);
+
+        worldPanel = this;
+    }
+
+    /**
+     * paints the trips on the world map
+     * */
+    private void paintTrips(Graphics2D g) {
+        if (currentTrips == null) return; // no trips yet
+        double s = INDICATOR_SIZE;
+        g.setColor(Color.GREEN);
+        var sm = this.world.getSelectionModel();
+        for (Trip trip : currentTrips) {
+            if (sm.getSelectedTrip() != null && sm.getSelectedTrip().equals(trip)) {
+                g.setColor(Color.CYAN);
+                // update the selected aircraft only if it is not already selected
+                if (sm.getSelectedAircraft() != trip.getAircraft()) sm.setSelectedAircraft(trip.getAircraft());
+            }
+            Shape marker = new Ellipse2D.Double(trip.getCurrentPosition().getX() - s/2, trip.getCurrentPosition().getY()- s/2, s,s);
+            g.fill(marker);
+        }
     }
 
     private void drawAirportIndicator(Graphics2D g, Airport airport) {
@@ -66,27 +86,12 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener, A
         if (sm.getSelectedAirport() != null && sm.getSelectedAirport().equals(airport)) {
             c = Color.CYAN;
             s *= 2;
-            if(sm.getSelectedAirport() != currentStart) {
-                currentStart = sm.getSelectedAirport();
-                takeOffPlace = new Point2D.Double(p.getX(), p.getY());
-            }
         } else if (sm.getSelectedDestinationAirport() != null && sm.getSelectedDestinationAirport().equals(airport)) {
             c = Color.GREEN;
             s *= 1.5;
-            if(sm.getSelectedDestinationAirport() != currentDest) {
-                currentDest = sm.getSelectedDestinationAirport();
-                landingPlace = new Point2D.Double(p.getX(), p.getY());
-            }
         }
         g.setColor(c);
         Shape marker = new Ellipse2D.Double(p.x - s/2, p.y - s/2, s, s);
-        g.fill(marker);
-    }
-    private void drawAirplane(Graphics2D g) {
-        timer.start();
-        double s = INDICATOR_SIZE;
-        g.setColor(Color.GREEN);
-        Shape marker = new Ellipse2D.Double(takeOffPlace.getX() - s/2, takeOffPlace.getY() - s/2, s,s);
         g.fill(marker);
     }
 
@@ -126,10 +131,11 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener, A
             drawTrajectory(g2d);
         }
         if (sm.getSelectedDestinationAirport() != null && sm.getSelectedAirport() != null && sm.getSelectedAircraft() != null) {
-            drawAirplane(g2d);
-           // drawPlannedRoute(g2d, sm.getSelectedAirport(), sm.getSelectedDestinationAirport());
+           drawPlannedRoute(g2d, sm.getSelectedAirport(), sm.getSelectedDestinationAirport());
         }
         this.world.getAirports().values().forEach(airport -> drawAirportIndicator(g2d, airport));
+
+        paintTrips(g2d);
     }
 
     private void drawPlannedRoute(Graphics2D g, Airport selectedAirport, Airport selectedDestinationAirport) {
@@ -139,6 +145,26 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener, A
         g.setColor(Color.WHITE);
         g.draw(new Line2D.Double(start, end));
     }
+
+    /**
+     * adds a trip to the trips list
+     * @param trip the trip to be added
+     * */
+    public void addTrip(Trip trip) {
+        if (currentTrips == null) {
+            currentTrips = new ArrayList<>();
+        }
+        currentTrips.add(trip);
+    }
+
+    /**
+     * removes a trip from the trips list
+     * @param trip the trip to be removed
+     * */
+    public void removeTrip(Trip trip) {
+        currentTrips.remove(trip);
+    }
+
 
     @Override
     public void airportSelected(Airport selectedAirport) {
@@ -153,23 +179,5 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener, A
     @Override
     public void destinationSelectionUpdated() {
         this.repaint();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (takeOffPlace.getX() < landingPlace.getX()) {
-            takeOffPlace.setLocation(takeOffPlace.getX()+velocity, takeOffPlace.getY());
-        } else if (takeOffPlace.getX() >= landingPlace.getX()) {
-            takeOffPlace.setLocation(takeOffPlace.getX()-velocity, takeOffPlace.getY());
-        }
-        if (takeOffPlace.getY() < landingPlace.getY()) {
-            takeOffPlace.setLocation(takeOffPlace.getX(), takeOffPlace.getY() + velocity);
-        } else if (takeOffPlace.getY() >= landingPlace.getY()) {
-            takeOffPlace.setLocation(takeOffPlace.getX(), takeOffPlace.getY() - velocity);
-        }
-        if(takeOffPlace.getX() == landingPlace.getX() && takeOffPlace.getY() == landingPlace.getY()) {
-            timer.stop();
-        }
-        repaint();
     }
 }

@@ -1,10 +1,13 @@
 package nl.rug.oop.flaps.simulation.model.world;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
+import nl.rug.oop.flaps.simulation.model.trips.Trip;
 
+import java.awt.geom.Point2D;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +29,8 @@ public class WorldSelectionModel {
 	private Airport selectedAirport = null;
 	@Getter
 	private Airport selectedDestinationAirport = null;
-
+	@Getter @Setter
+	private Trip selectedTrip;
 	@Getter
 	private boolean selectingDestination = false;
 	@Getter
