@@ -12,6 +12,8 @@ import nl.rug.oop.flaps.simulation.model.map.coordinates.ProjectionMapping;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -25,13 +27,20 @@ import java.nio.file.Path;
  * @author T.O.W.E.R.
  */
 @Log
-public class WorldPanel extends JPanel implements WorldSelectionModelListener {
+public class WorldPanel extends JPanel implements WorldSelectionModelListener, ActionListener {
     public static final double INDICATOR_SIZE = 8;
 
     private final BufferedImage worldMapImage;
     private final World world;
 
     private Image cachedWorldMapImage;
+
+    private Point2D takeOffPlace = new Point2D.Double();
+    private Point2D landingPlace = new Point2D.Double();
+    private Airport currentDest = new Airport();
+    private Airport currentStart = new Airport();
+    private Timer timer = new Timer(1, this);;
+    private double velocity = 0.5;
 
     public WorldPanel(World world) {
         this.world = world;
@@ -50,18 +59,34 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
     private void drawAirportIndicator(Graphics2D g, Airport airport) {
         double s = INDICATOR_SIZE;
         Color c = Color.RED;
+        var p = ProjectionMapping.mercatorToWorld(this.world.getDimensions())
+                .map(airport.getGeographicCoordinates()).asPoint();
+
         var sm = this.world.getSelectionModel();
         if (sm.getSelectedAirport() != null && sm.getSelectedAirport().equals(airport)) {
             c = Color.CYAN;
             s *= 2;
+            if(sm.getSelectedAirport() != currentStart) {
+                currentStart = sm.getSelectedAirport();
+                takeOffPlace = new Point2D.Double(p.getX(), p.getY());
+            }
         } else if (sm.getSelectedDestinationAirport() != null && sm.getSelectedDestinationAirport().equals(airport)) {
             c = Color.GREEN;
             s *= 1.5;
+            if(sm.getSelectedDestinationAirport() != currentDest) {
+                currentDest = sm.getSelectedDestinationAirport();
+                landingPlace = new Point2D.Double(p.getX(), p.getY());
+            }
         }
-        var p = ProjectionMapping.mercatorToWorld(this.world.getDimensions())
-                .map(airport.getGeographicCoordinates()).asPoint();
         g.setColor(c);
         Shape marker = new Ellipse2D.Double(p.x - s/2, p.y - s/2, s, s);
+        g.fill(marker);
+    }
+    private void drawAirplane(Graphics2D g) {
+        timer.start();
+        double s = INDICATOR_SIZE;
+        g.setColor(Color.GREEN);
+        Shape marker = new Ellipse2D.Double(takeOffPlace.getX() - s/2, takeOffPlace.getY() - s/2, s,s);
         g.fill(marker);
     }
 
@@ -101,7 +126,8 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
             drawTrajectory(g2d);
         }
         if (sm.getSelectedDestinationAirport() != null && sm.getSelectedAirport() != null && sm.getSelectedAircraft() != null) {
-            drawPlannedRoute(g2d, sm.getSelectedAirport(), sm.getSelectedDestinationAirport());
+            drawAirplane(g2d);
+           // drawPlannedRoute(g2d, sm.getSelectedAirport(), sm.getSelectedDestinationAirport());
         }
         this.world.getAirports().values().forEach(airport -> drawAirportIndicator(g2d, airport));
     }
@@ -127,5 +153,23 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
     @Override
     public void destinationSelectionUpdated() {
         this.repaint();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (takeOffPlace.getX() < landingPlace.getX()) {
+            takeOffPlace.setLocation(takeOffPlace.getX()+velocity, takeOffPlace.getY());
+        } else if (takeOffPlace.getX() >= landingPlace.getX()) {
+            takeOffPlace.setLocation(takeOffPlace.getX()-velocity, takeOffPlace.getY());
+        }
+        if (takeOffPlace.getY() < landingPlace.getY()) {
+            takeOffPlace.setLocation(takeOffPlace.getX(), takeOffPlace.getY() + velocity);
+        } else if (takeOffPlace.getY() >= landingPlace.getY()) {
+            takeOffPlace.setLocation(takeOffPlace.getX(), takeOffPlace.getY() - velocity);
+        }
+        if(takeOffPlace.getX() == landingPlace.getX() && takeOffPlace.getY() == landingPlace.getY()) {
+            timer.stop();
+        }
+        repaint();
     }
 }
