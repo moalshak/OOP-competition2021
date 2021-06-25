@@ -25,6 +25,13 @@ public class PassengersModel {
     private final static int avgAdultWeight = 83;
     private final static int avgKidTo12Weight = 42;
     private final static int avgKidUnder12Weight = 22;
+    @Getter
+    private final static int ticketAdults = (int) (Math.random()*(900-50+1)+50);
+    @Getter
+    private final static int ticketKids12 = (int) (Math.random()*(900-50+1)+50);
+    @Getter
+    private final static int ticketKids = (int) (Math.random()*(900-50+1)+50);
+
     @Setter
     private PassengersConfigPanel panel;
 
