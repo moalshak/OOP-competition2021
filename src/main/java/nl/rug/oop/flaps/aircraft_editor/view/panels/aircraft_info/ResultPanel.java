@@ -66,13 +66,13 @@ public class ResultPanel extends JPanel implements InfoPanelModelListener {
     private void updateProfitRevAndCost() {
         JLabel text; double val;
         val = InfoPanelModel.getCost();
-        text = new JLabel("<html> <h3>Trip's cost: "+ (int) val + " Euro </h3> </html>");
+        text = new JLabel("<html> <h3>Trip's cost: € "+ (int) val + "</h3> </html>");
         bottomPanel.add(text);
         val = roundTwoDec(InfoPanelModel.getRevenue());
-        text = new JLabel("<html> <h3>Trip's revenue: "+ (int) val + " Euro </h3> </html>");
+        text = new JLabel("<html> <h3>Trip's revenue: € "+ (int) val + "</h3> </html>");
         bottomPanel.add(text);
         val = roundTwoDec(InfoPanelModel.getProfitEstimation());
-        text = new JLabel("<html> <h3>Trip's profit: "+ (int) val + " Euro </h3> </html>");
+        text = new JLabel("<html> <h3>Trip's profit: € "+ (int) val + "</h3> </html>");
         bottomPanel.add(text);
         val = roundTwoDec(InfoPanelModel.getTripDistance()/model.getAircraft().getType().getCruiseSpeed());
         text = new JLabel("<html> <h3>Estimated flight time: "+ (int) val + " Hours </h3> </html>");

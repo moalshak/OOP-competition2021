@@ -55,7 +55,7 @@ public class TripsInfo extends JPanel {
         infoPanel.add(label, gbc);
         label.setFont(infoTextFont);
 
-        label = new JLabel("Aircraft's cargo: " + selectedTrip.getAircraft().getTotalCargoWeight() + " Kg");
+        label = new JLabel("Aircraft's cargo weight: " + selectedTrip.getAircraft().getTotalCargoWeight() + " Kg");
         gbc.gridy = 3; gbc.gridx = 0;
         infoPanel.add(label, gbc);
         label.setFont(infoTextFont);
@@ -65,10 +65,15 @@ public class TripsInfo extends JPanel {
         infoPanel.add(label, gbc);
         label.setFont(infoTextFont);
 
-        label = new JLabel();
-        ImageIcon banner = new ImageIcon(selectedTrip.getBannerInAir().getScaledInstance(WIDTH-15, WIDTH/2-100, Image.SCALE_SMOOTH));
-        label.setIcon(banner);
+        label = new JLabel("Aircraft's Revenue: € " + Trip.getRevenue());
         gbc.gridy = 5; gbc.gridx = 0;
+        infoPanel.add(label, gbc);
+        label.setFont(infoTextFont);
+
+        label = new JLabel();
+        ImageIcon banner = new ImageIcon(selectedTrip.getBannerInAir().getScaledInstance(WIDTH-15, WIDTH/2-50, Image.SCALE_SMOOTH));
+        label.setIcon(banner);
+        gbc.gridy = 6; gbc.gridx = 0;
         gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
         infoPanel.add(label, gbc);
         label.setFont(infoTextFont);

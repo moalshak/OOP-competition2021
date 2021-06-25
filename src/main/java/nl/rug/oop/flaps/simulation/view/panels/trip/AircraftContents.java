@@ -1,5 +1,6 @@
 package nl.rug.oop.flaps.simulation.view.panels.trip;
 
+import nl.rug.oop.flaps.aircraft_editor.model.config_models.passenger.PassengersModel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoUnit;
@@ -29,9 +30,13 @@ public class AircraftContents extends JPanel {
         Trip selectedTrip = sm.getSelectedTrip();
         Aircraft aircraft = selectedTrip.getAircraft();
 
-        String[] colNames1 = {"Adults", "Kids 12+", "Kids Under 12"};
+        String[] colNames1 = {"Adults", "Kids 12+", "Kids Under 12", "Crew"};
         Object[][] data1 = {
-                {aircraft.getPassengers().get("adults"), aircraft.getPassengers().get("kidsTo12"), aircraft.getPassengers().get("kidsUnder12")}
+                {aircraft.getPassengers().get("adults") + " on board || Ticket: € " + PassengersModel.getTicketAdults(),
+                        aircraft.getPassengers().get("kidsTo12") + " on board || Ticket: € " + PassengersModel.getTicketKids12(),
+                        aircraft.getPassengers().get("kidsUnder12")+ " on board || Ticket: € " + PassengersModel.getTicketKids(),
+                        aircraft.getCrewOnBoard() + " on board exc. (co-)pilot"
+                }
         };
         JTable table = new JTable(data1, colNames1);
         JScrollPane panel = new JScrollPane(table);

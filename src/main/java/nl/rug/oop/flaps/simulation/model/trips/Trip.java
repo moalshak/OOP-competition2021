@@ -2,6 +2,9 @@ package nl.rug.oop.flaps.simulation.model.trips;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
+import nl.rug.oop.flaps.aircraft_editor.model.config_models.InfoPanelModel;
+import nl.rug.oop.flaps.aircraft_editor.model.config_models.passenger.PassengersModel;
+import nl.rug.oop.flaps.aircraft_editor.model.config_models.trip_results.ProfitEstimationModel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.InteractionPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
@@ -23,6 +26,9 @@ public class Trip {
     private static final double INDICATOR_SIZE = 8;
     private final Point2D originAirportLocation;
     private final Point2D destinationAirportLocation;
+    @Getter
+    private final static int revenue = (int) InfoPanelModel.getRevenue();
+
     private final StringBuilder flightsId = generateId();
     private Image bannerInAir;
     private final List<Point2D> steps = new ArrayList<>();
