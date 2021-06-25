@@ -5,21 +5,17 @@ import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.InteractionPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
-import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
-import nl.rug.oop.flaps.simulation.model.map.coordinates.PointProvider;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.ProjectionMapping;
 import nl.rug.oop.flaps.simulation.model.world.World;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 import nl.rug.oop.flaps.simulation.view.panels.WorldPanel;
-import nl.rug.oop.flaps.simulation.view.panels.aircraft.AircraftPanel;
-import nl.rug.oop.flaps.simulation.view.panels.airport.AirportPanel;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Getter
@@ -29,6 +25,7 @@ public class Trip {
     private final Point2D destinationAirportLocation;
     private final StringBuilder flightsId = generateId();
     private Image bannerInAir;
+    private final List<Point2D> steps = new ArrayList<>();
 
     private final Airport originAirport;
     private final Airport destAirport;
@@ -83,6 +80,8 @@ public class Trip {
         } else if (currentPosition.getY() >= destinationAirportLocation.getY()) {
             currentPosition.setLocation(currentPosition.getX(), currentPosition.getY() - velocity);
         }
+        steps.add(new Point2D.Double(currentPosition.getX(), currentPosition.getY()));
+
         // update of checked destination (trip arrived when in range of the airport )
         reachedDestination = currentPosition.distance(destinationAirportLocation) < INDICATOR_SIZE;
         // repaint

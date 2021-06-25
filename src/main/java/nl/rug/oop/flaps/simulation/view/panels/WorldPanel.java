@@ -63,16 +63,28 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
      * */
     private void paintTrips(Graphics2D g, Trip trip) {
         double s = INDICATOR_SIZE;
-        g.setColor(Color.GREEN);
         var sm = this.world.getSelectionModel();
 
+        g.setColor(Color.GREEN);
         if (sm.getSelectedTrip() != null && sm.getSelectedTrip().equals(trip) ) {
             s *= 1.5;
+            paintSteps(g, trip);
             g.setColor(Color.CYAN);
         }
         Shape marker = new Ellipse2D.Double(trip.getCurrentPosition().getX() - s/2, trip.getCurrentPosition().getY()- s/2, s,s);
         g.fill(marker);
 
+    }
+
+    private void paintSteps(Graphics2D g, Trip trip) {
+        List<Point2D> steps = trip.getSteps();
+        g.setColor(Color.YELLOW);
+        double s = INDICATOR_SIZE;
+        s /= 3;
+        for(Point2D step : steps) {
+            Shape marker = new Ellipse2D.Double(step.getX() - s/2, step.getY()- s/2, s,s);
+            g.fill(marker);
+        }
     }
 
     private void drawAirportIndicator(Graphics2D g, Airport airport) {
