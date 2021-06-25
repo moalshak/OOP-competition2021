@@ -58,9 +58,29 @@ public class Trip {
     private void setBannerImage() {
         String aircraftType = aircraft.getType().getName();
         if (aircraftType.equals("Boeing 747-400F")) {
-            bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/747", "clouds747.jpg").toFile());
+            int nr = (int)(Math.random()*(4-1+1)+1);
+            switch (nr) {
+                case 1 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/747", "clouds747.jpg").toFile());
+                break;
+                case 2 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/747", "clouds747_2.jpg").toFile());
+                break;
+                case 3 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/747", "clouds747_3.jpg").toFile());
+                break;
+                case 4 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/747", "clouds747_4.jpg").toFile());
+                break;
+            }
         } else if (aircraftType.equals("Boeing 737-800BCF Freighter")) {
-            bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/737", "clouds737.jpg").toFile());
+            int nr = (int)(Math.random()*(4-1+1)+1);
+            switch (nr) {
+                case 1 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/737", "clouds737.jpg").toFile());
+                    break;
+                case 2 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/737", "clouds737_2.jpg").toFile());
+                    break;
+                case 3 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/737", "clouds737_3.jpg").toFile());
+                    break;
+                case 4 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/737", "clouds737_4.jpg").toFile());
+                    break;
+            }
         } else {
             bannerInAir = ImageIO.read(Path.of("data/aircraft_types/general_aviation/grand_caravan", "cloudsGrandCarvan.jpg").toFile());
         }
