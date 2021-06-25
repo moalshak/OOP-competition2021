@@ -47,35 +47,9 @@ public class PassengersModel {
 
     public PassengersModel(WorldSelectionModel selectionModel) {
         this.selectionModel = selectionModel;
-        passengers = new HashMap<>();
-        passengers.put("adults", 0);
-        passengers.put("kidsTo12", 0);
-        passengers.put("kidsUnder12", 0);
-        selectionModel.getSelectedAircraft().setPassengers(passengers);
-    }
-
-    /**
-     * Maps particular properties to the aircraft and sets that in the {@link BluePrintModel}
-     * @param bluePrintModel the blueprintModel for the particular aircraft
-     * */
-    public static void typeMapper(BluePrintModel bluePrintModel) {
-        AircraftType type = bluePrintModel.getAircraft().getType();
-        Point2D geo = new Point2D.Double();
-
-        if(type.getName().equals("Boeing 747-400F")) {
-            geo.setLocation(4, 18);
-            nrOfSeats = 366;
-            crewOnBoard = (int)(Math.random()*(10-2+1)+2);
-        } else if (type.getName().equals("Boeing 737-800BCF Freighter")) {
-            geo.setLocation(3, 10);
-            nrOfSeats = 120;
-            crewOnBoard = (int)(Math.random()*(5-2+1)+2);
-        } else {
-            geo.setLocation(0.5, 2.1);
-            nrOfSeats = 9;
-            crewOnBoard = 2;
-        }
-        bluePrintModel.setPassengersEntrance(geo);
+        passengers = selectionModel.getSelectedAircraft().getPassengers();
+        nrOfSeats = selectionModel.getSelectedAircraft().getNrOfSeats();
+        crewOnBoard = selectionModel.getSelectedAircraft().getCrewOnBoard();
     }
 
     /**
@@ -98,7 +72,6 @@ public class PassengersModel {
         passengers.put("kidsTo12", (int) panel.getKidsTo12().getValue());
         passengers.put("kidsUnder12", (int) panel.getKidsUnder12().getValue());
         selectionModel.getSelectedAircraft().setPassengers(passengers);
-        selectionModel.getSelectedAircraft().setCrewOnBoard(crewOnBoard);
     }
 
     /**

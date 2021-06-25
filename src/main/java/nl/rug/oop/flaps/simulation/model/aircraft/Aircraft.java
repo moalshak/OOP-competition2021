@@ -2,6 +2,7 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.flaps.aircraft_editor.model.blueprint.BluePrintModel;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType; //!!Don't remove this!!, if you do it causes some weird bug
 import nl.rug.oop.flaps.simulation.model.cargo.CargoUnit;
@@ -56,6 +57,8 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
      * */
     @Setter
     private int crewOnBoard;
+    private int nrOfSeats;
+    private Point2D geoEnt;
 
     public Aircraft(String identifier, AircraftType type, World world) {
         this.identifier = identifier;
@@ -68,7 +71,30 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
         passengers.put("adults", 0);
         passengers.put("kidsTo12", 0);
         passengers.put("kidsUnder12", 0);
+
+        typeMapper();
     }
+
+    public void typeMapper() {
+        AircraftType type = this.getType();
+        geoEnt = new Point2D.Double();
+
+        if(type.getName().equals("Boeing 747-400F")) {
+            geoEnt.setLocation(4, 18);
+            nrOfSeats = 366;
+            crewOnBoard = (int)(Math.random()*(10-2+1)+2);
+        } else if (type.getName().equals("Boeing 737-800BCF Freighter")) {
+            geoEnt.setLocation(3, 10);
+            nrOfSeats = 120;
+            crewOnBoard = (int)(Math.random()*(5-2+1)+2);
+        } else {
+            geoEnt.setLocation(0.5, 2.1);
+            nrOfSeats = 9;
+            crewOnBoard = 2;
+        }
+    }
+
+
 
     /**
      * Retrieves the amount of fuel that is consumed when flying between two airports in kg

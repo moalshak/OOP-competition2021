@@ -54,7 +54,7 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
         nrPassengersLabel = new JLabel();
         seatsLabel = new JLabel();
         confirmButton = new JButton();
-        //this.confirmButton.addActionListener(new ConfirmChangeButtonListener(this));
+
         listener = new ConfirmChangeButtonListener(this);
 
         initPassengersConfig();
@@ -72,9 +72,9 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
         this.displayPanel.add(passengerInteraction, BorderLayout.CENTER);
         this.displayPanel.add(new JLabel("<html><h1> Adding passengers aboard </h1></html>"), BorderLayout.NORTH);
 
-        adultNumberModel = new SpinnerNumberModel(0, 0, PassengersModel.getNrOfSeats(), 1);
-        to12NumberModel = new SpinnerNumberModel(0, 0, PassengersModel.getNrOfSeats(), 1);
-        under12NumberModel = new SpinnerNumberModel(0, 0, PassengersModel.getNrOfSeats(), 1);
+        adultNumberModel = new SpinnerNumberModel(0, 0, bluePrintModel.getAircraft().getNrOfSeats(), 1);
+        to12NumberModel = new SpinnerNumberModel(0, 0, bluePrintModel.getAircraft().getNrOfSeats(), 1);
+        under12NumberModel = new SpinnerNumberModel(0, 0, bluePrintModel.getAircraft().getNrOfSeats(), 1);
 
         initModels();
         intiLabels();
@@ -151,11 +151,11 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
      *  and {@link PassengersConfigPanel#seatsLabel}
      * */
     public void updatePassengerLabel() {
-        int remainingSeats = (PassengersModel.getNrOfSeats() - model.getPassengersSum());
+        int remainingSeats = (bluePrintModel.getAircraft().getNrOfSeats() - model.getPassengersSum());
 
         nrPassengersLabel.setText("<html><h1>Number of seats occupied: " + model.getPassengersSum() +" </h1></html>");
         nrPassengersLabel.updateUI();
-        seatsLabel.setText("<html><h3>Max number of seats: " + PassengersModel.getNrOfSeats() + " || \t Free seats: " + remainingSeats +" </h3></html>");
+        seatsLabel.setText("<html><h3>Max number of seats: " + bluePrintModel.getAircraft().getNrOfSeats() + " || \t Free seats: " + remainingSeats +" </h3></html>");
         seatsLabel.updateUI();
 
         if(remainingSeats >= 0) {
@@ -164,6 +164,7 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
             passengerInteraction.updateUI();
             MaxSeatsExceeded.setWarned(false);
             displayPanel.updateUI();
+            this.confirmButton.removeActionListener(listener);
             this.confirmButton.addActionListener(listener);
         } else  {
             this.confirmButton.setText("Kick " + remainingSeats*-1 + " passengers out of the aircraft");
