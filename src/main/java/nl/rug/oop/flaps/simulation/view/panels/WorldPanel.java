@@ -1,16 +1,15 @@
 package nl.rug.oop.flaps.simulation.view.panels;
-import java.util.ArrayList;
-import java.util.List;
+
 import lombok.Getter;
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.simulation.controller.AirportSelectionController;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
-import nl.rug.oop.flaps.simulation.model.trips.Trip;
-import nl.rug.oop.flaps.simulation.model.world.World;
-import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModelListener;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.PointProvider;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.ProjectionMapping;
+import nl.rug.oop.flaps.simulation.model.trips.Trip;
+import nl.rug.oop.flaps.simulation.model.world.World;
+import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModelListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,6 +20,8 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Displays the world map and the airport indicators
@@ -60,20 +61,19 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
     /**
      * paints the trips on the world map
      * */
-    private void paintTrips(Graphics2D g) {
+    private void paintTrips(Graphics2D g, Trip trip) {
         if (currentTrips == null) return; // no trips yet
         double s = INDICATOR_SIZE;
         g.setColor(Color.GREEN);
         var sm = this.world.getSelectionModel();
-        for (Trip trip : currentTrips) {
-            if (sm.getSelectedTrip() != null && sm.getSelectedTrip().equals(trip)) {
-                g.setColor(Color.CYAN);
-                // update the selected aircraft only if it is not already selected
-                if (sm.getSelectedAircraft() != trip.getAircraft()) sm.setSelectedAircraft(trip.getAircraft());
-            }
-            Shape marker = new Ellipse2D.Double(trip.getCurrentPosition().getX() - s/2, trip.getCurrentPosition().getY()- s/2, s,s);
-            g.fill(marker);
+
+        if (sm.getSelectedTrip() != null && sm.getSelectedTrip().equals(trip) ) {
+            s *= 1.5;
+            g.setColor(Color.CYAN);
         }
+        Shape marker = new Ellipse2D.Double(trip.getCurrentPosition().getX() - s/2, trip.getCurrentPosition().getY()- s/2, s,s);
+        g.fill(marker);
+
     }
 
     private void drawAirportIndicator(Graphics2D g, Airport airport) {
@@ -135,7 +135,11 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
         }
         this.world.getAirports().values().forEach(airport -> drawAirportIndicator(g2d, airport));
 
-        paintTrips(g2d);
+        if (currentTrips != null) {
+            for (Trip trip : currentTrips) {
+                paintTrips(g2d, trip);
+            }
+        }
     }
 
     private void drawPlannedRoute(Graphics2D g, Airport selectedAirport, Airport selectedDestinationAirport) {

@@ -47,7 +47,7 @@ public class InfoPanel extends JPanel implements BluePrintModelListener {
 
         ResultPanel resultPanel = new ResultPanel(infoPanelModel);
 
-        InteractionPanel interactionPanel = new InteractionPanel(model, infoPanelModel);
+        InteractionPanel interactionPanel = new InteractionPanel(selectionModel,model, infoPanelModel);
 
         this.add(interactionPanel.getInteractionScrollPane(), BorderLayout.NORTH);
         this.add(resultPanel.getResultPartScrollPane(), BorderLayout.SOUTH);

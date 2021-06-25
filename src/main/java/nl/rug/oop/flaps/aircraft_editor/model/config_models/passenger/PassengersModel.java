@@ -6,6 +6,7 @@ import nl.rug.oop.flaps.aircraft_editor.controller.listeners.infopanel_listeners
 import nl.rug.oop.flaps.aircraft_editor.model.blueprint.BluePrintModel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.PassengersConfigPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.AircraftType;
+import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 
 import java.awt.geom.Point2D;
 import java.util.HashMap;
@@ -40,11 +41,15 @@ public class PassengersModel {
     @Setter
     private HashMap<String, Integer> passengers;
 
-    public PassengersModel() {
+    private final WorldSelectionModel selectionModel;
+
+    public PassengersModel(WorldSelectionModel selectionModel) {
+        this.selectionModel = selectionModel;
         passengers = new HashMap<>();
         passengers.put("adults", 0);
         passengers.put("kidsTo12", 0);
         passengers.put("kidsUnder12", 0);
+        selectionModel.getSelectedAircraft().setPassengers(passengers);
     }
 
     /**
@@ -90,6 +95,7 @@ public class PassengersModel {
         passengers.put("adults", (int) panel.getAdults().getValue());
         passengers.put("kidsTo12", (int) panel.getKidsTo12().getValue());
         passengers.put("kidsUnder12", (int) panel.getKidsUnder12().getValue());
+        selectionModel.getSelectedAircraft().setPassengers(passengers);
     }
 
     /**
@@ -120,6 +126,7 @@ public class PassengersModel {
         passengers.put("adults", 0);
         passengers.put("kidsTo12", 0);
         passengers.put("kidsUnder12", 0);
+        selectionModel.getSelectedAircraft().setPassengers(passengers);
     }
 
     /**

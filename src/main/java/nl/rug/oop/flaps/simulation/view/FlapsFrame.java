@@ -16,9 +16,15 @@ import java.awt.*;
  */
 public class FlapsFrame extends JFrame {
     private static final int WIDTH = 1620;
+    @Getter
     private static final int HEIGHT = 920;
     @Getter
     private static JFrame frame = null;
+
+    @Getter
+    private static JSplitPane worldPlaneSplit;
+    @Getter
+    private static JSplitPane leftRightSplit;
 
     public FlapsFrame(World world) {
         super("Flight Logistics Aviation Planning Simulation");
@@ -45,11 +51,11 @@ public class FlapsFrame extends JFrame {
         AirportPanel airportPanel = new AirportPanel(world);
         airportPanel.setPreferredSize(new Dimension(WIDTH/2, HEIGHT/2));
 
-        JSplitPane worldPlaneSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, worldPanelScrollPane, aircraftPanel);
+        worldPlaneSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, worldPanelScrollPane, aircraftPanel);
         worldPlaneSplit.setDividerLocation(HEIGHT/2);
         worldPlaneSplit.setDividerSize(0);
 
-        JSplitPane leftRightSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, airportPanel, worldPlaneSplit);
+        leftRightSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, airportPanel, worldPlaneSplit);
         leftRightSplit.setDividerLocation(WIDTH/2);
         leftRightSplit.setDividerSize(0);
         add(leftRightSplit);

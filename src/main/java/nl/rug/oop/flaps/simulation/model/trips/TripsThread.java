@@ -5,7 +5,7 @@ import lombok.SneakyThrows;
 public class TripsThread extends Thread{
 
     private final Trip newTrip;
-    private static final int RATE = 10;
+    private static final int RATE = 100;
 
     /**
      * creates a new thread to process the trip

@@ -29,7 +29,7 @@ public class WorldSelectionModel {
 	private Airport selectedAirport = null;
 	@Getter
 	private Airport selectedDestinationAirport = null;
-	@Getter @Setter
+	@Getter
 	private Trip selectedTrip;
 	@Getter
 	private boolean selectingDestination = false;
@@ -49,10 +49,25 @@ public class WorldSelectionModel {
 		this.listeners.add(listener);
 	}
 
+	/**
+	 * sets the selected trip and calls listeners to update view
+	 * */
+	public void setSelectedTrip(Trip trip) {
+		this.selectedTrip = trip;
+		this.selectedAirport = null;
+		this.selectedAircraft = null;
+		this.listeners.forEach( lst -> {
+			lst.aircraftSelected(null);
+			lst.aircraftSelected(null);
+			lst.tripSelected();
+		});
+	}
+
 	public void setSelectedAirport(Airport airport) {
 		this.selectedAirport = airport;
 		this.selectedAircraft = null;
 		this.selectedDestinationAirport = null;
+		this.selectedTrip = null;
 		this.listeners.forEach(lst -> {
 			lst.airportSelected(airport);
 			lst.aircraftSelected(null);

@@ -43,7 +43,7 @@ public class AirportSelectionController extends MouseAdapter {
                     }
                 }
             }
-            this.world.getSelectionModel().setSelectedTrip(null);
+
             var airport = this.world.getNearestAirport(new GeographicCoordinates(geo.getPointX(), geo.getPointY()), SELECTION_TOLERANCE);
             airport.ifPresent(a -> {
                 if (this.world.getSelectionModel().isSelectingDestination()) {

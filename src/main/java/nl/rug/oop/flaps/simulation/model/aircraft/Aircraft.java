@@ -1,11 +1,14 @@
 package nl.rug.oop.flaps.simulation.model.aircraft;
 
 import lombok.Getter;
+import lombok.Setter;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType; //!!Don't remove this!!, if you do it causes some weird bug
 import nl.rug.oop.flaps.simulation.model.cargo.CargoUnit;
+import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 import nl.rug.oop.flaps.simulation.model.world.World;
 
+import java.awt.geom.Point2D;
 import java.util.*;
 
 /**
@@ -42,6 +45,11 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
      */
     private final Map<CargoArea, Set<CargoUnit>> cargoAreaContents;
 
+    /**
+     * holds the passengers on board
+     * */
+    @Setter
+    private HashMap<String, Integer> passengers;
 
     public Aircraft(String identifier, AircraftType type, World world) {
         this.identifier = identifier;
@@ -49,6 +57,11 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
         this.world = world;
         fuelTankFillStatuses = new HashMap<>();
         cargoAreaContents = new HashMap<>();
+
+        passengers = new HashMap<>();
+        passengers.put("adults", 0);
+        passengers.put("kidsTo12", 0);
+        passengers.put("kidsUnder12", 0);
     }
 
     /**
@@ -61,6 +74,26 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
     public double getFuelConsumption(Airport origin, Airport destination) {
         /* calculate distance to destination airport */
         double distance = origin.getGeographicCoordinates().distanceTo(destination.getGeographicCoordinates());
+
+        double cruiseSpeed = this.getType().getCruiseSpeed();
+        /* flightDuration = the distance in Km then device by the cruiseSpeed*/
+        double flightDuration =  (distance / 1000) / cruiseSpeed;
+        /* the rate at which the aircraft uses fuel */
+        double fuelConsumptionRate = this.getType().getFuelConsumption();
+        /* fuel consumption */
+        return flightDuration * fuelConsumptionRate;
+    }
+
+    /**
+     * Retrieves the amount of fuel that is consumed when flying between origin airport and a point on map in kg
+     *
+     * @param origin The airport the aircraft departs from
+     * @param destination The airport the aircraft flies to
+     * @return The amount of fuel in kg consumed in the journey
+     */
+    public double getFuelConsumption(Airport origin, GeographicCoordinates destination) {
+        /* calculate distance to destination airport */
+        double distance = origin.getGeographicCoordinates().distanceTo(destination);
 
         double cruiseSpeed = this.getType().getCruiseSpeed();
         /* flightDuration = the distance in Km then device by the cruiseSpeed*/
