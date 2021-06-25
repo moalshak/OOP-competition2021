@@ -2,7 +2,6 @@ package nl.rug.oop.flaps.simulation.view.panels.airport;
 
 import lombok.Getter;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
-import nl.rug.oop.flaps.simulation.model.trips.Trip;
 import nl.rug.oop.flaps.simulation.model.world.World;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModelListener;
 import nl.rug.oop.flaps.simulation.view.FlapsFrame;
@@ -28,7 +27,7 @@ public class AirportPanel extends JPanel implements WorldSelectionModelListener 
 
     private final AircraftAreaPanel aircraftAreaPanel;
 
-    private final static int DIV_LOCATION = FlapsFrame.getHEIGHT()/2+100;
+    private final static int DIV_LOCATION = FlapsFrame.getHEIGHT()/2+200;
 
     private final GridBagLayout gridBagLayout = new GridBagLayout();
 

@@ -4,10 +4,8 @@ import lombok.Getter;
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.simulation.controller.actions.OpenAircraftConfigurer;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.trips.Trip;
 import nl.rug.oop.flaps.simulation.model.world.World;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModelListener;
-import nl.rug.oop.flaps.simulation.view.FlapsFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,8 +47,28 @@ public class AircraftPanel extends JPanel implements WorldSelectionModelListener
         repaint();
     }
 
+    /**
+     * displays the aircraft without the buttons
+     * */
+    private void displayFlyingAircraft(Aircraft aircraft) {
+        this.removeAll();
+        AircraftInfoPanel aircraftInfoPanelWithoutButton = new AircraftInfoPanel(aircraft, this.world.getSelectionModel());
+        aircraftInfoPanelWithoutButton.remove(aircraftInfoPanelWithoutButton.getSelectDestination());
+        add(aircraftInfoPanelWithoutButton, BorderLayout.NORTH);
+        ImageIcon blueprintIcon = new ImageIcon(aircraft.getType().getBannerImage().getScaledInstance(this.getWidth(), this.getWidth() / 3, Image.SCALE_SMOOTH));
+        add(new JLabel(blueprintIcon), BorderLayout.CENTER);
+        revalidate();
+        repaint();
+    }
+
     @Override
     public void aircraftSelected(Aircraft aircraft) {
         this.displayAircraft(aircraft);
     }
+
+    @Override
+    public void tripSelected() {
+        this.displayFlyingAircraft(this.world.getSelectionModel().getSelectedAircraft());
+    }
+
 }

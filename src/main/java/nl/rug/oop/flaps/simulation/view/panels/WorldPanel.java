@@ -62,7 +62,6 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
      * paints the trips on the world map
      * */
     private void paintTrips(Graphics2D g, Trip trip) {
-        if (currentTrips == null) return; // no trips yet
         double s = INDICATOR_SIZE;
         g.setColor(Color.GREEN);
         var sm = this.world.getSelectionModel();

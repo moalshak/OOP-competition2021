@@ -19,8 +19,9 @@ public class AircraftContents extends JPanel {
         this.sm = selectionModel;
         this.WIDTH = width;
         setLayout(new BorderLayout());
-
-        add(new JLabel("Aircraft's content:"), BorderLayout.NORTH);
+        JLabel title = new JLabel("Aircraft's content:");
+        title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
+        add( title, BorderLayout.NORTH);
         add(displayContent(), BorderLayout.CENTER);
     }
 
@@ -55,6 +56,7 @@ public class AircraftContents extends JPanel {
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, panel,panel1);
         splitPane.setDividerLocation(100);
+        splitPane.setDividerSize(0);
         return splitPane;
     }
 

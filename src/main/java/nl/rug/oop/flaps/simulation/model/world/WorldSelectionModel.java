@@ -55,12 +55,8 @@ public class WorldSelectionModel {
 	public void setSelectedTrip(Trip trip) {
 		this.selectedTrip = trip;
 		this.selectedAirport = null;
-		this.selectedAircraft = null;
-		this.listeners.forEach( lst -> {
-			lst.aircraftSelected(null);
-			lst.aircraftSelected(null);
-			lst.tripSelected();
-		});
+		this.selectedAircraft = trip.getAircraft();
+		this.listeners.forEach(WorldSelectionModelListener::tripSelected);
 	}
 
 	public void setSelectedAirport(Airport airport) {
