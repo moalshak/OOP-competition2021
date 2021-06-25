@@ -51,6 +51,12 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
     @Setter
     private HashMap<String, Integer> passengers;
 
+    /**
+     * number of crew on board
+     * */
+    @Setter
+    private int crewOnBoard;
+
     public Aircraft(String identifier, AircraftType type, World world) {
         this.identifier = identifier;
         this.type = type;

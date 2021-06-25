@@ -42,6 +42,7 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
     private SpinnerNumberModel to12NumberModel ;
     private SpinnerNumberModel under12NumberModel;
 
+    private ConfirmChangeButtonListener listener;
     public PassengersConfigPanel(JPanel displayPanel, PassengersModel passengersModel, BluePrintModel bluePrintModel) {
         this.model = passengersModel;
         this.bluePrintModel = bluePrintModel;
@@ -53,7 +54,8 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
         nrPassengersLabel = new JLabel();
         seatsLabel = new JLabel();
         confirmButton = new JButton();
-        this.confirmButton.addActionListener(new ConfirmChangeButtonListener(this));
+        //this.confirmButton.addActionListener(new ConfirmChangeButtonListener(this));
+        listener = new ConfirmChangeButtonListener(this);
 
         initPassengersConfig();
 
@@ -162,11 +164,13 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
             passengerInteraction.updateUI();
             MaxSeatsExceeded.setWarned(false);
             displayPanel.updateUI();
+            this.confirmButton.addActionListener(listener);
         } else  {
             this.confirmButton.setText("Kick " + remainingSeats*-1 + " passengers out of the aircraft");
             this.confirmButton.updateUI();
             passengerInteraction.updateUI();
             displayPanel.updateUI();
+            this.confirmButton.removeActionListener(listener);
             if (!MaxSeatsExceeded.isWarned()) new MaxSeatsExceeded();
         }
     }

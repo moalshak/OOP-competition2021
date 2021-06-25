@@ -8,7 +8,9 @@ import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_pa
 import nl.rug.oop.flaps.simulation.model.aircraft.AircraftType;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 
+import javax.imageio.ImageIO;
 import java.awt.geom.Point2D;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -96,6 +98,7 @@ public class PassengersModel {
         passengers.put("kidsTo12", (int) panel.getKidsTo12().getValue());
         passengers.put("kidsUnder12", (int) panel.getKidsUnder12().getValue());
         selectionModel.getSelectedAircraft().setPassengers(passengers);
+        selectionModel.getSelectedAircraft().setCrewOnBoard(crewOnBoard);
     }
 
     /**
@@ -127,6 +130,7 @@ public class PassengersModel {
         passengers.put("kidsTo12", 0);
         passengers.put("kidsUnder12", 0);
         selectionModel.getSelectedAircraft().setPassengers(passengers);
+        selectionModel.getSelectedAircraft().setCrewOnBoard(crewOnBoard);
     }
 
     /**
