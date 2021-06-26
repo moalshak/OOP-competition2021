@@ -42,6 +42,7 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
     private SpinnerNumberModel to12NumberModel ;
     private SpinnerNumberModel under12NumberModel;
 
+    private ConfirmChangeButtonListener listener;
     public PassengersConfigPanel(JPanel displayPanel, PassengersModel passengersModel, BluePrintModel bluePrintModel) {
         this.model = passengersModel;
         this.bluePrintModel = bluePrintModel;
@@ -53,7 +54,8 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
         nrPassengersLabel = new JLabel();
         seatsLabel = new JLabel();
         confirmButton = new JButton();
-        this.confirmButton.addActionListener(new ConfirmChangeButtonListener(this));
+
+        listener = new ConfirmChangeButtonListener(this);
 
         initPassengersConfig();
 
@@ -70,9 +72,9 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
         this.displayPanel.add(passengerInteraction, BorderLayout.CENTER);
         this.displayPanel.add(new JLabel("<html><h1> Adding passengers aboard </h1></html>"), BorderLayout.NORTH);
 
-        adultNumberModel = new SpinnerNumberModel(0, 0, PassengersModel.getNrOfSeats(), 1);
-        to12NumberModel = new SpinnerNumberModel(0, 0, PassengersModel.getNrOfSeats(), 1);
-        under12NumberModel = new SpinnerNumberModel(0, 0, PassengersModel.getNrOfSeats(), 1);
+        adultNumberModel = new SpinnerNumberModel(0, 0, bluePrintModel.getAircraft().getNrOfSeats(), 1);
+        to12NumberModel = new SpinnerNumberModel(0, 0, bluePrintModel.getAircraft().getNrOfSeats(), 1);
+        under12NumberModel = new SpinnerNumberModel(0, 0, bluePrintModel.getAircraft().getNrOfSeats(), 1);
 
         initModels();
         intiLabels();
@@ -119,13 +121,13 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
             kidsUnder12 = new JSpinner();
         }
 
-        passengerInteraction.add(new JLabel("<html><h1>Adults: </h1></html>"));
+        passengerInteraction.add(new JLabel("<html><h1>Adults: ( "+ PassengersModel.getTicketAdults()+ " €)</h1></html>"));
         passengerInteraction.add(adults);
 
-        passengerInteraction.add(new JLabel("<html><h1>Kids older than 12: </h1></html>"));
+        passengerInteraction.add(new JLabel("<html><h1>Kids older than 12: ( "+ PassengersModel.getTicketKids12()+ " €)</h1></html>"));
         passengerInteraction.add(kidsTo12);
 
-        passengerInteraction.add(new JLabel("<html><h1>Kids younger than 12: </h1></html>"));
+        passengerInteraction.add(new JLabel("<html><h1>Kids younger than 12: ( "+ PassengersModel.getTicketKids()+ " €)</h1></html>"));
         passengerInteraction.add(kidsUnder12);
 
         adults.setModel(adultNumberModel);
@@ -149,11 +151,12 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
      *  and {@link PassengersConfigPanel#seatsLabel}
      * */
     public void updatePassengerLabel() {
-        int remainingSeats = (PassengersModel.getNrOfSeats() - model.getPassengersSum());
+        model.updatePassengersSum();
+        int remainingSeats = (bluePrintModel.getAircraft().getNrOfSeats() - model.getPassengersSum());
 
         nrPassengersLabel.setText("<html><h1>Number of seats occupied: " + model.getPassengersSum() +" </h1></html>");
         nrPassengersLabel.updateUI();
-        seatsLabel.setText("<html><h3>Max number of seats: " + PassengersModel.getNrOfSeats() + " || \t Free seats: " + remainingSeats +" </h3></html>");
+        seatsLabel.setText("<html><h3>Max number of seats: " + bluePrintModel.getAircraft().getNrOfSeats() + " || \t Free seats: " + remainingSeats +" </h3></html>");
         seatsLabel.updateUI();
 
         if(remainingSeats >= 0) {
@@ -162,11 +165,14 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
             passengerInteraction.updateUI();
             MaxSeatsExceeded.setWarned(false);
             displayPanel.updateUI();
+            this.confirmButton.removeActionListener(listener);
+            this.confirmButton.addActionListener(listener);
         } else  {
             this.confirmButton.setText("Kick " + remainingSeats*-1 + " passengers out of the aircraft");
             this.confirmButton.updateUI();
             passengerInteraction.updateUI();
             displayPanel.updateUI();
+            this.confirmButton.removeActionListener(listener);
             if (!MaxSeatsExceeded.isWarned()) new MaxSeatsExceeded();
         }
     }

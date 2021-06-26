@@ -4,6 +4,7 @@ import lombok.extern.java.Log;
 import nl.rug.oop.flaps.aircraft_editor.controller.listeners.infopanel_listeners.ConfirmChangeButtonListener;
 import nl.rug.oop.flaps.aircraft_editor.model.config_models.InfoPanelModel;
 import nl.rug.oop.flaps.aircraft_editor.model.config_models.InfoPanelModelListener;
+import nl.rug.oop.flaps.aircraft_editor.model.config_models.passenger.PassengersModel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.FuelType;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
@@ -44,9 +45,17 @@ public class ProfitEstimationModel implements InfoPanelModelListener {
             cost = originAirport.getFuelPriceByType(fuelType) * aircraft.getTotalFuel();
         }
         double cargoRevenue = aircraft.getCargoRevenue();
+        int ticketsRev = 0;
+        var passengers = aircraft.getPassengers();
+        ticketsRev += passengers.get("adults") * PassengersModel.getTicketAdults();
+        ticketsRev += passengers.get("kidsTo12") * PassengersModel.getTicketKids12();
+        ticketsRev += passengers.get("kidsUnder12") * PassengersModel.getTicketKids();
+
+        double totRev = ticketsRev + cargoRevenue;
+
         InfoPanelModel.setCost(cost);
-        InfoPanelModel.setRevenue(cargoRevenue);
-        InfoPanelModel.setProfitEstimation(cargoRevenue - cost);
+        InfoPanelModel.setRevenue(totRev);
+        InfoPanelModel.setProfitEstimation(totRev - cost);
     }
 
     @Override

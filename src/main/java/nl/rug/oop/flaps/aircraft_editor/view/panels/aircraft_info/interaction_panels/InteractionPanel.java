@@ -7,6 +7,7 @@ import nl.rug.oop.flaps.aircraft_editor.model.config_models.passenger.Passengers
 import nl.rug.oop.flaps.aircraft_editor.model.config_models.InfoPanelModel;
 import nl.rug.oop.flaps.aircraft_editor.view.frame.EditorFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.InfoPanel;
+import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +39,7 @@ public class InteractionPanel extends JPanel implements BluePrintModelListener {
      * @param infoPanelModel the model with the info about the aircraft
      * @param bluePrintModel the bluePrintModel which we contains the data about the aircraft
      */
-    public InteractionPanel(BluePrintModel bluePrintModel, InfoPanelModel infoPanelModel) {
+    public InteractionPanel(WorldSelectionModel selectionModel,BluePrintModel bluePrintModel, InfoPanelModel infoPanelModel) {
         this.bluePrintModel = bluePrintModel;
         this.infoPanelModel = infoPanelModel;
         bluePrintModel.addListener(this);
@@ -48,7 +49,7 @@ public class InteractionPanel extends JPanel implements BluePrintModelListener {
         this.add(nothingSelectedLabel, BorderLayout.NORTH);
         interactionScrollPane = new JScrollPane(this);
 
-        passengersModel = new PassengersModel();
+        passengersModel = new PassengersModel(selectionModel);
     }
 
     /**

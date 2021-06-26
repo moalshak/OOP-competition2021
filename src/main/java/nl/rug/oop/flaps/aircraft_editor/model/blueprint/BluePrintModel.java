@@ -40,7 +40,7 @@ public class BluePrintModel {
     @Getter @Setter
     private static Point2D realCG = new Point2D.Double();
     @Getter @Setter
-    private Point2D passengersEntrance = new Point2D.Double();
+    private Point2D passengersEntrance;
 
     private double scale, indicatorOffset, offsetX, offsetY;
     private final Set<BluePrintModelListener> listeners;
@@ -64,6 +64,8 @@ public class BluePrintModel {
     public BluePrintModel(Aircraft aircraft, BluePrintPanel bluePrintPanel) {
         this.bluePrintPanel = bluePrintPanel;
         this.aircraft = aircraft;
+        this.passengersEntrance = aircraft.getGeoEnt();
+
         listeners = new HashSet<>();
 
 
@@ -71,7 +73,6 @@ public class BluePrintModel {
         setPoints();
         setCenterOfGravity();
 
-        PassengersModel.typeMapper(this);
         this.passengersEntrance = setOnBluePrint(passengersEntrance);
         System.out.println(passengersEntrance);
     }

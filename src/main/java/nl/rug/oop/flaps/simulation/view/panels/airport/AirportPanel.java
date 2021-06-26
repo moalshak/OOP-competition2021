@@ -1,8 +1,12 @@
 package nl.rug.oop.flaps.simulation.view.panels.airport;
 
+import lombok.Getter;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.world.World;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModelListener;
+import nl.rug.oop.flaps.simulation.view.FlapsFrame;
+import nl.rug.oop.flaps.simulation.view.panels.trip.AircraftContents;
+import nl.rug.oop.flaps.simulation.view.panels.trip.TripsInfo;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -16,13 +20,19 @@ import java.awt.*;
 public class AirportPanel extends JPanel implements WorldSelectionModelListener {
 
     private final World world;
+    @Getter
+    private static int WIDTH;
 
     private final GridBagConstraints gbc;
 
     private final AircraftAreaPanel aircraftAreaPanel;
 
+    private final static int DIV_LOCATION = FlapsFrame.getHEIGHT()/2+200;
+
+    private final GridBagLayout gridBagLayout = new GridBagLayout();
+
     public AirportPanel(World world) {
-        setLayout(new GridBagLayout());
+        setLayout(gridBagLayout);
         this.aircraftAreaPanel = new AircraftAreaPanel(null, world);
         gbc = new GridBagConstraints();
         gbc.weightx = 1;
@@ -32,6 +42,7 @@ public class AirportPanel extends JPanel implements WorldSelectionModelListener 
         this.world = world;
         world.getSelectionModel().addListener(this);
         displayAirport();
+        WIDTH = this.getWidth();
     }
 
     private void pad() {
@@ -46,6 +57,7 @@ public class AirportPanel extends JPanel implements WorldSelectionModelListener 
 
     private void displayAirport() {
         this.removeAll();
+        setLayout(gridBagLayout);
         Airport airport = world.getSelectionModel().getSelectedAirport();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -101,6 +113,25 @@ public class AirportPanel extends JPanel implements WorldSelectionModelListener 
         repaint();
     }
 
+    /**
+     * displays the info about the selected trip / flight
+     * */
+    private void displayTripsInfo() {
+        this.removeAll();
+        setLayout(new BorderLayout());
+        TripsInfo tripsInfo = new TripsInfo(this.world.getSelectionModel(), this.getWidth());
+        JScrollPane flightsInfo = new JScrollPane(tripsInfo);
+        AircraftContents aircraftContents = new AircraftContents(this.world.getSelectionModel());
+        JScrollPane aircraftContentsPanel = new JScrollPane(aircraftContents);
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, flightsInfo, aircraftContentsPanel);
+        splitPane.setDividerLocation(DIV_LOCATION);
+        this.add(splitPane);
+        resetPad();
+        revalidate();
+        repaint();
+    }
+
     private JPanel buildValuePanel(String label, String value) {
         JTextField valueField = new JTextField(value);
         valueField.setEditable(false);
@@ -117,5 +148,10 @@ public class AirportPanel extends JPanel implements WorldSelectionModelListener 
     @Override
     public void airportSelected(Airport selectedAirport) {
         this.displayAirport();
+    }
+
+    @Override
+    public void tripSelected() {
+        this.displayTripsInfo();
     }
 }

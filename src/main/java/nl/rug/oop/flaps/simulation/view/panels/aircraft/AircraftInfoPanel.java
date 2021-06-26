@@ -1,5 +1,6 @@
 package nl.rug.oop.flaps.simulation.view.panels.aircraft;
 
+import lombok.Getter;
 import nl.rug.oop.flaps.simulation.controller.actions.SelectDestinationAction;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
@@ -19,6 +20,8 @@ public class AircraftInfoPanel extends JPanel implements PropertyChangeListener 
     private final WorldSelectionModel selectionModel;
     private final GridBagConstraints gbc;
 
+    @Getter
+    private JButton selectDestination;
 
     public AircraftInfoPanel(Aircraft aircraft, WorldSelectionModel selectionModel) {
         super(new GridBagLayout());
@@ -45,7 +48,8 @@ public class AircraftInfoPanel extends JPanel implements PropertyChangeListener 
         gbc.gridy = 0;
         gbc.gridx = 2;
         gbc.gridheight = 2;
-        add(new JButton(new SelectDestinationAction(this.selectionModel)), gbc);
+        selectDestination = new JButton(new SelectDestinationAction(this.selectionModel));
+        add(selectDestination, gbc);
         gbc.gridheight = 1;
         revalidate();
         repaint();

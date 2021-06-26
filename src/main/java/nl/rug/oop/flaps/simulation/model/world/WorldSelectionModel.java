@@ -1,10 +1,13 @@
 package nl.rug.oop.flaps.simulation.model.world;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
+import nl.rug.oop.flaps.simulation.model.trips.Trip;
 
+import java.awt.geom.Point2D;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +29,8 @@ public class WorldSelectionModel {
 	private Airport selectedAirport = null;
 	@Getter
 	private Airport selectedDestinationAirport = null;
-
+	@Getter
+	private Trip selectedTrip;
 	@Getter
 	private boolean selectingDestination = false;
 	@Getter
@@ -45,10 +49,21 @@ public class WorldSelectionModel {
 		this.listeners.add(listener);
 	}
 
+	/**
+	 * sets the selected trip and calls listeners to update view
+	 * */
+	public void setSelectedTrip(Trip trip) {
+		this.selectedTrip = trip;
+		this.selectedAirport = null;
+		this.selectedAircraft = trip.getAircraft();
+		this.listeners.forEach(WorldSelectionModelListener::tripSelected);
+	}
+
 	public void setSelectedAirport(Airport airport) {
 		this.selectedAirport = airport;
 		this.selectedAircraft = null;
 		this.selectedDestinationAirport = null;
+		this.selectedTrip = null;
 		this.listeners.forEach(lst -> {
 			lst.airportSelected(airport);
 			lst.aircraftSelected(null);

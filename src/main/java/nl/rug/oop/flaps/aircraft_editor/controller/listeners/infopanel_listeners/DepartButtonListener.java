@@ -4,8 +4,12 @@ import lombok.extern.java.Log;
 import nl.rug.oop.flaps.aircraft_editor.view.frame.EditorFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.InteractionPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.AircraftType;
+import nl.rug.oop.flaps.simulation.model.trips.TripsThread;
+import nl.rug.oop.flaps.simulation.model.trips.Trip;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 import nl.rug.oop.flaps.simulation.view.FlapsFrame;
+import nl.rug.oop.flaps.simulation.view.panels.aircraft.AircraftInfoPanel;
+import nl.rug.oop.flaps.simulation.view.panels.airport.AircraftAreaPanel;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -33,28 +37,29 @@ public class DepartButtonListener extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent event) {
+        startNewTrip();
+
         var sm = this.selectionModel; // Just to keep things succinct.
         if (sm.getSelectedAirport() != null && sm.getSelectedAircraft() != null && sm.getSelectedDestinationAirport() != null) {
             var aircraft = sm.getSelectedAircraft();
             if (aircraft.getType().getTakeoffClipPath() != null) {
                 this.playTakeoffClip(aircraft.getType());
             }
-            var start = sm.getSelectedAirport();
-            var end = sm.getSelectedDestinationAirport();
-            start.removeAircraft(aircraft);
-            end.addAircraft(aircraft);
-            sm.setSelectedAirport(end);
-            sm.setSelectedDestinationAirport(null);
-            sm.setSelectedAircraft(aircraft);
-            aircraft.removeFuel(aircraft.getFuelConsumption(start, end));
-            aircraft.emptyCargo();
-            /* escort passengers if any were added */
-            if(InteractionPanel.getPassengersConfigPanel() != null) {
-                InteractionPanel.getPassengersConfigPanel().getModel().escortPassengers();
-            }
+            sm.getSelectedAirport().removeAircraft(aircraft);
+            sm.setSelectedAirport(sm.getSelectedAirport());
         }
         closeFrame();
     }
+
+    /**
+     *  start a trip from origin airport to destination airport
+     *  */
+    private void startNewTrip() {
+        Trip newTrip = new Trip(selectionModel);
+        TripsThread tripsThread = new TripsThread(newTrip);
+        tripsThread.start();
+    }
+
     /**
      * closes the frame after departing and shows a message
      * */

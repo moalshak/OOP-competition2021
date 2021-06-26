@@ -6,8 +6,12 @@ import nl.rug.oop.flaps.aircraft_editor.controller.listeners.infopanel_listeners
 import nl.rug.oop.flaps.aircraft_editor.model.blueprint.BluePrintModel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.PassengersConfigPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.AircraftType;
+import nl.rug.oop.flaps.simulation.model.trips.Trip;
+import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 
+import javax.imageio.ImageIO;
 import java.awt.geom.Point2D;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +26,13 @@ public class PassengersModel {
     private final static int avgAdultWeight = 83;
     private final static int avgKidTo12Weight = 42;
     private final static int avgKidUnder12Weight = 22;
+    @Getter
+    private final static int ticketAdults = (int) (Math.random()*(900-300+1)+300);
+    @Getter
+    private final static int ticketKids12 = (int) (Math.random()*(300-200+1)+200);
+    @Getter
+    private final static int ticketKids = (int) (Math.random()*(200-50+1)+50);
+
     @Setter
     private PassengersConfigPanel panel;
 
@@ -40,35 +51,13 @@ public class PassengersModel {
     @Setter
     private HashMap<String, Integer> passengers;
 
-    public PassengersModel() {
-        passengers = new HashMap<>();
-        passengers.put("adults", 0);
-        passengers.put("kidsTo12", 0);
-        passengers.put("kidsUnder12", 0);
-    }
+    private final WorldSelectionModel selectionModel;
 
-    /**
-     * Maps particular properties to the aircraft and sets that in the {@link BluePrintModel}
-     * @param bluePrintModel the blueprintModel for the particular aircraft
-     * */
-    public static void typeMapper(BluePrintModel bluePrintModel) {
-        AircraftType type = bluePrintModel.getAircraft().getType();
-        Point2D geo = new Point2D.Double();
-
-        if(type.getName().equals("Boeing 747-400F")) {
-            geo.setLocation(4, 18);
-            nrOfSeats = 366;
-            crewOnBoard = (int)(Math.random()*(10-2+1)+2);
-        } else if (type.getName().equals("Boeing 737-800BCF Freighter")) {
-            geo.setLocation(3, 10);
-            nrOfSeats = 120;
-            crewOnBoard = (int)(Math.random()*(5-2+1)+2);
-        } else {
-            geo.setLocation(0.5, 2.1);
-            nrOfSeats = 9;
-            crewOnBoard = 2;
-        }
-        bluePrintModel.setPassengersEntrance(geo);
+    public PassengersModel(WorldSelectionModel selectionModel) {
+        this.selectionModel = selectionModel;
+        passengers = selectionModel.getSelectedAircraft().getPassengers();
+        nrOfSeats = selectionModel.getSelectedAircraft().getNrOfSeats();
+        crewOnBoard = selectionModel.getSelectedAircraft().getCrewOnBoard();
     }
 
     /**
@@ -90,6 +79,7 @@ public class PassengersModel {
         passengers.put("adults", (int) panel.getAdults().getValue());
         passengers.put("kidsTo12", (int) panel.getKidsTo12().getValue());
         passengers.put("kidsUnder12", (int) panel.getKidsUnder12().getValue());
+        selectionModel.getSelectedAircraft().setPassengers(passengers);
     }
 
     /**
@@ -114,12 +104,14 @@ public class PassengersModel {
      * escorts the passengers from the aircraft by resetting values in {@link PassengersModel#passengersWeight} and
      * {@link PassengersModel#passengersSum} and resetting all values in {@link PassengersModel#passengers}
      * */
-    public void escortPassengers() {
+    public void escortPassengers(Trip trip) {
         passengersWeight = 0;
         passengersSum = 0;
         passengers.put("adults", 0);
         passengers.put("kidsTo12", 0);
         passengers.put("kidsUnder12", 0);
+        trip.getAircraft().setPassengers(passengers);
+        trip.getAircraft().setCrewOnBoard(crewOnBoard);
     }
 
     /**

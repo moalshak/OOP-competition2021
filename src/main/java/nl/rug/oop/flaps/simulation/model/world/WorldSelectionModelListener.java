@@ -2,6 +2,7 @@ package nl.rug.oop.flaps.simulation.model.world;
 
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
+import nl.rug.oop.flaps.simulation.model.trips.Trip;
 
 /**
  * A world selection model listener is any object that should react to changes
@@ -38,4 +39,10 @@ public interface WorldSelectionModelListener {
 	 * such as the user moving their mouse while selecting a destination.
 	 */
 	default void destinationSelectionUpdated() {}
+
+	/**
+	 * called when a trip or flight is selected
+	 *
+	 * */
+	default void tripSelected(){};
 }
