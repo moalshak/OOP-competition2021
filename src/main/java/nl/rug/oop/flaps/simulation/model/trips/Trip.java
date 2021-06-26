@@ -121,12 +121,12 @@ public class Trip {
         reachedDestination = currentPosition.distance(destinationAirportLocation) < INDICATOR_SIZE/10;
         GeographicCoordinates end = getGeoPosition(currentPosition);
 
-        removedAndUpdateFuel(start, end);
         setDistanceLeft(end);
-        if(reachedDestination) aircraftArrived();
-
+        removedAndUpdateFuel(start, end);
         // repaint
         WorldPanel.getWorldPanel().repaint();
+
+        if(reachedDestination) aircraftArrived();
     }
 
     /**
@@ -146,7 +146,7 @@ public class Trip {
         stringBuilder.append("-".repeat(Math.max(0, 50 - percentage)));
         stringBuilder.append("🏢");
 
-        if(reachedDestination) stringBuilder.append("Arrived 🛬 ✅");
+        if(reachedDestination) stringBuilder.append("   Arrived 🛬 ✅");
 
         distanceLeft = String.valueOf(stringBuilder);
     }
