@@ -3,15 +3,16 @@ package nl.rug.oop.flaps.simulation.model.trips;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.model.config_models.InfoPanelModel;
-import nl.rug.oop.flaps.aircraft_editor.model.config_models.passenger.PassengersModel;
-import nl.rug.oop.flaps.aircraft_editor.model.config_models.trip_results.ProfitEstimationModel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.InteractionPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
+import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
+import nl.rug.oop.flaps.simulation.model.map.coordinates.PointProvider;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.ProjectionMapping;
 import nl.rug.oop.flaps.simulation.model.world.World;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 import nl.rug.oop.flaps.simulation.view.panels.WorldPanel;
+import nl.rug.oop.flaps.simulation.view.panels.trip.TripsInfo;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -41,7 +42,7 @@ public class Trip {
     boolean reachedDestination = false;
 
     private final WorldSelectionModel sm;
-    private static final double velocity = 0.1;
+    private static final double VELOCITY = 0.1;
     /**
      * creates a new instance of the Trip after departure
      * */
@@ -96,24 +97,52 @@ public class Trip {
      * */
     public void cruise () {
         // update position
+
+        GeographicCoordinates start =  getGeoPosition(currentPosition);
+        double xVelocity = currentPosition.getX();
+        double yVelocity = currentPosition.getY();
+
         if (currentPosition.getX() < destinationAirportLocation.getX()) {
-            currentPosition.setLocation(currentPosition.getX()+velocity, currentPosition.getY());
+            xVelocity += VELOCITY;
         } else if (currentPosition.getX() >= destinationAirportLocation.getX()) {
-            currentPosition.setLocation(currentPosition.getX()-velocity, currentPosition.getY());
+            xVelocity -= VELOCITY;
         }
         if (currentPosition.getY() < destinationAirportLocation.getY()) {
-            currentPosition.setLocation(currentPosition.getX(), currentPosition.getY() + velocity);
+            yVelocity += VELOCITY;
         } else if (currentPosition.getY() >= destinationAirportLocation.getY()) {
-            currentPosition.setLocation(currentPosition.getX(), currentPosition.getY() - velocity);
+            yVelocity -= VELOCITY;
         }
-        steps.add(new Point2D.Double(currentPosition.getX(), currentPosition.getY()));
+        currentPosition.setLocation(xVelocity, yVelocity);
 
+        steps.add(new Point2D.Double(currentPosition.getX(), currentPosition.getY()));
         // update of checked destination (trip arrived when in range of the airport )
         reachedDestination = currentPosition.distance(destinationAirportLocation) < INDICATOR_SIZE;
-        // repaint
+        GeographicCoordinates end = getGeoPosition(currentPosition);
+
+        removedAndUpdateFuel(start, end);
         if(reachedDestination) aircraftArrived();
-        // todo: make the fuel removed according to the place of the plane on the map
+
+        // repaint
         WorldPanel.getWorldPanel().repaint();
+    }
+
+    /**
+     * removes the fuel from the aircraft and updates the trip's info panel
+     * */
+    private void removedAndUpdateFuel(GeographicCoordinates start, GeographicCoordinates end) {
+        aircraft.removeFuel(aircraft.getFuelConsumption(start, end));
+        if (TripsInfo.getTripsInfo() != null) {
+            TripsInfo.getTripsInfo().updateFuelLabel();
+        }
+    }
+
+    /**
+     * @return the the geo position of a point drawn on the world map
+     * */
+    private GeographicCoordinates getGeoPosition(Point2D currentPosition) {
+        var geo = ProjectionMapping.worldToMercator(World.getStaticDimensions()).
+                map(PointProvider.ofPoint(new Point2D.Double(currentPosition.getX(), currentPosition.getY())));
+        return new GeographicCoordinates(geo.getPointX(),geo.getPointY());
     }
 
     /**
@@ -121,16 +150,11 @@ public class Trip {
      * Also removed the trip from the trip list
      * */
     private void aircraftArrived() {
-        //GeographicCoordinates place = new GeographicCoordinates(0,0);
-        //place.setLongitude(currentPosition.getX() * originAirport.getLocation().getLongitude() / originAirportLocation.getX());
-        //place.setLongitude(currentPosition.getY() * originAirport.getLocation().getLatitude() / originAirportLocation.getY());
-        //aircraft.removeFuel(aircraft.getFuelConsumption(originAirport, place));
         destAirport.addAircraft(aircraft);
-        aircraft.removeFuel(aircraft.getFuelConsumption(originAirport, destAirport));
         aircraft.emptyCargo();
         /* escort passengers if any were added */
         if(InteractionPanel.getPassengersConfigPanel() != null) {
-            InteractionPanel.getPassengersConfigPanel().getModel().escortPassengers();
+            InteractionPanel.getPassengersConfigPanel().getModel().escortPassengers(this);
         }
         if(sm.getSelectedAirport() != null && sm.getSelectedAirport() == destAirport) {
             sm.setSelectedAirport(destAirport);

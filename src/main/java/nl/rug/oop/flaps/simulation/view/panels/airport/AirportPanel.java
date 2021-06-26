@@ -112,6 +112,7 @@ public class AirportPanel extends JPanel implements WorldSelectionModelListener 
         revalidate();
         repaint();
     }
+
     /**
      * displays the info about the selected trip / flight
      * */
@@ -120,7 +121,7 @@ public class AirportPanel extends JPanel implements WorldSelectionModelListener 
         setLayout(new BorderLayout());
         TripsInfo tripsInfo = new TripsInfo(this.world.getSelectionModel(), this.getWidth());
         JScrollPane flightsInfo = new JScrollPane(tripsInfo);
-        AircraftContents aircraftContents = new AircraftContents(this.world.getSelectionModel(), this.getWidth());
+        AircraftContents aircraftContents = new AircraftContents(this.world.getSelectionModel());
         JScrollPane aircraftContentsPanel = new JScrollPane(aircraftContents);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, flightsInfo, aircraftContentsPanel);

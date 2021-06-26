@@ -8,17 +8,18 @@ import nl.rug.oop.flaps.simulation.model.trips.Trip;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.util.List;
 
 public class AircraftContents extends JPanel {
-    private WorldSelectionModel sm;
-    private int WIDTH;
-    private GridBagConstraints gbc = new GridBagConstraints();
+    private final WorldSelectionModel sm;
+    private final Aircraft aircraft;
 
-    public AircraftContents(WorldSelectionModel selectionModel, int width) {
+    public AircraftContents(WorldSelectionModel selectionModel) {
         this.sm = selectionModel;
-        this.WIDTH = width;
+        this.aircraft = sm.getSelectedAircraft();
+
         setLayout(new BorderLayout());
         JLabel title = new JLabel("Aircraft's content:");
         title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
@@ -26,10 +27,29 @@ public class AircraftContents extends JPanel {
         add(displayContent(), BorderLayout.CENTER);
     }
 
+    /**
+     * displays the content of the two tables
+     * */
     private JSplitPane displayContent() {
         Trip selectedTrip = sm.getSelectedTrip();
-        Aircraft aircraft = selectedTrip.getAircraft();
 
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+
+        JScrollPane panel = new JScrollPane(this.makePassengersTable(centerRenderer));
+        JScrollPane panel1 = new JScrollPane(makeCargoTable(selectedTrip, centerRenderer));
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, panel,panel1);
+        splitPane.setDividerLocation(100);
+        splitPane.setDividerSize(0);
+        return splitPane;
+    }
+
+    /**
+     * makes the table for passengers
+     * @return the passengers info table
+     * */
+    private JTable makePassengersTable(DefaultTableCellRenderer centerRenderer) {
         String[] colNames1 = {"Adults", "Kids 12+", "Kids Under 12", "Crew"};
         Object[][] data1 = {
                 {aircraft.getPassengers().get("adults") + " on board || Ticket: € " + PassengersModel.getTicketAdults(),
@@ -39,8 +59,14 @@ public class AircraftContents extends JPanel {
                 }
         };
         JTable table = new JTable(data1, colNames1);
-        JScrollPane panel = new JScrollPane(table);
+        centerColumns(table, centerRenderer, colNames1.length);
+        return table;
+    }
 
+    /** makes the table for cargo
+     * @return the cargo info table
+     * */
+    private JTable makeCargoTable(Trip selectedTrip, DefaultTableCellRenderer centerRenderer) {
         List<CargoArea> list = selectedTrip.getAircraft().getType().getCargoAreas();
         String[] colNames = new String[list.size()]; int i = 0; int j = 0;
         Object[][] data = new Object[10][list.size()];
@@ -48,6 +74,7 @@ public class AircraftContents extends JPanel {
             colNames[i] = cargoArea.getName();
             i++;
         }
+
         for (CargoArea cargoArea : list) {
             i = 0;
             for (CargoUnit unit : selectedTrip.getAircraft().getCargoAreaContents(cargoArea)) {
@@ -56,13 +83,18 @@ public class AircraftContents extends JPanel {
             }
             j++;
         }
-        JTable table1 = new JTable(data, colNames);
-        JScrollPane panel1 = new JScrollPane(table1);
+        JTable table = new JTable(data, colNames);
+        centerColumns(table, centerRenderer, list.size());
+        return table;
+    }
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, panel,panel1);
-        splitPane.setDividerLocation(100);
-        splitPane.setDividerSize(0);
-        return splitPane;
+    /**
+     * centers the text in the columns of the table
+     * */
+    private void centerColumns(JTable table, DefaultTableCellRenderer centerRenderer, int size) {
+        for(int x=0;x<size;x++){
+            table.getColumnModel().getColumn(x).setCellRenderer( centerRenderer );
+        }
     }
 
 }

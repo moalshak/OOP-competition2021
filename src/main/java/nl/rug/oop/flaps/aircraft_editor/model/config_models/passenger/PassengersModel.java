@@ -6,6 +6,7 @@ import nl.rug.oop.flaps.aircraft_editor.controller.listeners.infopanel_listeners
 import nl.rug.oop.flaps.aircraft_editor.model.blueprint.BluePrintModel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.PassengersConfigPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.AircraftType;
+import nl.rug.oop.flaps.simulation.model.trips.Trip;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 
 import javax.imageio.ImageIO;
@@ -103,14 +104,14 @@ public class PassengersModel {
      * escorts the passengers from the aircraft by resetting values in {@link PassengersModel#passengersWeight} and
      * {@link PassengersModel#passengersSum} and resetting all values in {@link PassengersModel#passengers}
      * */
-    public void escortPassengers() {
+    public void escortPassengers(Trip trip) {
         passengersWeight = 0;
         passengersSum = 0;
         passengers.put("adults", 0);
         passengers.put("kidsTo12", 0);
         passengers.put("kidsUnder12", 0);
-        selectionModel.getSelectedAircraft().setPassengers(passengers);
-        selectionModel.getSelectedAircraft().setCrewOnBoard(crewOnBoard);
+        trip.getAircraft().setPassengers(passengers);
+        trip.getAircraft().setCrewOnBoard(crewOnBoard);
     }
 
     /**

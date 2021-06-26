@@ -1,5 +1,6 @@
 package nl.rug.oop.flaps.simulation.view.panels.trip;
 
+import lombok.Getter;
 import nl.rug.oop.flaps.simulation.model.trips.Trip;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 
@@ -13,6 +14,13 @@ public class TripsInfo extends JPanel {
     private WorldSelectionModel sm;
     private GridBagConstraints gbc = new GridBagConstraints();
     private final int WIDTH;
+    @Getter
+    private static TripsInfo tripsInfo;
+
+    private Trip selectedTrip;
+    private JPanel infoPanel = new JPanel();
+    private Font infoTextFont = new Font(Font.SANS_SERIF, Font.BOLD, 18);
+    private JLabel fuelLabel;
 
     public TripsInfo (WorldSelectionModel sm, int width) {
         this.sm = sm;
@@ -31,13 +39,12 @@ public class TripsInfo extends JPanel {
         add(splitPane);
 
         setVisible(true);
+        tripsInfo = this;
     }
     // y -> row ; x -> col
     private JPanel viewInfo() {
-        JPanel infoPanel = new JPanel();
-        Font infoTextFont = new Font(Font.SANS_SERIF, Font.BOLD, 18);
 
-        Trip selectedTrip = sm.getSelectedTrip();
+        selectedTrip = sm.getSelectedTrip();
         infoPanel.setLayout(new GridBagLayout());
 
         JLabel label = new JLabel("Origin Airport: " + selectedTrip.getOriginAirport().getName());
@@ -50,10 +57,7 @@ public class TripsInfo extends JPanel {
         infoPanel.add(label, gbc);
         label.setFont(infoTextFont);
 
-        label = new JLabel("Aircraft's fuel: " + selectedTrip.getAircraft().getTotalFuel() + " Kg");
-        gbc.gridy = 2; gbc.gridx = 0;
-        infoPanel.add(label, gbc);
-        label.setFont(infoTextFont);
+        updateFuelLabel();
 
         label = new JLabel("Aircraft's cargo weight: " + selectedTrip.getAircraft().getTotalCargoWeight() + " Kg");
         gbc.gridy = 3; gbc.gridx = 0;
@@ -81,4 +85,17 @@ public class TripsInfo extends JPanel {
 
         return infoPanel;
     }
+
+    public void updateFuelLabel() {
+        if (fuelLabel == null) {
+            fuelLabel = new JLabel("Aircraft's fuel: " + (int) selectedTrip.getAircraft().getTotalFuel() + " Kg");
+            gbc.gridy = 2; gbc.gridx = 0;
+            infoPanel.add(fuelLabel, gbc);
+            fuelLabel.setFont(infoTextFont);
+        } else {
+            fuelLabel.setText("Aircraft's fuel: " + (int) selectedTrip.getAircraft().getTotalFuel() + " Kg");
+        }
+        infoPanel.updateUI();
+    }
+
 }

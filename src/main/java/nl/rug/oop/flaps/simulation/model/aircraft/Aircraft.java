@@ -123,9 +123,9 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
      * @param destination The airport the aircraft flies to
      * @return The amount of fuel in kg consumed in the journey
      */
-    public double getFuelConsumption(Airport origin, GeographicCoordinates destination) {
+    public double getFuelConsumption(GeographicCoordinates origin, GeographicCoordinates destination) {
         /* calculate distance to destination airport */
-        double distance = origin.getGeographicCoordinates().distanceTo(destination);
+        double distance = origin.distanceTo(destination);
 
         double cruiseSpeed = this.getType().getCruiseSpeed();
         /* flightDuration = the distance in Km then device by the cruiseSpeed*/
