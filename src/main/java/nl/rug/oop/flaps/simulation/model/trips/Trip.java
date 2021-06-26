@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.model.config_models.InfoPanelModel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.InteractionPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
+import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.PointProvider;
@@ -17,10 +18,10 @@ import nl.rug.oop.flaps.simulation.view.panels.trip.TripsInfo;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.lang.reflect.Field;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 @Getter
 public class Trip {
@@ -45,6 +46,8 @@ public class Trip {
     private static final double VELOCITY = 0.1;
 
     private String distanceLeft;
+
+    Map<FuelTank, Double> fuelTankFillStatuses;
     /**
      * creates a new instance of the Trip after departure
      * */
@@ -56,6 +59,8 @@ public class Trip {
         originAirportLocation = getAirportAsPoint(originAirport);
         currentPosition = originAirportLocation;
         destinationAirportLocation = getAirportAsPoint(destAirport);
+        this.fuelTankFillStatuses = new HashMap<>(aircraft.getFuelTankFillStatuses());
+
         setBannerImage();
         WorldPanel.getWorldPanel().addTrip(this);
     }
@@ -122,7 +127,7 @@ public class Trip {
         GeographicCoordinates end = getGeoPosition(currentPosition);
 
         setDistanceLeft(end);
-        removedAndUpdateFuel(start, end);
+        removedAndUpdateFuel(end);
         // repaint
         WorldPanel.getWorldPanel().repaint();
 
@@ -154,8 +159,13 @@ public class Trip {
     /**
      * removes the fuel from the aircraft and updates the trip's info panel
      * */
-    private void removedAndUpdateFuel(GeographicCoordinates start, GeographicCoordinates end) {
-        aircraft.removeFuel(aircraft.getFuelConsumption(start, end));
+    private void removedAndUpdateFuel(GeographicCoordinates end) {
+        for (FuelTank fuelTank : fuelTankFillStatuses.keySet()) {
+            aircraft.setFuelAmountForFuelTank(fuelTank, fuelTankFillStatuses.get(fuelTank));
+        }
+
+        aircraft.removeFuel(aircraft.getFuelConsumption(originAirport, end));
+
         if (TripsInfo.getTripsInfo() != null) {
             TripsInfo.getTripsInfo().updateFuelLabel();
             TripsInfo.getTripsInfo().updateDistanceMeter();

@@ -2,9 +2,7 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.flaps.aircraft_editor.model.blueprint.BluePrintModel;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
-import nl.rug.oop.flaps.simulation.model.cargo.CargoType; //!!Don't remove this!!, if you do it causes some weird bug
 import nl.rug.oop.flaps.simulation.model.cargo.CargoUnit;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 import nl.rug.oop.flaps.simulation.model.world.World;
@@ -123,9 +121,9 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
      * @param destination The airport the aircraft flies to
      * @return The amount of fuel in kg consumed in the journey
      */
-    public double getFuelConsumption(GeographicCoordinates origin, GeographicCoordinates destination) {
+    public double getFuelConsumption(Airport origin, GeographicCoordinates destination) {
         /* calculate distance to destination airport */
-        double distance = origin.distanceTo(destination);
+        double distance = origin.getGeographicCoordinates().distanceTo(destination);
 
         double cruiseSpeed = this.getType().getCruiseSpeed();
         /* flightDuration = the distance in Km then device by the cruiseSpeed*/
