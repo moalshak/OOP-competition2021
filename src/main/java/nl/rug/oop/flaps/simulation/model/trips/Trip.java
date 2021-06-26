@@ -43,6 +43,8 @@ public class Trip {
 
     private final WorldSelectionModel sm;
     private static final double VELOCITY = 0.1;
+
+    private String distanceLeft;
     /**
      * creates a new instance of the Trip after departure
      * */
@@ -116,14 +118,37 @@ public class Trip {
 
         steps.add(new Point2D.Double(currentPosition.getX(), currentPosition.getY()));
         // update of checked destination (trip arrived when in range of the airport )
-        reachedDestination = currentPosition.distance(destinationAirportLocation) < INDICATOR_SIZE;
+        reachedDestination = currentPosition.distance(destinationAirportLocation) < INDICATOR_SIZE/10;
         GeographicCoordinates end = getGeoPosition(currentPosition);
 
         removedAndUpdateFuel(start, end);
+        setDistanceLeft(end);
         if(reachedDestination) aircraftArrived();
 
         // repaint
         WorldPanel.getWorldPanel().repaint();
+    }
+
+    /**
+     * sets and loads the distance left progress bar
+     * */
+    private void setDistanceLeft(GeographicCoordinates end) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        int percentage = (int) (Math.round(50.0 * originAirport.getGeographicCoordinates().distanceTo(end) /
+                originAirport.getGeographicCoordinates().distanceTo(destAirport.getGeographicCoordinates())));
+
+        stringBuilder.append("Progress: 🏢");
+        stringBuilder.append("-".repeat(Math.max(0,percentage)));
+        if (percentage > 0) {
+            stringBuilder.append("✈");
+        }
+        stringBuilder.append("-".repeat(Math.max(0, 50 - percentage)));
+        stringBuilder.append("🏢");
+
+        if(reachedDestination) stringBuilder.append("Arrived 🛬 ✅");
+
+        distanceLeft = String.valueOf(stringBuilder);
     }
 
     /**
@@ -133,6 +158,7 @@ public class Trip {
         aircraft.removeFuel(aircraft.getFuelConsumption(start, end));
         if (TripsInfo.getTripsInfo() != null) {
             TripsInfo.getTripsInfo().updateFuelLabel();
+            TripsInfo.getTripsInfo().updateDistanceMeter();
         }
     }
 

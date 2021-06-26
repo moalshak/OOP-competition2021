@@ -60,6 +60,7 @@ public class AircraftContents extends JPanel {
         };
         JTable table = new JTable(data1, colNames1);
         centerColumns(table, centerRenderer, colNames1.length);
+        table.setEnabled(false);
         return table;
     }
 
@@ -85,6 +86,7 @@ public class AircraftContents extends JPanel {
         }
         JTable table = new JTable(data, colNames);
         centerColumns(table, centerRenderer, list.size());
+        table.setEnabled(false);
         return table;
     }
 

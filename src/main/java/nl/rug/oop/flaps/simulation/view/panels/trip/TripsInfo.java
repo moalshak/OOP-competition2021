@@ -11,16 +11,17 @@ import java.awt.*;
  * shows information about the flight when clicked
  * */
 public class TripsInfo extends JPanel {
-    private WorldSelectionModel sm;
-    private GridBagConstraints gbc = new GridBagConstraints();
+    private final WorldSelectionModel sm;
+    private final GridBagConstraints gbc = new GridBagConstraints();
     private final int WIDTH;
     @Getter
     private static TripsInfo tripsInfo;
 
     private Trip selectedTrip;
-    private JPanel infoPanel = new JPanel();
-    private Font infoTextFont = new Font(Font.SANS_SERIF, Font.BOLD, 18);
+    private final JPanel infoPanel = new JPanel();
+    private final Font infoTextFont = new Font(Font.SANS_SERIF, Font.BOLD, 18);
     private JLabel fuelLabel;
+    private JLabel distanceLabel;
 
     public TripsInfo (WorldSelectionModel sm, int width) {
         this.sm = sm;
@@ -58,6 +59,7 @@ public class TripsInfo extends JPanel {
         label.setFont(infoTextFont);
 
         updateFuelLabel();
+        updateDistanceMeter();
 
         label = new JLabel("Aircraft's cargo weight: " + selectedTrip.getAircraft().getTotalCargoWeight() + " Kg");
         gbc.gridy = 3; gbc.gridx = 0;
@@ -77,7 +79,7 @@ public class TripsInfo extends JPanel {
         label = new JLabel();
         ImageIcon banner = new ImageIcon(selectedTrip.getBannerInAir().getScaledInstance(WIDTH-15, WIDTH/2-50, Image.SCALE_SMOOTH));
         label.setIcon(banner);
-        gbc.gridy = 6; gbc.gridx = 0;
+        gbc.gridy = 7; gbc.gridx = 0;
         gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
         infoPanel.add(label, gbc);
         label.setFont(infoTextFont);
@@ -86,6 +88,10 @@ public class TripsInfo extends JPanel {
         return infoPanel;
     }
 
+
+    /**
+     * updates the fuel label when the aircraft is flying
+     * */
     public void updateFuelLabel() {
         if (fuelLabel == null) {
             fuelLabel = new JLabel("Aircraft's fuel: " + (int) selectedTrip.getAircraft().getTotalFuel() + " Kg");
@@ -98,4 +104,18 @@ public class TripsInfo extends JPanel {
         infoPanel.updateUI();
     }
 
+    /**
+     * updates the distance meter
+     * */
+    public void updateDistanceMeter() {
+        if (distanceLabel == null) {
+            distanceLabel = new JLabel(selectedTrip.getDistanceLeft());
+            gbc.gridy = 6; gbc.gridx = 0;
+            distanceLabel.setFont(infoTextFont);
+            infoPanel.add(distanceLabel, gbc);
+        } else {
+            distanceLabel.setText(selectedTrip.getDistanceLeft());
+        }
+        infoPanel.updateUI();
+    }
 }
