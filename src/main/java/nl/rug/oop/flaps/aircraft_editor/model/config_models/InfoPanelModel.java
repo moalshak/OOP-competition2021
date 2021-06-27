@@ -36,19 +36,19 @@ public class InfoPanelModel  {
     private final Airport originAirport;
     private final Airport destinationAirport;
 
-    @Getter @Setter
+    @Setter
     private double aircraftRange;
     @Getter @Setter
     private static Point2D centerOfGravity;
-    @Getter @Setter
+    @Setter
     private double profitEstimation;
-    @Getter @Setter
+    @Setter
     private double cost;
-    @Getter @Setter
+    @Setter
     private double Revenue;
-    @Getter @Setter
+    @Setter
     private double aircraftWeight;
-    @Setter @Getter
+    @Setter
     private double tripDistance;
     @Getter
     private static List<InfoPanelModelListener> listeners;
