@@ -23,7 +23,9 @@ public class DepartButton extends JButton {
     private static final String OFF_CENTER = "Cannot depart: Aircraft center of gravity is problematic...";
     private static final String TOO_HEAVY = "Cannot depart: Max takeoff weight exceeded...";
 
-    public DepartButton() {
+    private InfoPanelModel model;
+    public DepartButton(InfoPanelModel model) {
+        this.model = model;
         this.selectionModel = InfoPanel.getWorldSelectionModel();
         makeDepartButton();
     }
@@ -45,8 +47,8 @@ public class DepartButton extends JButton {
 
         boolean offCenter = GravityCenterModel.isAircraftOffCenter();
         boolean canAcceptIncomingAircraft = selectionModel.getSelectedDestinationAirport().canAcceptIncomingAircraft();
-        boolean sufficientWeight = InfoPanelModel.getAircraftWeight() > selectionModel.getSelectedAircraft().getType().getMaxTakeoffWeight();
-        boolean notEnoughFuel = InfoPanelModel.getAircraftRange() < InfoPanelModel.getTripDistance();
+        boolean sufficientWeight = model.getAircraftWeight() > selectionModel.getSelectedAircraft().getType().getMaxTakeoffWeight();
+        boolean notEnoughFuel = model.getAircraftRange() < model.getTripDistance();
 
         if (offCenter) {
             this.setText(OFF_CENTER);
@@ -56,7 +58,7 @@ public class DepartButton extends JButton {
             this.setText(TOO_HEAVY + "Max weight = " +
                     (int) selectionModel.getSelectedAircraft().getType().getMaxTakeoffWeight() + " Kg");
         } else if (notEnoughFuel) {
-            this.setText(NOT_ENOUGH_FUEL + " Distance = " + (int) InfoPanelModel.getTripDistance() + " Km");
+            this.setText(NOT_ENOUGH_FUEL + " Distance = " + (int) model.getTripDistance() + " Km");
         } else {
             this.setText("Depart");
             addActionListener(listener);

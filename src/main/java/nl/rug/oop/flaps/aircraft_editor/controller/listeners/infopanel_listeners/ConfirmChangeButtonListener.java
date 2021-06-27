@@ -7,6 +7,7 @@ import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.InfoPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.CargoConfigPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.FuelConfigPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.PassengersConfigPanel;
+import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoUnit;
 
 import javax.swing.undo.UndoableEditSupport;
@@ -23,21 +24,25 @@ public class ConfirmChangeButtonListener implements ActionListener {
     private FuelConfigPanel fuelConfigPanel;
     private CargoConfigPanel cargoConfigPanel;
     private PassengersConfigPanel passengersConfigPanel;
-    private final UndoableEditSupport undoSupport = EditMenu.getUndoSupport();
+    private Aircraft aircraft;
+    private final UndoableEditSupport undoSupport;
 
-    public ConfirmChangeButtonListener(FuelConfigPanel fuelConfigPanel) {
+    public ConfirmChangeButtonListener(FuelConfigPanel fuelConfigPanel, Aircraft aircraft) {
         this.fuelConfigPanel = fuelConfigPanel;
-
+        this.aircraft = aircraft;
+        this.undoSupport = aircraft.getEditMenu().getUndoSupport();
     }
 
-    public ConfirmChangeButtonListener(CargoConfigPanel cargoConfigPanel) {
+    public ConfirmChangeButtonListener(CargoConfigPanel cargoConfigPanel, Aircraft aircraft) {
         this.cargoConfigPanel = cargoConfigPanel;
-
+        this.aircraft = aircraft;
+        this.undoSupport = aircraft.getEditMenu().getUndoSupport();
     }
 
-    public ConfirmChangeButtonListener(PassengersConfigPanel passengersConfigPanel) {
+    public ConfirmChangeButtonListener(PassengersConfigPanel passengersConfigPanel, Aircraft aircraft) {
         this.passengersConfigPanel = passengersConfigPanel;
-
+        this.aircraft = aircraft;
+        this.undoSupport = aircraft.getEditMenu().getUndoSupport();
     }
 
     /**
@@ -77,7 +82,7 @@ public class ConfirmChangeButtonListener implements ActionListener {
                 CargoUnit redoCargoUnit = new CargoUnit(cargoConfigPanel.getSelectedCargoUnit().getCargoType(),
                         cargoConfigPanel.getSelectedCargoUnit().getWeight());
                 undoSupport.postEdit(new AddEdit(cargoConfigPanel, undoCargoUnit, redoCargoUnit));
-                cargoConfigPanel.getAircraft().addToCargoArea(cargoConfigPanel.getSelectedCargoArea(), cargoConfigPanel.getSelectedCargoUnit());
+                aircraft.addToCargoArea(cargoConfigPanel.getSelectedCargoArea(), cargoConfigPanel.getSelectedCargoUnit());
                 cargoConfigPanel.updateCargoAreaWeightLabel();
                 cargoConfigPanel.getBluePrintModel().getBluePrintPanel().repaint();
                 InfoPanel.updateResultInfo();
@@ -94,7 +99,7 @@ public class ConfirmChangeButtonListener implements ActionListener {
             double undoFuelTankAmount = fuelConfigPanel.getAircraft().getFuelAmountForFuelTank(fuelConfigPanel.getSelectedTank());
             double redoFuelTankAmount = fuelConfigPanel.getInfoSlider().getValue();
             undoSupport.postEdit(new AddEdit(fuelConfigPanel,undoFuelTankAmount, redoFuelTankAmount));
-            fuelConfigPanel.getAircraft().setFuelAmountForFuelTank(fuelConfigPanel.getSelectedTank(), fuelConfigPanel.getInfoSlider().getValue());
+            aircraft.setFuelAmountForFuelTank(fuelConfigPanel.getSelectedTank(), fuelConfigPanel.getInfoSlider().getValue());
             fuelConfigPanel.getDisplayPanel().removeAll();
             fuelConfigPanel.initConfigPanelFuel();
             fuelConfigPanel.getBluePrintModel().getBluePrintPanel().repaint();

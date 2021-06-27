@@ -80,12 +80,12 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
      * paints the steps of the aircraft
      * */
     private void paintSteps(Graphics2D g, Trip trip) {
-        List<Point2D> steps = trip.getSteps();
+        var steps = trip.getSteps();
         g.setColor(Color.YELLOW);
         double s = INDICATOR_SIZE;
         s /= 3;
-        for(Point2D step : steps) {
-            Shape marker = new Ellipse2D.Double(step.getX() - s/2, step.getY()- s/2, s,s);
+        for(Double step : steps.keySet()) {
+            Shape marker = new Ellipse2D.Double(step - s/2, steps.get(step)- s/2, s,s);
             g.fill(marker);
         }
     }

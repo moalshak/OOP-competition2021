@@ -17,7 +17,10 @@ import java.awt.*;
  * after confirmation of the user the data gets updated and the ResultPanel gets updated
  * */
 public class InteractionPanel extends JPanel implements BluePrintModelListener {
+    @Getter
     private final BluePrintModel bluePrintModel;
+    @Getter
+    private static BluePrintModel bluePrintModelStatic;
     @Getter
     private final JScrollPane interactionScrollPane;
     @Getter
@@ -33,6 +36,13 @@ public class InteractionPanel extends JPanel implements BluePrintModelListener {
     private static PassengersModel passengersModel;
     @Getter
     private static PassengersConfigPanel passengersConfigPanel;
+    @Getter
+    private static FuelConfigPanel fuelConfigPanel;
+    @Getter
+    private static CargoConfigPanel cargoConfigPanel;
+
+    @Getter
+    private static InteractionPanel interactionPanel;
     /**
      * Constructor for the InteractionPanel
      *
@@ -42,6 +52,7 @@ public class InteractionPanel extends JPanel implements BluePrintModelListener {
     public InteractionPanel(WorldSelectionModel selectionModel,BluePrintModel bluePrintModel, InfoPanelModel infoPanelModel) {
         this.bluePrintModel = bluePrintModel;
         this.infoPanelModel = infoPanelModel;
+        bluePrintModelStatic = bluePrintModel;
         bluePrintModel.addListener(this);
 
         this.setLayout(new BorderLayout());
@@ -50,6 +61,7 @@ public class InteractionPanel extends JPanel implements BluePrintModelListener {
         interactionScrollPane = new JScrollPane(this);
 
         passengersModel = new PassengersModel(selectionModel);
+        interactionPanel = this;
     }
 
     /**
@@ -61,12 +73,12 @@ public class InteractionPanel extends JPanel implements BluePrintModelListener {
         //checks to see which compartment is selected, and displays the appropriate information
         switch (bluePrintModel.getSelectedCompartment()) {
             case BluePrintModel.FUEL:
-                FuelConfigPanel fuelConfigPanel = new FuelConfigPanel(displayPanel, bluePrintModel);
+                fuelConfigPanel = new FuelConfigPanel(displayPanel, bluePrintModel);
                 this.add(fuelConfigPanel.getDisplayPanel());
                 InfoPanel.getInfoSplitPane().setDividerLocation(EditorFrame.getHEIGHT()/2);
                 break;
             case BluePrintModel.CARGO:
-                CargoConfigPanel cargoConfigPanel = new CargoConfigPanel(displayPanel, bluePrintModel);
+                cargoConfigPanel = new CargoConfigPanel(displayPanel, bluePrintModel);
                 this.add(cargoConfigPanel.getDisplayPanel());
                 break;
             case BluePrintModel.ENTRY:
@@ -85,6 +97,12 @@ public class InteractionPanel extends JPanel implements BluePrintModelListener {
     @Override
     public void pointSelectedUpdater() {
         initInfoPanel();
+        this.updateUI();
+    }
+
+    public void updateInfo() {
+        initInfoPanel();
+        this.displayPanel.updateUI();
         this.updateUI();
     }
 

@@ -27,7 +27,8 @@ import java.util.Map;
 public class CargoConfigPanel {
     private final BluePrintModel bluePrintModel;
     private final Aircraft aircraft;
-    private final CargoArea selectedCargoArea;
+    @Setter
+    private CargoArea selectedCargoArea;
     @Setter
     private CargoUnit selectedCargoUnit;
     @Getter
@@ -61,7 +62,7 @@ public class CargoConfigPanel {
         this.infoSlider.addChangeListener(new CargoSliderListener(this));
 
         this.confirmButton = new JButton();
-        confirmButton.addActionListener(new ConfirmChangeButtonListener(this));
+        confirmButton.addActionListener(new ConfirmChangeButtonListener(this, aircraft));
 
         initConfigCargoPanel();
     }

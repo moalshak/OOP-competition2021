@@ -65,16 +65,16 @@ public class ResultPanel extends JPanel implements InfoPanelModelListener {
      * */
     private void updateProfitRevAndCost() {
         JLabel text; double val;
-        val = InfoPanelModel.getCost();
+        val = model.getCost();
         text = new JLabel("<html> <h3>Trip's cost: € "+ (int) val + "</h3> </html>");
         bottomPanel.add(text);
-        val = roundTwoDec(InfoPanelModel.getRevenue());
+        val = roundTwoDec(model.getRevenue());
         text = new JLabel("<html> <h3>Trip's revenue: € "+ (int) val + "</h3> </html>");
         bottomPanel.add(text);
-        val = roundTwoDec(InfoPanelModel.getProfitEstimation());
+        val = roundTwoDec(model.getProfitEstimation());
         text = new JLabel("<html> <h3>Trip's profit: € "+ (int) val + "</h3> </html>");
         bottomPanel.add(text);
-        val = roundTwoDec(InfoPanelModel.getTripDistance()/model.getAircraft().getType().getCruiseSpeed());
+        val = roundTwoDec(model.getTripDistance()/model.getAircraft().getType().getCruiseSpeed());
         text = new JLabel("<html> <h3>Estimated flight time: "+ (int) val + " Hours </h3> </html>");
         bottomPanel.add(text);
     }
@@ -86,7 +86,7 @@ public class ResultPanel extends JPanel implements InfoPanelModelListener {
         if(departButton != null) {
             this.remove(departButton);
         }
-        departButton = new DepartButton();
+        departButton = new DepartButton(model);
     }
 
     /**
@@ -110,9 +110,9 @@ public class ResultPanel extends JPanel implements InfoPanelModelListener {
      * */
     private void updateRangeLabel() {
         JLabel text;
-        text = new JLabel("<html> <h3>Aircraft's range: "+ (int) InfoPanelModel.getAircraftRange() + " Km </h3> </html>");
+        text = new JLabel("<html> <h3>Aircraft's range: "+ (int) model.getAircraftRange() + " Km </h3> </html>");
         bottomPanel.add(text);
-        text = new JLabel("<html> <h3>Aircraft's weight: "+ (int) InfoPanelModel.getAircraftWeight() + " Kg </h3> </html>");
+        text = new JLabel("<html> <h3>Aircraft's weight: "+ (int) model.getAircraftWeight() + " Kg </h3> </html>");
         bottomPanel.add(text);
     }
 

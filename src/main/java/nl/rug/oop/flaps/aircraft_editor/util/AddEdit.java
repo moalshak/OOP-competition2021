@@ -2,16 +2,21 @@ package nl.rug.oop.flaps.aircraft_editor.util;
 
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.aircraft_editor.model.blueprint.BluePrintModel;
+import nl.rug.oop.flaps.aircraft_editor.model.blueprint.BluePrintModelListener;
 import nl.rug.oop.flaps.aircraft_editor.model.config_models.passenger.PassengersModelListener;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.InfoPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.CargoConfigPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.FuelConfigPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.InteractionPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.PassengersConfigPanel;
+import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoUnit;
 
+import javax.swing.*;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
+import java.awt.geom.Point2D;
 import java.util.HashMap;
 
 /**
@@ -19,6 +24,8 @@ import java.util.HashMap;
  */
 @Log
 public class AddEdit extends AbstractUndoableEdit {
+    private Point2D selectedPoint;
+
     private FuelConfigPanel fuelConfigPanel;
     private double undoFuelTankAmount;
     private double redoFuelTankAmount;
@@ -35,18 +42,21 @@ public class AddEdit extends AbstractUndoableEdit {
     //creating overloaded constructor for each undo/redo instances
     public AddEdit(FuelConfigPanel fuelConfigPanel, double undoFuelTankAmount, double redoFuelTankAmount) {
         this.fuelConfigPanel = fuelConfigPanel;
+        this.selectedPoint = (Point2D) fuelConfigPanel.getBluePrintModel().getSelectedPoint().clone();
         this.undoFuelTankAmount = undoFuelTankAmount;
         this.redoFuelTankAmount = redoFuelTankAmount;
     }
 
     public AddEdit(CargoConfigPanel cargoConfigPanel, CargoUnit undoCargoUnit, CargoUnit redoCargoUnit) {
         this.cargoConfigPanel = cargoConfigPanel;
+        this.selectedPoint = (Point2D) cargoConfigPanel.getBluePrintModel().getSelectedPoint().clone();
         this.undoCargoUnit = undoCargoUnit;
         this.redoCargoUnit = redoCargoUnit;
     }
 
     public AddEdit(PassengersConfigPanel passengersConfigPanel, HashMap<String, Integer> undoPassengers, HashMap<String, Integer> redoPassengers) {
         this.passengersConfigPanel = passengersConfigPanel;
+        this.selectedPoint = (Point2D) passengersConfigPanel.getBluePrintModel().getSelectedPoint().clone();
         this.undoPassengers = undoPassengers;
         this.redoPassengers = redoPassengers;
     }
@@ -56,12 +66,19 @@ public class AddEdit extends AbstractUndoableEdit {
      * @param fuelTankAmount the fuel amount u want to update the fuel tank with
      */
     private void updateFuelTankInfo(double fuelTankAmount){
+
         if (fuelConfigPanel != null) {
-            fuelConfigPanel.getBluePrintModel().setSelectedCompartment(BluePrintModel.FUEL);
+            BluePrintModel bluePrintModel = InteractionPanel.getBluePrintModelStatic();
+            bluePrintModel.setSelectedPoint(this.selectedPoint);
+            bluePrintModel.selectPointByCoords(this.selectedPoint, 34);
+            bluePrintModel.getListeners().forEach(BluePrintModelListener::pointSelectedUpdater);
+            fuelConfigPanel = InteractionPanel.getFuelConfigPanel();
+            InteractionPanel.getFuelConfigPanel().getDisplayPanel().updateUI();
+            fuelConfigPanel.setSelectedTank(fuelConfigPanel.getBluePrintModel().getSelectedTank());
             fuelConfigPanel.getAircraft().setFuelAmountForFuelTank(fuelConfigPanel.getSelectedTank(), fuelTankAmount);
-            fuelConfigPanel.getDisplayPanel().removeAll();
-            fuelConfigPanel.initConfigPanelFuel();
+            InteractionPanel.getInteractionPanel().updateInfo();
             InfoPanel.updateResultInfo();
+
             log.info("undo/redo Fuel");
         }
     }
@@ -71,12 +88,19 @@ public class AddEdit extends AbstractUndoableEdit {
      * @param cargoUnit the cargo unit that will be used to update the current cargo unit
      */
     private void updateCargoUnit(CargoUnit cargoUnit){
+
         if (cargoConfigPanel != null) {
+            BluePrintModel bluePrintModel = InteractionPanel.getBluePrintModelStatic();
+            bluePrintModel.setSelectedPoint(this.selectedPoint);
+            bluePrintModel.selectPointByCoords(this.selectedPoint, 34);
+            bluePrintModel.getListeners().forEach(BluePrintModelListener::pointSelectedUpdater);
+            cargoConfigPanel = InteractionPanel.getCargoConfigPanel();
             cargoConfigPanel.getBluePrintModel().setSelectedCompartment(BluePrintModel.CARGO);
             cargoConfigPanel.getAircraft().addToCargoArea(cargoConfigPanel.getSelectedCargoArea(), cargoUnit);
             cargoConfigPanel.getDisplayPanel().removeAll();
             cargoConfigPanel.initConfigCargoPanel();
             cargoConfigPanel.getCargoList().setSelectedValue(cargoUnit.getCargoType().getName(), true);
+            cargoConfigPanel.getDisplayPanel().updateUI();
             InfoPanel.updateResultInfo();
             log.info("undo/redo Cargo");
         }
@@ -87,8 +111,13 @@ public class AddEdit extends AbstractUndoableEdit {
      * @param passengers the passengers that will be used to update the current passengers
      */
     private void updatePassengers(HashMap<String, Integer> passengers){
+
         if (passengersConfigPanel != null) {
-            passengersConfigPanel.getBluePrintModel().setSelectedCompartment(BluePrintModel.ENTRY);
+            BluePrintModel bluePrintModel = InteractionPanel.getBluePrintModelStatic();
+            bluePrintModel.setSelectedPoint(this.selectedPoint);
+            bluePrintModel.selectPointByCoords(this.selectedPoint, 12);
+            bluePrintModel.getListeners().forEach(BluePrintModelListener::pointSelectedUpdater);
+            passengersConfigPanel = InteractionPanel.getPassengersConfigPanel();
             passengersConfigPanel.getModel().setPassengers(passengers);
             passengersConfigPanel.getModel().setPassengersWeight();
             passengersConfigPanel.initPassengersConfig();
@@ -97,6 +126,7 @@ public class AddEdit extends AbstractUndoableEdit {
             passengersConfigPanel.updatePassengerLabel();
             passengersConfigPanel.updateConfig();
             InfoPanel.updateResultInfo();
+
             log.info("undo/redo Passengers");
         }
     }

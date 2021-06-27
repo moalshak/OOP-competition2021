@@ -13,9 +13,10 @@ import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 @Log
 public class AircraftRangeModel implements InfoPanelModelListener {
     private final  Aircraft aircraft;
-
+    private InfoPanelModel infoPanelModel;
     public AircraftRangeModel(InfoPanelModel infoPanelModel) {
         infoPanelModel.addListener(this);
+        this.infoPanelModel = infoPanelModel;
 
         this.aircraft = infoPanelModel.getAircraft();
 
@@ -30,7 +31,7 @@ public class AircraftRangeModel implements InfoPanelModelListener {
             double totalFuel = this.aircraft.getTotalFuel();
             double fuelConsumption = this.aircraft.getType().getFuelConsumption();
             double cruiseSpeed = this.aircraft.getType().getCruiseSpeed();
-           InfoPanelModel.setAircraftRange( ( totalFuel / fuelConsumption) * cruiseSpeed);
+           infoPanelModel.setAircraftRange( ( totalFuel / fuelConsumption) * cruiseSpeed);
     }
 
     @Override

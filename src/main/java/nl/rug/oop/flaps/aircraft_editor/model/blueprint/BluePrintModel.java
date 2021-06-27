@@ -29,7 +29,7 @@ public class BluePrintModel {
     private final Aircraft aircraft;
     @Getter @Setter
     private Point2D selectedPoint;
-    @Getter
+    @Getter @Setter
     public static Point2D selectedPointS;
     @Getter
     private final List<Point2D> fuelTanksPos = new ArrayList<>();
@@ -51,6 +51,7 @@ public class BluePrintModel {
     private FuelTank selectedTank = null;
 
     public static final int CARGO = 2;
+    @Setter
     private CargoArea selectedCargo = null;
 
     public static final int ENTRY = 3;
@@ -74,7 +75,6 @@ public class BluePrintModel {
         setCenterOfGravity();
 
         this.passengersEntrance = setOnBluePrint(passengersEntrance);
-        System.out.println(passengersEntrance);
     }
     /**
      * sets the center of gravity in the {@link GravityCenterModel}

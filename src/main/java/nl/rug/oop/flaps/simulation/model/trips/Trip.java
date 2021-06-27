@@ -29,11 +29,11 @@ public class Trip {
     private final Point2D originAirportLocation;
     private final Point2D destinationAirportLocation;
     @Getter
-    private final static int revenue = (int) InfoPanelModel.getRevenue();
+    private final static int revenue = (int) InfoPanelModel.getInfoPanelModel().getRevenue();
 
     private final StringBuilder flightsId = generateId();
     private Image bannerInAir;
-    private final List<Point2D> steps = new ArrayList<>();
+    private Map<Double, Double> steps;
 
     private final Airport originAirport;
     private final Airport destAirport;
@@ -120,8 +120,10 @@ public class Trip {
             yVelocity -= VELOCITY;
         }
         currentPosition.setLocation(xVelocity, yVelocity);
-
-        steps.add(new Point2D.Double(currentPosition.getX(), currentPosition.getY()));
+        if (steps == null) {
+            steps = new HashMap<>();
+        }
+        steps.put(currentPosition.getX(), currentPosition.getY());
         // update of checked destination (trip arrived when in range of the airport )
         reachedDestination = currentPosition.distance(destinationAirportLocation) < INDICATOR_SIZE/10;
         GeographicCoordinates end = getGeoPosition(currentPosition);
