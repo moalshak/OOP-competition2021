@@ -60,7 +60,7 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
     private int passengersWeight;
     private int nrOfSeats;
     private Point2D geoEnt;
-    @Getter
+    @Getter @Setter
     private EditMenu editMenu;
 
     public Aircraft(String identifier, AircraftType type, World world) {
@@ -76,7 +76,7 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
         passengers.put("kidsUnder12", 0);
 
         typeMapper();
-        if(editMenu == null) editMenu = new EditMenu();
+        //if(editMenu == null) editMenu = new EditMenu();
     }
 
     public void typeMapper() {

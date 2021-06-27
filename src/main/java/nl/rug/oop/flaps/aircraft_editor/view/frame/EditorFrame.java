@@ -68,10 +68,9 @@ public class EditorFrame extends JFrame {
      * adds a {@link MenuBar} on top of the frame
      * */
     private void addMenuBar() {
-        //EditMenu editMenu = new EditMenu();
-        //frame.setJMenuBar(editMenu);
-        //
+        if (aircraft.getEditMenu() == null) {
+            aircraft.setEditMenu(new EditMenu());
+        }
         frame.setJMenuBar(aircraft.getEditMenu());
     }
-
 }
