@@ -17,9 +17,10 @@ public class AircraftWeightModel implements InfoPanelModelListener {
     @Getter
     private double aircraftWeight;
 
-    private final Aircraft aircraft;
-
+    private Aircraft aircraft;
+    private final InfoPanelModel infoPanelModel;
     public AircraftWeightModel(InfoPanelModel infoPanelModel) {
+        this.infoPanelModel = infoPanelModel;
         infoPanelModel.addListener(this);
         this.aircraft = infoPanelModel.getAircraft();
         calcAircraftWeight();
@@ -29,11 +30,12 @@ public class AircraftWeightModel implements InfoPanelModelListener {
      * calculates aircraft weight and sets it in the {@link InfoPanelModel}
      * */
     private void calcAircraftWeight() {
+        aircraft = infoPanelModel.getAircraft();
         aircraftWeight = aircraft.getType().getEmptyWeight();
         aircraftWeight += aircraft.getTotalFuel();
         aircraftWeight += aircraft.getTotalCargoWeight();
-        aircraftWeight += PassengersModel.getPassengersWeight();
-        InfoPanelModel.setAircraftWeight(aircraftWeight);
+        aircraftWeight += aircraft.getPassengersWeight();
+        infoPanelModel.setAircraftWeight(aircraftWeight);
     }
 
     @Override

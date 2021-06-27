@@ -19,9 +19,12 @@ public class ProfitEstimationModel implements InfoPanelModelListener {
     private static Airport originAirport = null;
     private static Airport destinationAirport = null;
     private final FuelType fuelType;
+    private InfoPanelModel infoPanelModel;
 
     public ProfitEstimationModel(InfoPanelModel infoPanelModel) {
         infoPanelModel.addListener(this);
+        this.infoPanelModel = infoPanelModel;
+
         this.aircraft = infoPanelModel.getAircraft();
         originAirport = infoPanelModel.getOriginAirport();
         destinationAirport = infoPanelModel.getDestinationAirport();
@@ -53,9 +56,9 @@ public class ProfitEstimationModel implements InfoPanelModelListener {
 
         double totRev = ticketsRev + cargoRevenue;
 
-        InfoPanelModel.setCost(cost);
-        InfoPanelModel.setRevenue(totRev);
-        InfoPanelModel.setProfitEstimation(totRev - cost);
+        infoPanelModel.setCost(cost);
+        infoPanelModel.setRevenue(totRev);
+        infoPanelModel.setProfitEstimation(totRev - cost);
     }
 
     @Override

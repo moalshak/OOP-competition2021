@@ -37,24 +37,25 @@ public class InfoPanelModel  {
     private final Airport destinationAirport;
 
     @Getter @Setter
-    private static double aircraftRange;
+    private double aircraftRange;
     @Getter @Setter
     private static Point2D centerOfGravity;
     @Getter @Setter
-    private static double profitEstimation;
+    private double profitEstimation;
     @Getter @Setter
-    private static double cost;
+    private double cost;
     @Getter @Setter
-    private static double Revenue;
+    private double Revenue;
     @Getter @Setter
-    private static double aircraftWeight;
+    private double aircraftWeight;
     @Setter @Getter
-    private static double tripDistance;
+    private double tripDistance;
     @Getter
     private static List<InfoPanelModelListener> listeners;
     @Getter
     private static ResultPanel resultPanel;
-
+    @Getter
+    private static InfoPanelModel infoPanelModel;
     public InfoPanelModel(Aircraft aircraft, WorldSelectionModel selectionModel) {
         this.aircraft = aircraft;
         this.selectionModel = selectionModel;
@@ -68,6 +69,7 @@ public class InfoPanelModel  {
         new ProfitEstimationModel(this);
 
         calcAircraftWeight(selectionModel);
+        infoPanelModel = this;
     }
 
     /**

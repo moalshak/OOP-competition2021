@@ -55,6 +55,8 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
      * */
     @Setter
     private int crewOnBoard;
+    @Setter
+    private int passengersWeight;
     private int nrOfSeats;
     private Point2D geoEnt;
 

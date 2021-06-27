@@ -91,6 +91,7 @@ public class PassengersModel {
         passengersWeight += ( (passengers.get("adults") + crewOnBoard) * avgAdultWeight );
         passengersWeight += ( passengers.get("kidsTo12") * avgKidTo12Weight );
         passengersWeight += (passengers.get("kidsUnder12") * avgKidUnder12Weight);
+        selectionModel.getSelectedAircraft().setPassengersWeight(passengersWeight);
     }
 
     public void updatePassengerSumPassenger() {
