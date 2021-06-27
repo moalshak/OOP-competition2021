@@ -2,6 +2,7 @@ package nl.rug.oop.flaps.simulation.model.cargo;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 
 /**
  * Represents a unit of cargo
@@ -9,7 +10,7 @@ import lombok.Setter;
  * @author T.O.W.E.R.
  */
 @Getter
-public class CargoUnit {
+public class CargoUnit implements Cloneable {
     /**
      * The type that this cargo unit has
      */
@@ -27,5 +28,11 @@ public class CargoUnit {
     public CargoUnit(CargoType cargoType, double weight) {
         this.cargoType = cargoType;
         this.weight = weight;
+    }
+
+    @Override
+    @SneakyThrows
+    public Object clone() {
+        return super.clone();
     }
 }

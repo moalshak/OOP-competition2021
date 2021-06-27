@@ -17,7 +17,10 @@ import java.awt.*;
  * after confirmation of the user the data gets updated and the ResultPanel gets updated
  * */
 public class InteractionPanel extends JPanel implements BluePrintModelListener {
+    @Getter
     private final BluePrintModel bluePrintModel;
+    @Getter
+    private static BluePrintModel bluePrintModelStatic;
     @Getter
     private final JScrollPane interactionScrollPane;
     @Getter
@@ -37,6 +40,9 @@ public class InteractionPanel extends JPanel implements BluePrintModelListener {
     private static FuelConfigPanel fuelConfigPanel;
     @Getter
     private static CargoConfigPanel cargoConfigPanel;
+
+    @Getter
+    private static InteractionPanel interactionPanel;
     /**
      * Constructor for the InteractionPanel
      *
@@ -46,6 +52,7 @@ public class InteractionPanel extends JPanel implements BluePrintModelListener {
     public InteractionPanel(WorldSelectionModel selectionModel,BluePrintModel bluePrintModel, InfoPanelModel infoPanelModel) {
         this.bluePrintModel = bluePrintModel;
         this.infoPanelModel = infoPanelModel;
+        bluePrintModelStatic = bluePrintModel;
         bluePrintModel.addListener(this);
 
         this.setLayout(new BorderLayout());
@@ -54,6 +61,7 @@ public class InteractionPanel extends JPanel implements BluePrintModelListener {
         interactionScrollPane = new JScrollPane(this);
 
         passengersModel = new PassengersModel(selectionModel);
+        interactionPanel = this;
     }
 
     /**
@@ -89,6 +97,12 @@ public class InteractionPanel extends JPanel implements BluePrintModelListener {
     @Override
     public void pointSelectedUpdater() {
         initInfoPanel();
+        this.updateUI();
+    }
+
+    public void updateInfo() {
+        initInfoPanel();
+        this.displayPanel.updateUI();
         this.updateUI();
     }
 

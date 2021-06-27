@@ -27,7 +27,8 @@ import java.util.Map;
 public class CargoConfigPanel {
     private final BluePrintModel bluePrintModel;
     private final Aircraft aircraft;
-    private final CargoArea selectedCargoArea;
+    @Setter
+    private CargoArea selectedCargoArea;
     @Setter
     private CargoUnit selectedCargoUnit;
     @Getter
