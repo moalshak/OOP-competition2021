@@ -50,7 +50,7 @@ public class FuelConfigPanel extends AbstractUndoableEdit  {
         this.infoSlider = new JSlider();
         this.infoSlider.addChangeListener(new FuelSliderListener(this));
         confirmButton = new JButton();
-        confirmButton.addActionListener(new ConfirmChangeButtonListener(this));
+        confirmButton.addActionListener(new ConfirmChangeButtonListener(this, aircraft));
 
         initConfigPanelFuel();
     }

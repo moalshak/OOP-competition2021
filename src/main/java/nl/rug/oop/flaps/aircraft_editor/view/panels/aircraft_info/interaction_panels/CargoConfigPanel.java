@@ -61,7 +61,7 @@ public class CargoConfigPanel {
         this.infoSlider.addChangeListener(new CargoSliderListener(this));
 
         this.confirmButton = new JButton();
-        confirmButton.addActionListener(new ConfirmChangeButtonListener(this));
+        confirmButton.addActionListener(new ConfirmChangeButtonListener(this, aircraft));
 
         initConfigCargoPanel();
     }

@@ -26,9 +26,10 @@ public class EditorFrame extends JFrame {
     private static JSplitPane mainSplitPane;
     @Getter
     private static JFrame frame;
-
+    private final Aircraft aircraft;
     public EditorFrame(Aircraft aircraft, WorldSelectionModel selectionModel) {
         super("Aircraft Editor");
+        this.aircraft = aircraft;
         /* if destination is not reachable with even full tanks. The user is asked if they want to configure it anyways*/
         if(!IsDestinationReachable.isDestinationReachable(aircraft, selectionModel)) {
             NotReachable choice = new NotReachable();
@@ -67,8 +68,10 @@ public class EditorFrame extends JFrame {
      * adds a {@link MenuBar} on top of the frame
      * */
     private void addMenuBar() {
-        EditMenu editMenu = new EditMenu();
-        frame.setJMenuBar(editMenu);
+        //EditMenu editMenu = new EditMenu();
+        //frame.setJMenuBar(editMenu);
+        //
+        frame.setJMenuBar(aircraft.getEditMenu());
     }
 
 }

@@ -6,6 +6,7 @@ import nl.rug.oop.flaps.aircraft_editor.model.config_models.passenger.Passengers
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.InfoPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.CargoConfigPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.FuelConfigPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.InteractionPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.PassengersConfigPanel;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoUnit;
 
@@ -57,6 +58,7 @@ public class AddEdit extends AbstractUndoableEdit {
      */
     private void updateFuelTankInfo(double fuelTankAmount){
         if (fuelConfigPanel != null) {
+            fuelConfigPanel = InteractionPanel.getFuelConfigPanel();
             fuelConfigPanel.getBluePrintModel().setSelectedCompartment(BluePrintModel.FUEL);
             fuelConfigPanel.getAircraft().setFuelAmountForFuelTank(fuelConfigPanel.getSelectedTank(), fuelTankAmount);
             fuelConfigPanel.getDisplayPanel().removeAll();
@@ -72,6 +74,7 @@ public class AddEdit extends AbstractUndoableEdit {
      */
     private void updateCargoUnit(CargoUnit cargoUnit){
         if (cargoConfigPanel != null) {
+            cargoConfigPanel = InteractionPanel.getCargoConfigPanel();
             cargoConfigPanel.getBluePrintModel().setSelectedCompartment(BluePrintModel.CARGO);
             cargoConfigPanel.getAircraft().addToCargoArea(cargoConfigPanel.getSelectedCargoArea(), cargoUnit);
             cargoConfigPanel.getDisplayPanel().removeAll();
@@ -88,6 +91,7 @@ public class AddEdit extends AbstractUndoableEdit {
      */
     private void updatePassengers(HashMap<String, Integer> passengers){
         if (passengersConfigPanel != null) {
+            passengersConfigPanel = InteractionPanel.getPassengersConfigPanel();
             passengersConfigPanel.getBluePrintModel().setSelectedCompartment(BluePrintModel.ENTRY);
             passengersConfigPanel.getModel().setPassengers(passengers);
             passengersConfigPanel.getModel().setPassengersWeight();

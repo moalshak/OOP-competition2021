@@ -55,7 +55,7 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
         seatsLabel = new JLabel();
         confirmButton = new JButton();
 
-        listener = new ConfirmChangeButtonListener(this);
+        listener = new ConfirmChangeButtonListener(this, bluePrintModel.getAircraft());
 
         initPassengersConfig();
 
