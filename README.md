@@ -1,6 +1,6 @@
 ### Mohammad Al Shakoush s4274865
 
-## Hi in this short overview I will inform you on what I have done and you can expect.
+## Hi, in this short overview I will inform you on what I have done and what you can expect.
 
 # TRIPS
 The main focus was adding flights/trips. After pressing 'depart' a dot shows on the world map. Green dots in the picture <br>
