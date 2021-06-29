@@ -2,7 +2,6 @@ package nl.rug.oop.flaps.aircraft_editor.controller.listeners.infopanel_listener
 
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.aircraft_editor.util.AddEdit;
-import nl.rug.oop.flaps.aircraft_editor.view.frame.EditMenu;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.InfoPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.CargoConfigPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.FuelConfigPanel;
@@ -24,7 +23,7 @@ public class ConfirmChangeButtonListener implements ActionListener {
     private FuelConfigPanel fuelConfigPanel;
     private CargoConfigPanel cargoConfigPanel;
     private PassengersConfigPanel passengersConfigPanel;
-    private Aircraft aircraft;
+    private final Aircraft aircraft;
     private final UndoableEditSupport undoSupport;
 
     public ConfirmChangeButtonListener(FuelConfigPanel fuelConfigPanel, Aircraft aircraft) {

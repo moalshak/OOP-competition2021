@@ -19,7 +19,7 @@ public class ProfitEstimationModel implements InfoPanelModelListener {
     private static Airport originAirport = null;
     private static Airport destinationAirport = null;
     private final FuelType fuelType;
-    private InfoPanelModel infoPanelModel;
+    private final InfoPanelModel infoPanelModel;
 
     public ProfitEstimationModel(InfoPanelModel infoPanelModel) {
         infoPanelModel.addListener(this);

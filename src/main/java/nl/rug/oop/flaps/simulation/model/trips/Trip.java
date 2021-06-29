@@ -18,10 +18,10 @@ import nl.rug.oop.flaps.simulation.view.panels.trip.TripsInfo;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.lang.reflect.Field;
 import java.nio.file.Path;
-import java.util.*;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 @Getter
 public class Trip {
@@ -47,7 +47,7 @@ public class Trip {
 
     private String distanceLeft;
 
-    Map<FuelTank, Double> fuelTankFillStatuses;
+    private final Map<FuelTank, Double> fuelTankFillStatuses;
     /**
      * creates a new instance of the Trip after departure
      * */
@@ -104,8 +104,6 @@ public class Trip {
      * */
     public void cruise () {
         // update position
-
-        GeographicCoordinates start =  getGeoPosition(currentPosition);
         double xVelocity = currentPosition.getX();
         double yVelocity = currentPosition.getY();
 

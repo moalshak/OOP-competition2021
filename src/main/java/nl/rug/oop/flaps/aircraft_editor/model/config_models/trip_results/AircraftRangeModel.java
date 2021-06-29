@@ -13,7 +13,7 @@ import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 @Log
 public class AircraftRangeModel implements InfoPanelModelListener {
     private final  Aircraft aircraft;
-    private InfoPanelModel infoPanelModel;
+    private final InfoPanelModel infoPanelModel;
     public AircraftRangeModel(InfoPanelModel infoPanelModel) {
         infoPanelModel.addListener(this);
         this.infoPanelModel = infoPanelModel;

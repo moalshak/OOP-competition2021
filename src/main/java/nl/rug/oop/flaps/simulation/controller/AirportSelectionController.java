@@ -1,17 +1,16 @@
 package nl.rug.oop.flaps.simulation.controller;
 
-import nl.rug.oop.flaps.simulation.model.trips.Trip;
-import nl.rug.oop.flaps.simulation.model.world.World;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.PointProvider;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.ProjectionMapping;
+import nl.rug.oop.flaps.simulation.model.trips.Trip;
+import nl.rug.oop.flaps.simulation.model.world.World;
 import nl.rug.oop.flaps.simulation.view.panels.WorldPanel;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.List;
 
 /**
  * Listens to mouse events on the world map
