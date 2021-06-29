@@ -1,7 +1,6 @@
 package nl.rug.oop.flaps.simulation.view.panels;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.simulation.controller.AirportSelectionController;
 import nl.rug.oop.flaps.simulation.controller.SpeedRateUp;

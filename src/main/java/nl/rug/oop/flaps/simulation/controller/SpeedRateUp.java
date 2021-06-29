@@ -12,7 +12,7 @@ public class SpeedRateUp implements ChangeListener {
     private static double RATE;
 
     /**
-     * controllers the thread at which the thread sleep thus the speed at which the planes move on the world map
+     * controls the thread at which the thread sleep thus the speed at which the planes move on the world map
      * */
     public SpeedRateUp(WorldPanel worldPanel) {
         this.worldPanel = worldPanel;
