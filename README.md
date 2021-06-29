@@ -3,7 +3,7 @@
 ## Hi in this short overview I will inform you on what I have done and you can expect.
 
 # TRIPS
-The main focus was adding flights/trips. After pressing 'depart' a dot shows on the world map. <br>
+The main focus was adding flights/trips. After pressing 'depart' a dot shows on the world map. Green dots in the picture <br>
 <br> ![trips](images/readme/Trips.PNG) <br>
 
 These dots will move to the chosen destination airport. The rate of which the dots moves is chosen by the user through a 'JSpinner'. But set as 100ms at first.
