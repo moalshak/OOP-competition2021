@@ -7,7 +7,7 @@ The first picture is the Aircraft Editor from the assignements F.L.A.P.S. I chan
 This is how it looks when a fuel tank is selected :
 ![FuelTank](images/readme/FuelTankChosen.PNG)
 This is how it looks when a cargo area is selected :
-[cargo](images/readme/CragoAreaChosen.PNG)
+![cargo](images/readme/CragoAreaChosen.PNG)
 
 The things I added/changed :
 
