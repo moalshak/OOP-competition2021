@@ -5,7 +5,6 @@ import lombok.extern.java.Log;
 import nl.rug.oop.flaps.aircraft_editor.controller.listeners.infopanel_listeners.ConfirmChangeButtonListener;
 import nl.rug.oop.flaps.aircraft_editor.model.config_models.InfoPanelModel;
 import nl.rug.oop.flaps.aircraft_editor.model.config_models.InfoPanelModelListener;
-import nl.rug.oop.flaps.aircraft_editor.model.config_models.passenger.PassengersModel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 
 /**

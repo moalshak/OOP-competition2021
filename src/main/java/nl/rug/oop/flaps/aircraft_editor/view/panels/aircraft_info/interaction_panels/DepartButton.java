@@ -23,7 +23,7 @@ public class DepartButton extends JButton {
     private static final String OFF_CENTER = "Cannot depart: Aircraft center of gravity is problematic...";
     private static final String TOO_HEAVY = "Cannot depart: Max takeoff weight exceeded...";
 
-    private InfoPanelModel model;
+    private final InfoPanelModel model;
     public DepartButton(InfoPanelModel model) {
         this.model = model;
         this.selectionModel = InfoPanel.getWorldSelectionModel();

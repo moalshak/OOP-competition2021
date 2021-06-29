@@ -17,7 +17,9 @@ public class NotReachable extends JOptionPane {
     @Getter
     private boolean configureAnyWay;
 
-
+    /**
+     * checks if the user wants to configure the aircraft if it the capacity is not enough
+     * */
     public NotReachable() {
         configureAnyWay = false;
         showOptions();

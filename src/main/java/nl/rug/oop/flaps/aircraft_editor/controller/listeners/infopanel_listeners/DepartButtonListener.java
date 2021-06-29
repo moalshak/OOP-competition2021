@@ -2,14 +2,11 @@ package nl.rug.oop.flaps.aircraft_editor.controller.listeners.infopanel_listener
 
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.aircraft_editor.view.frame.EditorFrame;
-import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.InteractionPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.AircraftType;
-import nl.rug.oop.flaps.simulation.model.trips.TripsThread;
 import nl.rug.oop.flaps.simulation.model.trips.Trip;
+import nl.rug.oop.flaps.simulation.model.trips.TripsThread;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 import nl.rug.oop.flaps.simulation.view.FlapsFrame;
-import nl.rug.oop.flaps.simulation.view.panels.aircraft.AircraftInfoPanel;
-import nl.rug.oop.flaps.simulation.view.panels.airport.AircraftAreaPanel;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

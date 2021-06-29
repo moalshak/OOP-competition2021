@@ -9,10 +9,8 @@ import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_pa
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.FuelConfigPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.InteractionPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.PassengersConfigPanel;
-import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoUnit;
 
-import javax.swing.*;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -24,7 +22,7 @@ import java.util.HashMap;
  */
 @Log
 public class AddEdit extends AbstractUndoableEdit {
-    private Point2D selectedPoint;
+    private final Point2D selectedPoint;
 
     private FuelConfigPanel fuelConfigPanel;
     private double undoFuelTankAmount;
@@ -39,7 +37,12 @@ public class AddEdit extends AbstractUndoableEdit {
     private HashMap<String, Integer> redoPassengers;
 
 
-    //creating overloaded constructor for each undo/redo instances
+    /**
+     * creates an instance for the un-re do app for the fuel configuration panel
+     * @param fuelConfigPanel the fuel configuration panel
+     * @param undoFuelTankAmount the old fuel tank amount
+     * @param redoFuelTankAmount the new / redo fuel tank amount
+     * */
     public AddEdit(FuelConfigPanel fuelConfigPanel, double undoFuelTankAmount, double redoFuelTankAmount) {
         this.fuelConfigPanel = fuelConfigPanel;
         this.selectedPoint = (Point2D) fuelConfigPanel.getBluePrintModel().getSelectedPoint().clone();
@@ -47,6 +50,12 @@ public class AddEdit extends AbstractUndoableEdit {
         this.redoFuelTankAmount = redoFuelTankAmount;
     }
 
+    /**
+     * creates an instance for the un-re do app for the cargo configuration panel
+     * @param cargoConfigPanel the cargo configuration panel
+     * @param undoCargoUnit the unit for the undo
+     * @param redoCargoUnit the unit or the redo
+     * */
     public AddEdit(CargoConfigPanel cargoConfigPanel, CargoUnit undoCargoUnit, CargoUnit redoCargoUnit) {
         this.cargoConfigPanel = cargoConfigPanel;
         this.selectedPoint = (Point2D) cargoConfigPanel.getBluePrintModel().getSelectedPoint().clone();
@@ -54,6 +63,12 @@ public class AddEdit extends AbstractUndoableEdit {
         this.redoCargoUnit = redoCargoUnit;
     }
 
+    /**
+     * creates an instance for the un-re do app for the passengers configuration panel
+     * @param passengersConfigPanel the passengers configuration panel
+     * @param undoPassengers the old passengers map
+     * @param redoPassengers the new passengers map
+     * */
     public AddEdit(PassengersConfigPanel passengersConfigPanel, HashMap<String, Integer> undoPassengers, HashMap<String, Integer> redoPassengers) {
         this.passengersConfigPanel = passengersConfigPanel;
         this.selectedPoint = (Point2D) passengersConfigPanel.getBluePrintModel().getSelectedPoint().clone();
@@ -66,7 +81,6 @@ public class AddEdit extends AbstractUndoableEdit {
      * @param fuelTankAmount the fuel amount u want to update the fuel tank with
      */
     private void updateFuelTankInfo(double fuelTankAmount){
-
         if (fuelConfigPanel != null) {
             BluePrintModel bluePrintModel = InteractionPanel.getBluePrintModelStatic();
             bluePrintModel.setSelectedPoint(this.selectedPoint);
@@ -78,8 +92,6 @@ public class AddEdit extends AbstractUndoableEdit {
             fuelConfigPanel.getAircraft().setFuelAmountForFuelTank(fuelConfigPanel.getSelectedTank(), fuelTankAmount);
             InteractionPanel.getInteractionPanel().updateInfo();
             InfoPanel.updateResultInfo();
-
-            log.info("undo/redo Fuel");
         }
     }
 
@@ -88,7 +100,6 @@ public class AddEdit extends AbstractUndoableEdit {
      * @param cargoUnit the cargo unit that will be used to update the current cargo unit
      */
     private void updateCargoUnit(CargoUnit cargoUnit){
-
         if (cargoConfigPanel != null) {
             BluePrintModel bluePrintModel = InteractionPanel.getBluePrintModelStatic();
             bluePrintModel.setSelectedPoint(this.selectedPoint);
@@ -102,7 +113,6 @@ public class AddEdit extends AbstractUndoableEdit {
             cargoConfigPanel.getCargoList().setSelectedValue(cargoUnit.getCargoType().getName(), true);
             cargoConfigPanel.getDisplayPanel().updateUI();
             InfoPanel.updateResultInfo();
-            log.info("undo/redo Cargo");
         }
     }
 
@@ -111,7 +121,6 @@ public class AddEdit extends AbstractUndoableEdit {
      * @param passengers the passengers that will be used to update the current passengers
      */
     private void updatePassengers(HashMap<String, Integer> passengers){
-
         if (passengersConfigPanel != null) {
             BluePrintModel bluePrintModel = InteractionPanel.getBluePrintModelStatic();
             bluePrintModel.setSelectedPoint(this.selectedPoint);
@@ -126,8 +135,6 @@ public class AddEdit extends AbstractUndoableEdit {
             passengersConfigPanel.updatePassengerLabel();
             passengersConfigPanel.updateConfig();
             InfoPanel.updateResultInfo();
-
-            log.info("undo/redo Passengers");
         }
     }
 
@@ -137,6 +144,7 @@ public class AddEdit extends AbstractUndoableEdit {
             updateFuelTankInfo(undoFuelTankAmount);
             updateCargoUnit(undoCargoUnit);
             updatePassengers(undoPassengers);
+            log.info("Undid Action");
         } catch (CannotUndoException error) {
             log.info("Nothing to undo");
         }
@@ -148,6 +156,7 @@ public class AddEdit extends AbstractUndoableEdit {
             updateFuelTankInfo(redoFuelTankAmount);
             updateCargoUnit(redoCargoUnit);
             updatePassengers(redoPassengers);
+            log.info("Redid action");
         } catch (CannotRedoException error) {
             log.info("Nothing to redo");
         }

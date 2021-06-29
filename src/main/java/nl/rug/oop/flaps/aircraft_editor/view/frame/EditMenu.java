@@ -18,7 +18,7 @@ import java.awt.event.KeyEvent;
 public class EditMenu extends JMenuBar implements UndoableEditListener {
     private final UndoManager manager;
     @Getter
-    private UndoableEditSupport undoSupport;
+    private final UndoableEditSupport undoSupport;
 
     public EditMenu() {
         //preparing undo manager for the edit menu
