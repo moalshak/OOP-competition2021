@@ -3,6 +3,7 @@
 ## Hi in this short overview I will inform you on what I have done and you can expect.
 
 The first picture is the Aircraft Editor from the assignements F.L.A.P.S. I changed two things here for this competition.
+We went for a slick design and decided to show the user the reason for no being able to depart on the button depart itself which is much better than a popup.
 ![Editor](images/readme/AircraftEditor.PNG)
 This is how it looks when a fuel tank is selected :
 ![FuelTank](images/readme/FuelTankChosen.PNG)
