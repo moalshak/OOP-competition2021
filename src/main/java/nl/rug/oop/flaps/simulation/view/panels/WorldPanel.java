@@ -72,7 +72,7 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
         JPanel temp = new JPanel();
         temp.setLayout(new GridLayout(1,1));
         temp.add(new JLabel("Speed Rate : "));
-        speedUpRate.setModel(new SpinnerNumberModel(1.0, 1.0, 4.5, 0.5));
+        speedUpRate.setModel(new SpinnerNumberModel(1.0, 0.5, 4.5, 0.5));
         speedUpRate.addChangeListener(new SpeedRateUp(this));
         temp.add(speedUpRate);
         return temp;

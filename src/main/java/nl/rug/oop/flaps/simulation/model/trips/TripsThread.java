@@ -20,10 +20,14 @@ public class TripsThread extends Thread{
         while (!newTrip.isReachedDestination()) {
             newTrip.cruise();
             long newRate = 100;
-            for (long i = (long) ((SpeedRateUp.getRATE()/0.5-2)); i > 0; i--) {
+            if (SpeedRateUp.getRATE() == 0.5) {
+                newRate = (long) (newRate * 1.5);
+            }
+            for (double i = (SpeedRateUp.getRATE()/0.5-2); i > 0; i--) {
                 newRate = newRate / 2;
             }
             Thread.sleep(newRate);
+            System.out.println(newRate);
         }
     }
 
