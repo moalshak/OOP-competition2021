@@ -24,3 +24,15 @@ The things I added/changed :
 * 2: The un/re do manager
   The un/re do manager is now perfected. Prevouisly the mager was initiated when the editor frame was opened. Now however each aircraft that gets selected gets its own manager.   This way you can still undo previous action taken even after closing the configration frame of the aircraft. In addition to the fact that the program now jumps back to the right configuration panel (cargo, fuel, passengers) and the exact previosly selected point is reselected.
   
+# TRIPS
+The main focuse was adding flights/trips. After pressing `deprat` a dot shows on the world map. 
+![trips](images/readme/Trips.PNG)
+
+These dots will move to the chosen destination airport. The rate of which the dots moves is chosen by the user through a `JSpinner`. But set as 100ms at first.
+![speed](main/images/readme/newSpeed.PNG)
+
+The dots/trips are selectable. When selected the, the steps taken so far are patinted and the new panel is shown. This panel views real time fuel status and the progress of the 
+trips. Ofcourse some more info about trip itself and the content of the aircraft. In addition to a cool randomized image (dependent on type of aircraft).
+![](images/readme/TripDotChosen.PNG)
+The trips info panel
+![](images/readme/TripChosen.PNG)
