@@ -52,7 +52,7 @@ public class FlapsFrame extends JFrame {
         airportPanel.setPreferredSize(new Dimension(WIDTH/2, HEIGHT/2));
 
         worldPlaneSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, worldPanelScrollPane, aircraftPanel);
-        worldPlaneSplit.setDividerLocation(HEIGHT/2);
+        worldPlaneSplit.setDividerLocation(HEIGHT/2+20);
         //worldPlaneSplit.setDividerSize(0);
 
         leftRightSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, airportPanel, worldPlaneSplit);

@@ -1,8 +1,10 @@
 package nl.rug.oop.flaps.simulation.view.panels;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.simulation.controller.AirportSelectionController;
+import nl.rug.oop.flaps.simulation.controller.SpeedRateUp;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.PointProvider;
@@ -21,7 +23,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -42,6 +43,8 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
     public static WorldPanel worldPanel;
     @Getter
     private List<Trip> currentTrips;
+    @Getter
+    private final JSpinner speedUpRate = new JSpinner();
 
     public WorldPanel(World world) {
         this.world = world;
@@ -57,6 +60,22 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
         this.world.getSelectionModel().addListener(this);
 
         worldPanel = this;
+
+        this.setLayout(new BorderLayout());
+        this.add(speedControlPanel(), BorderLayout.SOUTH);
+    }
+
+    /**
+     * panel containing the speed controller
+     * */
+    private JPanel speedControlPanel() {
+        JPanel temp = new JPanel();
+        temp.setLayout(new GridLayout(1,1));
+        temp.add(new JLabel("Speed Rate : "));
+        speedUpRate.setModel(new SpinnerNumberModel(1.0, 1.0, 4.5, 0.5));
+        speedUpRate.addChangeListener(new SpeedRateUp(this));
+        temp.add(speedUpRate);
+        return temp;
     }
 
     /**
