@@ -2,6 +2,10 @@
 
 ## Hi in this short overview I will inform you on what I have done and you can expect.
 
+Right off the bat, added a notification message telling the user that they will never reach their selected destination even with fully loaded fuel tanks (if applicable). However,
+the user still has the choice to configure the aircraft.
+![Error1](images/readme/NotReachableError.PNG)
+
 The first picture is the Aircraft Editor from the assignements F.L.A.P.S. I changed two things here for this competition.
 We went for a slick design and decided to show the user the reason for no being able to depart on the button depart itself which is much better than a popup.
 ![Editor](images/readme/AircraftEditor.PNG)
