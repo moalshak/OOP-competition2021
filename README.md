@@ -1,6 +1,6 @@
 ### Mohammad Al Shakoush s4274865 & Dominic Therattil (s4228952)
 
-## Hi, in this short overview I will inform you on what I have changed/added and what you can expect.
+## Hi, in this short overview you will be informed on what is changed/added and what you can expect.
 
 # TRIPS / FLIGHTS
 The main focus was adding flights/trips. After pressing 'depart' a dot shows on the world map. Green dots in the picture <br>
