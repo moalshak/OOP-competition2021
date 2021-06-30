@@ -14,12 +14,13 @@ public class TripsThread extends Thread{
     public TripsThread(Trip newTrip) {
         this.newTrip = newTrip;
         String type = newTrip.getAircraft().getType().getName();
+        long baseRate = 300;
         if(type.equals("Boeing 747-400F")) {
-            this.RATE = 100;
+            this.RATE = baseRate;
         } else if (type.equals("Boeing 737-800BCF Freighter")) {
-            this.RATE = 150;
+            this.RATE = (long) (baseRate + (0.2 * baseRate));
         } else {
-            this.RATE = 200;
+            this.RATE = (long) (baseRate + (2.7 * baseRate));
         }
     }
 
