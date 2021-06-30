@@ -19,7 +19,7 @@ trips. Of course some more info about trip itself and the content of the aircraf
 ## Close up:
 <br> ![](images/readme/TripsInfo.PNG) <br>
 
-# Upgrades / Updates
+# Editor Frame
 
 At the main frame, added a notification message telling the user that they will never reach their selected destination even with fully loaded fuel tanks (if applicable). However,
 the user still has the choice to configure the aircraft.
@@ -34,7 +34,7 @@ We went for a slick design and decided to show the user the reason for no being 
 <br> ![cargo](images/readme/CragoAreaChosen.PNG)<br>
 >As you can see the button 'view import demands' shows the import demands of the destination airport so the user can choose the best options.
 
-# The things I added/changed :
+# Upgrades / Updates:
 
 * 1 : The passengers entrance (adding passengers on board)
 <br> ![Passengers](images/readme/PassengersChosen.PNG)<br>
