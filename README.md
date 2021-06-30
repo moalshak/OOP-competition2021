@@ -14,9 +14,9 @@ These dots will move to the chosen destination airport. The rate of which the do
 The dots/trips are select-able. When selected, the steps taken so far are painted and the new panel is shown. This panel views real time fuel status and the progress of the
 trips. Of course some more info about trip itself and the content of the aircraft. In addition to a cool randomized image (dependent on type of aircraft).
 <br> ![](images/readme/TripDotChosen.PNG)<br>
-##The trips info panel
+## The trips info panel
 <br> ![](images/readme/TripChosen.PNG)<br>
-##Close up:
+## Close up:
 <br> ![](images/readme/TripsInfo.PNG) <br>
 
 At the main frame, added a notification message telling the user that they will never reach their selected destination even with fully loaded fuel tanks (if applicable). However,
@@ -26,13 +26,13 @@ the user still has the choice to configure the aircraft.
 Next picture is the Aircraft Editor from the assignments F.L.A.P.S. I changed two things here for this competition.
 We went for a slick design and decided to show the user the reason for no being able to depart on the button depart itself which is much better than a pop up.
 <br> ![Editor](images/readme/AircraftEditor.PNG)<br>
-##This is how it looks when a fuel tank is selected :
+## This is how it looks when a fuel tank is selected :
 <br> ![FuelTank](images/readme/FuelTankChosen.PNG)<br>
-##This is how it looks when a cargo area is selected :
+## This is how it looks when a cargo area is selected :
 <br> ![cargo](images/readme/CragoAreaChosen.PNG)<br>
 >As you can see the button 'view import demands' shows the import demands of the destination airport so the user can choose the best options.
 
-#The things I added/changed :
+# The things I added/changed :
 
 * 1 : The passengers entrance (adding passengers on board)
 <br> ![Passengers](images/readme/PassengersChosen.PNG)<br>
