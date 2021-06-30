@@ -38,3 +38,4 @@ What I added is that the passengers from each category now get a randomized pric
 Of course the sum of theses tickets is added to the profit and the weight of the passengers.
 * 2: The un/re do manager
 The un/re do manager is now perfected. Previously the manager was initiated when the editor frame was opened. Now however each aircraft that gets selected gets its own manager. This way you can still undo previous action taken even after closing the configuration frame of the aircraft. In addition to the fact that the program now jumps back to the right configuration panel (cargo, fuel, passengers) and the exact previously selected point is re selected.
+>When the aircraft departs its manager and edit menu get deleted
