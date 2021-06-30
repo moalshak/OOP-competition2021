@@ -1,6 +1,7 @@
 package nl.rug.oop.flaps.simulation.model.world;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
@@ -29,7 +30,7 @@ public class WorldSelectionModel {
 	private Airport selectedDestinationAirport = null;
 	@Getter
 	private Trip selectedTrip;
-	@Getter
+	@Getter @Setter
 	private boolean selectingDestination = false;
 	@Getter
 	private int destinationSelectionCursorX;

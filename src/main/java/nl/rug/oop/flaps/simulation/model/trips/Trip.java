@@ -175,7 +175,7 @@ public class Trip {
     /**
      * @return the the geo position of a point drawn on the world map
      * */
-    private GeographicCoordinates getGeoPosition(Point2D currentPosition) {
+    public GeographicCoordinates getGeoPosition(Point2D currentPosition) {
         var geo = ProjectionMapping.worldToMercator(World.getStaticDimensions()).
                 map(PointProvider.ofPoint(new Point2D.Double(currentPosition.getX(), currentPosition.getY())));
         return new GeographicCoordinates(geo.getPointX(),geo.getPointY());

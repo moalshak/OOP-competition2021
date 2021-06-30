@@ -131,6 +131,11 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
     private void drawTrajectory(Graphics2D g) {
         g.setColor(Color.WHITE);
         var sm = this.world.getSelectionModel();
+        // here the user is trying to select a trip as destination (•_•)
+        if (sm.getSelectedAirport() == null) {
+            sm.setSelectingDestination(false);
+            return;
+        }
         var start = ProjectionMapping.mercatorToWorld(this.world.getDimensions())
                 .map(sm.getSelectedAirport().getLocation());
         var end = new Point2D.Double(sm.getDestinationSelectionCursorX(), sm.getDestinationSelectionCursorY());

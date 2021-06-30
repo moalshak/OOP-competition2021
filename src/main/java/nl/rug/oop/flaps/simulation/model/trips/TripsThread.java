@@ -27,7 +27,6 @@ public class TripsThread extends Thread{
                 newRate = newRate / 2;
             }
             Thread.sleep(newRate);
-            System.out.println(newRate);
         }
     }
 
