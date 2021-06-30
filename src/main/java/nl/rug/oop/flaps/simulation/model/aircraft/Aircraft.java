@@ -59,7 +59,13 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
     @Setter
     private int passengersWeight;
     private int nrOfSeats;
+    /**
+     * place of entrance location on blueprint
+     * */
     private Point2D geoEnt;
+    /**
+     * Aircraft's own {@link EditMenu}
+     * */
     @Getter @Setter
     private EditMenu editMenu;
 
@@ -69,17 +75,15 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
         this.world = world;
         fuelTankFillStatuses = new HashMap<>();
         cargoAreaContents = new HashMap<>();
-
         passengers = new HashMap<>();
+        typeMapper();
+    }
+
+    public void typeMapper() {
         passengers.put("adults", 0);
         passengers.put("kidsTo12", 0);
         passengers.put("kidsUnder12", 0);
 
-        typeMapper();
-        //if(editMenu == null) editMenu = new EditMenu();
-    }
-
-    public void typeMapper() {
         AircraftType type = this.getType();
         geoEnt = new Point2D.Double();
 
@@ -98,8 +102,6 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
         }
     }
 
-
-
     /**
      * Retrieves the amount of fuel that is consumed when flying between two airports in kg
      *
@@ -110,7 +112,6 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
     public double getFuelConsumption(Airport origin, Airport destination) {
         /* calculate distance to destination airport */
         double distance = origin.getGeographicCoordinates().distanceTo(destination.getGeographicCoordinates());
-
         double cruiseSpeed = this.getType().getCruiseSpeed();
         /* flightDuration = the distance in Km then device by the cruiseSpeed*/
         double flightDuration =  (distance / 1000) / cruiseSpeed;
@@ -130,7 +131,6 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
     public double getFuelConsumption(Airport origin, GeographicCoordinates destination) {
         /* calculate distance to destination airport */
         double distance = origin.getGeographicCoordinates().distanceTo(destination);
-
         double cruiseSpeed = this.getType().getCruiseSpeed();
         /* flightDuration = the distance in Km then device by the cruiseSpeed*/
         double flightDuration =  (distance / 1000) / cruiseSpeed;

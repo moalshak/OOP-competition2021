@@ -39,11 +39,12 @@ public class DepartButtonListener extends AbstractAction {
         var sm = this.selectionModel; // Just to keep things succinct.
         if (sm.getSelectedAirport() != null && sm.getSelectedAircraft() != null && sm.getSelectedDestinationAirport() != null) {
             var aircraft = sm.getSelectedAircraft();
+            aircraft.setEditMenu(null);
             if (aircraft.getType().getTakeoffClipPath() != null) {
                 this.playTakeoffClip(aircraft.getType());
             }
             sm.getSelectedAirport().removeAircraft(aircraft);
-            sm.setSelectedAirport(sm.getSelectedAirport());
+            sm.setSelectedAirport(sm.getSelectedAirport()); // this line is to refresh the airport viewer panel
         }
         closeFrame();
     }

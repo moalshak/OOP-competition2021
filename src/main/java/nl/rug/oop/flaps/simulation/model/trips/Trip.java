@@ -31,7 +31,7 @@ public class Trip {
     @Getter
     private final static int revenue = (int) InfoPanelModel.getInfoPanelModel().getRevenue();
 
-    private final StringBuilder flightsId = generateId();
+    private final String flightsId;
     private Image bannerInAir;
     private Map<Double, Double> steps;
 
@@ -60,7 +60,7 @@ public class Trip {
         currentPosition = originAirportLocation;
         destinationAirportLocation = getAirportAsPoint(destAirport);
         this.fuelTankFillStatuses = new HashMap<>(aircraft.getFuelTankFillStatuses());
-
+        this.flightsId = generateId();
         setBannerImage();
         WorldPanel.getWorldPanel().addTrip(this);
     }
@@ -201,16 +201,16 @@ public class Trip {
     /**
      * generates a random ID
      * */
-    private StringBuilder generateId() {
+    private String generateId() {
         Random r = new Random();
         StringBuilder id = new StringBuilder();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 7; i++) {
             id.append((char) (r.nextInt(26) + 'a'));
         }
         for (int i = 0; i < 3; i++) {
-            id.append(Math.floor(Math.random()*(10 +1)+0));
+            id.append((int) Math.floor(Math.random()*(10 +1)+0));
         }
-        return id;
+        return id.toString().toUpperCase();
     }
 
     /**
