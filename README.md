@@ -1,4 +1,4 @@
-### Mohammad Al Shakoush s4274865
+### Mohammad Al Shakoush s4274865 & Dominic Therattil (s4228952)
 
 ## Hi, in this short overview I will inform you on what I have changed/added and what you can expect.
 
