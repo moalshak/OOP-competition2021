@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Displays the world map and the airport indicators
@@ -41,9 +42,9 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
     @Getter
     public static WorldPanel worldPanel;
     @Getter
-    private List<Trip> currentTrips;
+    private ConcurrentHashMap<Trip, Integer> currentTrips;
     @Getter
-    private final JSpinner speedUpRate = new JSpinner();
+    private final JSpinner speedUpRate;
 
     public WorldPanel(World world) {
         this.world = world;
@@ -53,6 +54,8 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
             log.severe("Could not load world map image.");
             throw new IllegalStateException(e);
         }
+        speedUpRate = new JSpinner();
+
         AirportSelectionController selectionController = new AirportSelectionController(world);
         addMouseMotionListener(selectionController);
         addMouseListener(selectionController);
@@ -71,7 +74,7 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
         JPanel temp = new JPanel();
         temp.setLayout(new GridLayout(1,1));
         temp.add(new JLabel("Speed Rate : "));
-        speedUpRate.setModel(new SpinnerNumberModel(1.0, 0.5, 4.5, 0.5));
+        speedUpRate.setModel(new SpinnerNumberModel(1.0, 0.5, 4, 0.5));
         speedUpRate.addChangeListener(new SpeedRateUp(this));
         temp.add(speedUpRate);
         return temp;
@@ -174,7 +177,7 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
         this.world.getAirports().values().forEach(airport -> drawAirportIndicator(g2d, airport));
 
         if (currentTrips != null) {
-            for (Trip trip : currentTrips) {
+            for (Trip trip : currentTrips.keySet()) {
                 paintTrips(g2d, trip);
             }
         }
@@ -194,9 +197,9 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
      * */
     public void addTrip(Trip trip) {
         if (currentTrips == null) {
-            currentTrips = new ArrayList<>();
+            currentTrips = new ConcurrentHashMap<>();
         }
-        currentTrips.add(trip);
+        currentTrips.put(trip, 0);
     }
 
     /**
