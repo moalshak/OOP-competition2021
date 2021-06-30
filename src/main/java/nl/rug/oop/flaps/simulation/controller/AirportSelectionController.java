@@ -35,7 +35,7 @@ public class AirportSelectionController extends MouseAdapter {
                     .map(PointProvider.ofPoint(new Point2D.Double(e.getX(), e.getY())));
             var list = WorldPanel.getWorldPanel().getCurrentTrips();
             if (list != null) {
-                for (Trip trip : list) {
+                for (Trip trip : list.keySet()) {
                     if ((new Point2D.Double(e.getX(), e.getY())).distance(trip.getCurrentPosition()) < RADIUS) {
                         this.world.getSelectionModel().setSelectedTrip(trip);
                         return;

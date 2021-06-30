@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 public class Trip {
@@ -33,7 +34,7 @@ public class Trip {
 
     private final String flightsId;
     private Image bannerInAir;
-    private Map<Double, Double> steps;
+    private final ConcurrentHashMap<Double, Double> steps;
 
     private final Airport originAirport;
     private final Airport destAirport;
@@ -61,6 +62,7 @@ public class Trip {
         destinationAirportLocation = getAirportAsPoint(destAirport);
         this.fuelTankFillStatuses = new HashMap<>(aircraft.getFuelTankFillStatuses());
         this.flightsId = generateId();
+        steps = new ConcurrentHashMap<>();
         setBannerImage();
         WorldPanel.getWorldPanel().addTrip(this);
     }
@@ -118,9 +120,6 @@ public class Trip {
             yVelocity -= VELOCITY;
         }
         currentPosition.setLocation(xVelocity, yVelocity);
-        if (steps == null) {
-            steps = new HashMap<>();
-        }
         steps.put(currentPosition.getX(), currentPosition.getY());
         // update of checked destination (trip arrived when in range of the airport )
         reachedDestination = currentPosition.distance(destinationAirportLocation) < INDICATOR_SIZE/10;
