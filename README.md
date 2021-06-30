@@ -19,6 +19,8 @@ trips. Of course some more info about trip itself and the content of the aircraf
 ## Close up:
 <br> ![](images/readme/TripsInfo.PNG) <br>
 
+# Upgrades / Updates
+
 At the main frame, added a notification message telling the user that they will never reach their selected destination even with fully loaded fuel tanks (if applicable). However,
 the user still has the choice to configure the aircraft.
 <br> ![Error1](images/readme/NotReachableError.PNG)<br>
