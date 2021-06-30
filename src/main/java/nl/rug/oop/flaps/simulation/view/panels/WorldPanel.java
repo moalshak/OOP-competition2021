@@ -84,17 +84,34 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
      * paints the trips on the world map
      * */
     private void paintTrips(Graphics2D g, Trip trip) {
-        double s = INDICATOR_SIZE;
+        double s;
         var sm = this.world.getSelectionModel();
-
-        g.setColor(Color.GREEN);
-        if (sm.getSelectedTrip() != null && sm.getSelectedTrip().equals(trip) ) {
-            s *= 1.5;
-            paintSteps(g, trip);
-            g.setColor(Color.CYAN);
+        if (trip.getIcon() != null) {
+            s = trip.getIcon().getWidth(null);
+            Image icon = trip.getIcon();
+            g.setColor(Color.GREEN);
+            if (sm.getSelectedTrip() != null && sm.getSelectedTrip().equals(trip)) {
+                int newWidth = (int) (icon.getWidth(null) * 1.5);
+                int newHeight = (int) (icon.getHeight(null) * 1.5);
+                icon = icon.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+                s *= 1.5;
+                paintSteps(g, trip);
+                g.setColor(Color.CYAN);
+            }
+            int x = (int) (trip.getCurrentPosition().getX() - s / 2);
+            int y = (int) (trip.getCurrentPosition().getY() - s / 2);
+            g.drawImage(icon, x, y, null);
+        } else {
+            s = INDICATOR_SIZE;
+            g.setColor(Color.GREEN);
+            if (sm.getSelectedTrip() != null && sm.getSelectedTrip().equals(trip)) {
+                s *= 1.5;
+                paintSteps(g, trip);
+                g.setColor(Color.YELLOW);
+            }
+            Shape marker = new Ellipse2D.Double(trip.getCurrentPosition().getX() - s/2, trip.getCurrentPosition().getY()- s/2, s,s);
+            g.fill(marker);
         }
-        Shape marker = new Ellipse2D.Double(trip.getCurrentPosition().getX() - s/2, trip.getCurrentPosition().getY()- s/2, s,s);
-        g.fill(marker);
 
     }
 
@@ -103,7 +120,7 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
      * */
     private void paintSteps(Graphics2D g, Trip trip) {
         var steps = trip.getSteps();
-        g.setColor(Color.YELLOW);
+        g.setColor(Color.CYAN);
         double s = INDICATOR_SIZE;
         s /= 3;
         for(Double step : steps.keySet()) {

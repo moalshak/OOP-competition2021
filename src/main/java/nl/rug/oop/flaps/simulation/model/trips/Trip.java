@@ -17,7 +17,10 @@ import nl.rug.oop.flaps.simulation.view.panels.trip.TripsInfo;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +37,7 @@ public class Trip {
 
     private final String flightsId;
     private Image bannerInAir;
+    private Image icon;
     private final ConcurrentHashMap<Double, Double> steps;
 
     private final Airport originAirport;
@@ -44,7 +48,7 @@ public class Trip {
     boolean reachedDestination = false;
 
     private final WorldSelectionModel sm;
-    private static final double VELOCITY = 0.1;
+    private static final double VELOCITY = 1;
 
     private String distanceLeft;
 
@@ -67,6 +71,36 @@ public class Trip {
         WorldPanel.getWorldPanel().addTrip(this);
     }
 
+    @SneakyThrows
+    private void setIconImage(String direction) {
+        switch (direction) {
+            case "l":
+                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_l.png").toFile());
+                break;
+            case "r":
+                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_r.png").toFile());
+                break;
+            case "u":
+                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_u.png").toFile());
+                break;
+            case "d":
+                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_d.png").toFile());
+                break;
+            case "ul":
+                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_ul.png").toFile());
+                break;
+            case "dl":
+                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_dl.png").toFile());
+                break;
+            case "ur":
+                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_ur.png").toFile());
+                break;
+            case "dr":
+                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_dr.png").toFile());
+                break;
+        }
+    }
+
     /**
      * sets the banner image of the aircraft flying according to the type
      * */
@@ -75,28 +109,10 @@ public class Trip {
         String aircraftType = aircraft.getType().getName();
         if (aircraftType.equals("Boeing 747-400F")) {
             int nr = (int)(Math.random()*(4-1+1)+1);
-            switch (nr) {
-                case 1 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/747", "clouds747.jpg").toFile());
-                break;
-                case 2 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/747", "clouds747_2.jpg").toFile());
-                break;
-                case 3 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/747", "clouds747_3.jpg").toFile());
-                break;
-                case 4 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/747", "clouds747_4.jpg").toFile());
-                break;
-            }
+            bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/747", "clouds747_" + nr +".jpg").toFile());
         } else if (aircraftType.equals("Boeing 737-800BCF Freighter")) {
             int nr = (int)(Math.random()*(4-1+1)+1);
-            switch (nr) {
-                case 1 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/737", "clouds737.jpg").toFile());
-                    break;
-                case 2 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/737", "clouds737_2.jpg").toFile());
-                    break;
-                case 3 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/737", "clouds737_3.jpg").toFile());
-                    break;
-                case 4 : bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/737", "clouds737_4.jpg").toFile());
-                    break;
-            }
+            bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/737", "clouds737_" + nr + ".jpg").toFile());
         } else {
             bannerInAir = ImageIO.read(Path.of("data/aircraft_types/general_aviation/grand_caravan", "cloudsGrandCarvan.jpg").toFile());
         }
@@ -108,29 +124,81 @@ public class Trip {
         // update position
         double xVelocity = currentPosition.getX();
         double yVelocity = currentPosition.getY();
+        boolean left, right, up, down;
+        left = right = up = down = false;
 
+        if ((int) currentPosition.getX() == (int) destinationAirportLocation.getX() - 1
+                ||(int)  currentPosition.getX() == (int) destinationAirportLocation.getX() + 1) {
+            currentPosition.setLocation(destinationAirportLocation.getX(), currentPosition.getY());
+        }
         if (currentPosition.getX() < destinationAirportLocation.getX()) {
             xVelocity += VELOCITY;
-        } else if (currentPosition.getX() >= destinationAirportLocation.getX()) {
+            right = true;
+        } else if (currentPosition.getX() > destinationAirportLocation.getX()) {
             xVelocity -= VELOCITY;
+            left = true;
         }
+        if ((int) currentPosition.getY() == (int) destinationAirportLocation.getY() - 1
+                || (int)  currentPosition.getY() == (int) destinationAirportLocation.getY() + 1) {
+            currentPosition.setLocation(currentPosition.getX(), destinationAirportLocation.getY());
+        }
+
         if (currentPosition.getY() < destinationAirportLocation.getY()) {
             yVelocity += VELOCITY;
-        } else if (currentPosition.getY() >= destinationAirportLocation.getY()) {
+            down = true;
+        } else if (currentPosition.getY() > destinationAirportLocation.getY()) {
             yVelocity -= VELOCITY;
+            up = true;
         }
+        if ((int) currentPosition.getY() == (int) destinationAirportLocation.getY()) {
+            currentPosition.setLocation(currentPosition.getX(), destinationAirportLocation.getY());
+        }
+        updateIcon(left, right, up, down);
         currentPosition.setLocation(xVelocity, yVelocity);
+
         steps.put(currentPosition.getX(), currentPosition.getY());
         // update of checked destination (trip arrived when in range of the airport )
-        reachedDestination = currentPosition.distance(destinationAirportLocation) < INDICATOR_SIZE/10;
+        reachedDestination = (int) currentPosition.distance(destinationAirportLocation) < icon.getWidth(null)/6;
         GeographicCoordinates end = getGeoPosition(currentPosition);
-
         setDistanceLeft(end);
         removedAndUpdateFuel(end);
+
         // repaint
         WorldPanel.getWorldPanel().repaint();
 
         if(reachedDestination) aircraftArrived();
+    }
+
+    /**
+     * updates the icon of the flying aircraft
+     * */
+    private void updateIcon(boolean left, boolean right, boolean up, boolean down) {
+        if (left) {
+            if (up) {
+                setIconImage("ul");
+            } else if (down) {
+                setIconImage("dl");
+            } else {
+                setIconImage("l");
+            }
+            return;
+        }
+        if (right) {
+            if (up) {
+                setIconImage("ur");
+            } else if (down) {
+                setIconImage("dr");
+            } else {
+                setIconImage("r");
+            }
+            return;
+        }
+
+        if (up) {
+            setIconImage("u");
+        } else {
+            setIconImage("d");
+        }
     }
 
     /**
