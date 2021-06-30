@@ -36,6 +36,7 @@ public class Trip {
     private Image bannerInAir;
     private Image icon;
     private final ConcurrentHashMap<String, Boolean> directions;
+    private String prevDirection;
     private final ConcurrentHashMap<Double, Double> steps;
 
     private final Airport originAirport;
@@ -46,7 +47,7 @@ public class Trip {
     boolean reachedDestination = false;
 
     private final WorldSelectionModel sm;
-    private static final double VELOCITY = 0.6;
+    private static final double VELOCITY = 1;
 
     private String distanceLeft;
 
@@ -66,6 +67,7 @@ public class Trip {
         this.flightsId = generateId();
         steps = new ConcurrentHashMap<>();
         directions = new ConcurrentHashMap<>();
+        prevDirection = "";
         setBannerImage();
         WorldPanel.getWorldPanel().addTrip(this);
     }
@@ -137,7 +139,10 @@ public class Trip {
         } else if (directions.get("right")) {
             direction.append("r");
         }
-        setIconImage(String.valueOf(direction));
+        if (!prevDirection.equals(String.valueOf(direction))) {
+            prevDirection = String.valueOf(direction);
+            setIconImage(String.valueOf(direction));
+        }
     }
     /**
      * resets the directions {@link #directions}

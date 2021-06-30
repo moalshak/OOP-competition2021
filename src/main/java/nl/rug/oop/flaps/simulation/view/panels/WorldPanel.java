@@ -38,6 +38,7 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
     private final World world;
 
     private Image cachedWorldMapImage;
+    private Image cachedFlyingIconImage;
 
     @Getter
     public static WorldPanel worldPanel;
@@ -89,7 +90,9 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
         if (trip.getIcon() != null) {
             s = trip.getIcon().getWidth(null);
             Image icon = trip.getIcon();
-            g.setColor(Color.GREEN);
+            if (!icon.equals(this.cachedFlyingIconImage)) {
+                this.cachedFlyingIconImage = icon.getScaledInstance(20,20,Image.SCALE_SMOOTH);
+            }
             if (sm.getSelectedTrip() != null && sm.getSelectedTrip().equals(trip)) {
                 int newWidth = (int) (icon.getWidth(null) * 1.5);
                 int newHeight = (int) (icon.getHeight(null) * 1.5);
