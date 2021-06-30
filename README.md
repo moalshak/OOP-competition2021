@@ -20,7 +20,7 @@
 <a name = "trips">
   
 ## TRIPS
-The main focus was adding flights/trips. After pressing 'depart' a dot shows on the world map. Green dots in the picture <br>
+The main focus was adding flights/trips. After pressing 'depart' a dot shows on the world map. `Green dots in the picture` <br>
 <br> ![trips](images/readme/Trips.PNG) <br>
 
 These dots will move to the chosen destination airport. The rate of which the dots moves is chosen by the user through a 'JSpinner'.
