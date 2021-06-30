@@ -2,7 +2,7 @@
 
 ## Hi, in this short overview I will inform you on what I have changed/added and what you can expect.
 
-# TRIPS
+# TRIPS / FLIGHTS
 The main focus was adding flights/trips. After pressing 'depart' a dot shows on the world map. Green dots in the picture <br>
 <br> ![trips](images/readme/Trips.PNG) <br>
 
