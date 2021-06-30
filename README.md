@@ -8,6 +8,7 @@ The main focus was adding flights/trips. After pressing 'depart' a dot shows on 
 
 These dots will move to the chosen destination airport. The rate of which the dots moves is chosen by the user through a 'JSpinner'.
 >Each type of aircraft has its own speed or "rate" at which it moves across the map. This was decided by the help of cruise speed of the aircraft. This way the boeing 747 is faster than the 737. When adjusting the `JSpinner` the rate changes accordingly.
+
 <br> ![speed](images/readme/newSpeed.PNG) <br>
 
 The dots/trips are select-able. When selected, the steps taken so far are painted and the new panel is shown. This panel views real time fuel status and the progress of the
