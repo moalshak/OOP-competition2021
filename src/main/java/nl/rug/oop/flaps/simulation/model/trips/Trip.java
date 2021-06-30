@@ -17,10 +17,7 @@ import nl.rug.oop.flaps.simulation.view.panels.trip.TripsInfo;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +35,7 @@ public class Trip {
     private final String flightsId;
     private Image bannerInAir;
     private Image icon;
+    private final ConcurrentHashMap<String, Boolean> directions;
     private final ConcurrentHashMap<Double, Double> steps;
 
     private final Airport originAirport;
@@ -48,7 +46,7 @@ public class Trip {
     boolean reachedDestination = false;
 
     private final WorldSelectionModel sm;
-    private static final double VELOCITY = 1;
+    private static final double VELOCITY = 0.6;
 
     private String distanceLeft;
 
@@ -67,38 +65,88 @@ public class Trip {
         this.fuelTankFillStatuses = new HashMap<>(aircraft.getFuelTankFillStatuses());
         this.flightsId = generateId();
         steps = new ConcurrentHashMap<>();
+        directions = new ConcurrentHashMap<>();
         setBannerImage();
         WorldPanel.getWorldPanel().addTrip(this);
     }
 
-    @SneakyThrows
-    private void setIconImage(String direction) {
-        switch (direction) {
-            case "l":
-                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_l.png").toFile());
-                break;
-            case "r":
-                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_r.png").toFile());
-                break;
-            case "u":
-                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_u.png").toFile());
-                break;
-            case "d":
-                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_d.png").toFile());
-                break;
-            case "ul":
-                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_ul.png").toFile());
-                break;
-            case "dl":
-                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_dl.png").toFile());
-                break;
-            case "ur":
-                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_ur.png").toFile());
-                break;
-            case "dr":
-                this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_dr.png").toFile());
-                break;
+    /**
+     * Moves the plane forward
+     * */
+    public void cruise () {
+        // update position
+        double xDistance = currentPosition.getX();
+        double yDistance = currentPosition.getY();
+
+        resetDirections();
+
+        if ((int) currentPosition.getX() == (int) destinationAirportLocation.getX() - 1
+                ||(int)  currentPosition.getX() == (int) destinationAirportLocation.getX() + 1) {
+            currentPosition.setLocation(destinationAirportLocation.getX(), currentPosition.getY());
         }
+
+        if (currentPosition.getX() < destinationAirportLocation.getX()) {
+            xDistance += VELOCITY;
+            directions.put("right", true);
+        } else if (currentPosition.getX() > destinationAirportLocation.getX()) {
+            xDistance -= VELOCITY;
+            directions.put("left", true);
+        }
+
+        if ((int) currentPosition.getY() == (int) destinationAirportLocation.getY() - 1
+                || (int)  currentPosition.getY() == (int) destinationAirportLocation.getY() + 1) {
+            currentPosition.setLocation(currentPosition.getX(), destinationAirportLocation.getY());
+        }
+
+        if (currentPosition.getY() < destinationAirportLocation.getY()) {
+            yDistance += VELOCITY;
+            directions.put("down", true);
+        } else if (currentPosition.getY() > destinationAirportLocation.getY()) {
+            yDistance -= VELOCITY;
+            directions.put("up", true);
+        }
+
+        updateIcon();
+        currentPosition.setLocation(xDistance, yDistance);
+
+        steps.put(currentPosition.getX(), currentPosition.getY());
+        // update of checked destination (trip arrived when in range of the airport )
+        reachedDestination = (int) currentPosition.distance(destinationAirportLocation) < icon.getWidth(null)/6;
+        GeographicCoordinates end = getGeoPosition(currentPosition);
+        setDistanceLeft(end);
+        removedAndUpdateFuel(end);
+
+        // repaint
+        WorldPanel.getWorldPanel().repaint();
+
+        if(reachedDestination) aircraftArrived();
+    }
+
+    /**
+     * updates the icon of the flying aircraft
+     * */
+    private void updateIcon() {
+        StringBuilder direction = new StringBuilder();
+        if (directions.get("up")) {
+            direction.append("u");
+        } else if (directions.get("down")) {
+            direction.append("d");
+        }
+        if (directions.get("left")) {
+            direction.append("l");
+        } else if (directions.get("right")) {
+            direction.append("r");
+        }
+        setIconImage(String.valueOf(direction));
+    }
+    /**
+     * resets the directions {@link #directions}
+     * */
+    private void resetDirections() {
+        directions.put("left", false);
+        directions.put("right", false);
+        directions.put("up", false);
+        directions.put("down", false);
     }
 
     /**
@@ -117,92 +165,9 @@ public class Trip {
             bannerInAir = ImageIO.read(Path.of("data/aircraft_types/general_aviation/grand_caravan", "cloudsGrandCarvan.jpg").toFile());
         }
     }
-    /**
-     * Moves the plane forward
-     * */
-    public void cruise () {
-        // update position
-        double xVelocity = currentPosition.getX();
-        double yVelocity = currentPosition.getY();
-        boolean left, right, up, down;
-        left = right = up = down = false;
-
-        if ((int) currentPosition.getX() == (int) destinationAirportLocation.getX() - 1
-                ||(int)  currentPosition.getX() == (int) destinationAirportLocation.getX() + 1) {
-            currentPosition.setLocation(destinationAirportLocation.getX(), currentPosition.getY());
-        }
-        if (currentPosition.getX() < destinationAirportLocation.getX()) {
-            xVelocity += VELOCITY;
-            right = true;
-        } else if (currentPosition.getX() > destinationAirportLocation.getX()) {
-            xVelocity -= VELOCITY;
-            left = true;
-        }
-        if ((int) currentPosition.getY() == (int) destinationAirportLocation.getY() - 1
-                || (int)  currentPosition.getY() == (int) destinationAirportLocation.getY() + 1) {
-            currentPosition.setLocation(currentPosition.getX(), destinationAirportLocation.getY());
-        }
-
-        if (currentPosition.getY() < destinationAirportLocation.getY()) {
-            yVelocity += VELOCITY;
-            down = true;
-        } else if (currentPosition.getY() > destinationAirportLocation.getY()) {
-            yVelocity -= VELOCITY;
-            up = true;
-        }
-        if ((int) currentPosition.getY() == (int) destinationAirportLocation.getY()) {
-            currentPosition.setLocation(currentPosition.getX(), destinationAirportLocation.getY());
-        }
-        updateIcon(left, right, up, down);
-        currentPosition.setLocation(xVelocity, yVelocity);
-
-        steps.put(currentPosition.getX(), currentPosition.getY());
-        // update of checked destination (trip arrived when in range of the airport )
-        reachedDestination = (int) currentPosition.distance(destinationAirportLocation) < icon.getWidth(null)/6;
-        GeographicCoordinates end = getGeoPosition(currentPosition);
-        setDistanceLeft(end);
-        removedAndUpdateFuel(end);
-
-        // repaint
-        WorldPanel.getWorldPanel().repaint();
-
-        if(reachedDestination) aircraftArrived();
-    }
 
     /**
-     * updates the icon of the flying aircraft
-     * */
-    private void updateIcon(boolean left, boolean right, boolean up, boolean down) {
-        if (left) {
-            if (up) {
-                setIconImage("ul");
-            } else if (down) {
-                setIconImage("dl");
-            } else {
-                setIconImage("l");
-            }
-            return;
-        }
-        if (right) {
-            if (up) {
-                setIconImage("ur");
-            } else if (down) {
-                setIconImage("dr");
-            } else {
-                setIconImage("r");
-            }
-            return;
-        }
-
-        if (up) {
-            setIconImage("u");
-        } else {
-            setIconImage("d");
-        }
-    }
-
-    /**
-     * sets and loads the distance left progress bar
+     * sets and loads the distance left in the progress bar
      * */
     private void setDistanceLeft(GeographicCoordinates end) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -216,7 +181,7 @@ public class Trip {
             stringBuilder.append("✈");
         }
         stringBuilder.append("-".repeat(Math.max(0, 50 - percentage)));
-        stringBuilder.append("🏢");
+        stringBuilder.append("📌");
 
         if(reachedDestination) stringBuilder.append("   Arrived 🛬 ✅");
 
@@ -263,6 +228,15 @@ public class Trip {
             sm.setSelectedAirport(destAirport);
         }
         WorldPanel.getWorldPanel().removeTrip(this);
+    }
+
+    /**
+     * sets the icon image dependent on the direction
+     * @param direction the direction where the aircraft flies
+     * */
+    @SneakyThrows
+    private void setIconImage(String direction) {
+        this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_" + direction + ".png").toFile());
     }
 
     /**
