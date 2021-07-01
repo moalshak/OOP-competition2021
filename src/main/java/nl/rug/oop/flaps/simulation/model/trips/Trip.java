@@ -17,7 +17,10 @@ import nl.rug.oop.flaps.simulation.view.panels.trip.TripsInfo;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,9 +37,8 @@ public class Trip {
 
     private final String flightsId;
     private Image bannerInAir;
-    private Image icon;
+    private BufferedImage icon;
     private final ConcurrentHashMap<String, Boolean> directions;
-    private String prevDirection;
     private final ConcurrentHashMap<Double, Double> steps;
 
     private final Airport originAirport;
@@ -53,6 +55,7 @@ public class Trip {
 
     private double slope;
     private double beginNumber;
+    private double rotationAngle;
 
     private final Map<FuelTank, Double> fuelTankFillStatuses;
     /**
@@ -70,15 +73,29 @@ public class Trip {
         this.flightsId = generateId();
         steps = new ConcurrentHashMap<>();
         directions = new ConcurrentHashMap<>();
-        prevDirection = "";
         setBannerImage();
         WorldPanel.getWorldPanel().addTrip(this);
 
         calcLineEquation();
+        rotateCw();
     }
 
     /**
-     * calculate the formula of the line crossing both origin and destination airport
+     * rotates the icon image depending on angle between the origin airport and the destination airport
+     * */
+    @SneakyThrows
+    private void rotateCw() {
+        icon = ImageIO.read(Path.of("data/flying_airplanes/flying_airplane_u.png").toFile());
+        //scaleImage();
+        rotationAngle = Math.toRadians(Math.toDegrees(Math.atan2( (destinationAirportLocation.getY()-originAirportLocation.getY()),
+                (destinationAirportLocation.getX() - originAirportLocation.getX()) )) + 90 );
+        AffineTransform tr = AffineTransform.getRotateInstance(rotationAngle, (double) icon.getWidth()/2, (double) icon.getHeight()/2);
+        AffineTransformOp op = new AffineTransformOp(tr, AffineTransformOp.TYPE_BILINEAR);
+        icon = op.filter(icon, null);
+    }
+
+    /**
+     * calculates the formula of the line crossing both origin and destination airport points
      * */
     private void calcLineEquation() {
         slope = ( (destinationAirportLocation.getY() - originAirportLocation.getY()) /
@@ -115,8 +132,6 @@ public class Trip {
             directions.put("up", true);
         }
 
-        updateIcon();
-
         steps.put(currentPosition.getX(), currentPosition.getY());
 
         // update of checked destination (trip arrived when in range of the airport )
@@ -138,26 +153,6 @@ public class Trip {
         return slope * x + beginNumber;
     }
 
-    /**
-     * updates the icon of the flying aircraft
-     * */
-    private void updateIcon() {
-        StringBuilder direction = new StringBuilder();
-        if (directions.get("up")) {
-            direction.append("u");
-        } else if (directions.get("down")) {
-            direction.append("d");
-        }
-        if (directions.get("left")) {
-            direction.append("l");
-        } else if (directions.get("right")) {
-            direction.append("r");
-        }
-        if (!prevDirection.equals(String.valueOf(direction))) {
-            prevDirection = String.valueOf(direction);
-            setIconImage(String.valueOf(direction));
-        }
-    }
     /**
      * resets the directions {@link #directions}
      * */
@@ -247,15 +242,6 @@ public class Trip {
             sm.setSelectedAirport(destAirport);
         }
         WorldPanel.getWorldPanel().removeTrip(this);
-    }
-
-    /**
-     * sets the icon image dependent on the direction
-     * @param direction the direction where the aircraft flies
-     * */
-    @SneakyThrows
-    private void setIconImage(String direction) {
-        this.icon = ImageIO.read(Path.of("data/flying_airplanes", "flying_airplane_" + direction + ".png").toFile());
     }
 
     /**
