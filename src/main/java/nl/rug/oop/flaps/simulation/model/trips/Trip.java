@@ -49,7 +49,7 @@ public class Trip {
     boolean reachedDestination = false;
 
     private final WorldSelectionModel sm;
-    private static final double VELOCITY = 1;
+    private static final double VELOCITY = 0.5;
 
     private String distanceLeft;
 
