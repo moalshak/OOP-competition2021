@@ -54,13 +54,13 @@ We went for a slick design and decided to show the user the reason for no being 
   <br> ![cargo](images/readme/CragoAreaChosen.PNG)<br>
   >As you can see the button 'view import demands' shows the import demands of the destination airport so the user can choose the best options.
   
-> >Upon updating the slider and confirming a change, the slider data for the other cargo units also dynamically updates
+  >Upon updating the slider and confirming a change, the slider data for the other cargo units updates dynamically, this provides the user with more informative data.
 
 # Upgrades and Updates
 
 * ### Quick Info
   <br> ![QuickInfo](images/readme/HoverData.jpg)<br>
-  Hovering over the different points on the airplane map enables the user to view some quick information regarding the capacity of that area. 
+  >Hovering over the different points on the airplane map enables the user to view some quick information regarding the capacity of that area. 
 
 <a name = "passengers">
   
@@ -70,6 +70,9 @@ We went for a slick design and decided to show the user the reason for no being 
   Of course the sum of theses tickets is added to the profit and the weight of the passengers.
 
  <a name = "manager">
+   
 * ### Undo/Redo manager
-  The un/re do manager is now perfected. Previously the manager was initiated when the editor frame was opened. Now however each aircraft that gets selected gets its own manager. This way you can still undo previous action taken even after closing the configuration frame of the aircraft. In addition to the fact that the program now jumps back to the right configuration panel (cargo, fuel, passengers) and the exact previously selected point is re selected.
+   The un/re do manager is now perfected. Previously the manager was initiated when the editor frame was opened. Now however each aircraft that gets selected gets its own
+   manager. This way you can still undo previous action taken even after closing the configuration frame of the aircraft. In addition to the fact that the program now jumps
+   back to the right configuration panel (cargo, fuel, passengers) and the exact previously selected point is re selected.
   >When the aircraft departs its manager and edit menu get deleted
