@@ -86,9 +86,9 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
      * */
     private void paintTrips(Graphics2D g, Trip trip) {
         double s;
+        s = 20;
         var sm = this.world.getSelectionModel();
         if (trip.getIcon() != null) {
-            s = trip.getIcon().getWidth();
             BufferedImage icon = trip.getIcon();
             if (sm.getSelectedTrip() != null && sm.getSelectedTrip().equals(trip)) {
                 icon = upscaleIcon(icon);
