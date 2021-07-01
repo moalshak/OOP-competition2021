@@ -51,6 +51,9 @@ public class Trip {
 
     private String distanceLeft;
 
+    private double slope;
+    private double beginNumber;
+
     private final Map<FuelTank, Double> fuelTankFillStatuses;
     /**
      * creates a new instance of the Trip after departure
@@ -70,6 +73,17 @@ public class Trip {
         prevDirection = "";
         setBannerImage();
         WorldPanel.getWorldPanel().addTrip(this);
+
+        calcLineEquation();
+    }
+
+    /**
+     * calculate the formula of the line crossing both origin and destination airport
+     * */
+    private void calcLineEquation() {
+        slope = ( (destinationAirportLocation.getY() - originAirportLocation.getY()) /
+                (destinationAirportLocation.getX()-originAirportLocation.getX()));
+        beginNumber = ( destinationAirportLocation.getY() - (slope * destinationAirportLocation.getX()));
     }
 
     /**
@@ -78,14 +92,8 @@ public class Trip {
     public void cruise () {
         // update position
         double xDistance = currentPosition.getX();
-        double yDistance = currentPosition.getY();
 
         resetDirections();
-
-        if ((int) currentPosition.getX() == (int) destinationAirportLocation.getX() - 1
-                ||(int)  currentPosition.getX() == (int) destinationAirportLocation.getX() + 1) {
-            currentPosition.setLocation(destinationAirportLocation.getX(), currentPosition.getY());
-        }
 
         if (currentPosition.getX() < destinationAirportLocation.getX()) {
             xDistance += VELOCITY;
@@ -95,33 +103,39 @@ public class Trip {
             directions.put("left", true);
         }
 
-        if ((int) currentPosition.getY() == (int) destinationAirportLocation.getY() - 1
-                || (int)  currentPosition.getY() == (int) destinationAirportLocation.getY() + 1) {
-            currentPosition.setLocation(currentPosition.getX(), destinationAirportLocation.getY());
-        }
+        double oldY = currentPosition.getY();
 
-        if (currentPosition.getY() < destinationAirportLocation.getY()) {
-            yDistance += VELOCITY;
+        currentPosition.setLocation(xDistance, y(xDistance));
+
+        double newY = currentPosition.getY();
+
+        if (oldY < newY) {
             directions.put("down", true);
-        } else if (currentPosition.getY() > destinationAirportLocation.getY()) {
-            yDistance -= VELOCITY;
+        } else if (oldY > newY) {
             directions.put("up", true);
         }
 
         updateIcon();
-        currentPosition.setLocation(xDistance, yDistance);
 
         steps.put(currentPosition.getX(), currentPosition.getY());
+
         // update of checked destination (trip arrived when in range of the airport )
         reachedDestination = (int) currentPosition.distance(destinationAirportLocation) < icon.getWidth(null)/6;
         GeographicCoordinates end = getGeoPosition(currentPosition);
         setDistanceLeft(end);
         removedAndUpdateFuel(end);
-
         // repaint
         WorldPanel.getWorldPanel().repaint();
 
         if(reachedDestination) aircraftArrived();
+    }
+
+    /**
+     * @param x the x coordinate that we need to get the y coordinate of
+     * @return the y coordinate of the line crossing the dest airport and origin airport
+     * */
+    private double y (double x) {
+        return slope * x + beginNumber;
     }
 
     /**
