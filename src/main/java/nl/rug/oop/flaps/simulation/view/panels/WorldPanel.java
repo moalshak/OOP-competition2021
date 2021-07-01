@@ -10,19 +10,20 @@ import nl.rug.oop.flaps.simulation.model.map.coordinates.PointProvider;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.ProjectionMapping;
 import nl.rug.oop.flaps.simulation.model.trips.Trip;
 import nl.rug.oop.flaps.simulation.model.world.World;
+import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModelListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -38,7 +39,6 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
     private final World world;
 
     private Image cachedWorldMapImage;
-    private Image cachedFlyingIconImage;
 
     @Getter
     public static WorldPanel worldPanel;
@@ -88,34 +88,49 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
         double s;
         var sm = this.world.getSelectionModel();
         if (trip.getIcon() != null) {
-            s = trip.getIcon().getWidth(null);
-            Image icon = trip.getIcon();
-            if (!icon.equals(this.cachedFlyingIconImage)) {
-                this.cachedFlyingIconImage = icon.getScaledInstance(20,20,Image.SCALE_SMOOTH);
-            }
+            s = trip.getIcon().getWidth();
+            BufferedImage icon = trip.getIcon();
             if (sm.getSelectedTrip() != null && sm.getSelectedTrip().equals(trip)) {
-                int newWidth = (int) (icon.getWidth(null) * 1.5);
-                int newHeight = (int) (icon.getHeight(null) * 1.5);
-                icon = icon.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+                icon = upscaleIcon(icon);
                 s *= 1.5;
                 paintSteps(g, trip);
-                g.setColor(Color.CYAN);
             }
             int x = (int) (trip.getCurrentPosition().getX() - s / 2);
             int y = (int) (trip.getCurrentPosition().getY() - s / 2);
-            g.drawImage(icon, x, y, null);
+            g.drawImage(icon,x,y, null);
         } else {
-            s = INDICATOR_SIZE;
-            g.setColor(Color.GREEN);
-            if (sm.getSelectedTrip() != null && sm.getSelectedTrip().equals(trip)) {
-                s *= 1.5;
-                paintSteps(g, trip);
-                g.setColor(Color.YELLOW);
-            }
-            Shape marker = new Ellipse2D.Double(trip.getCurrentPosition().getX() - s/2, trip.getCurrentPosition().getY()- s/2, s,s);
-            g.fill(marker);
+            drawDots(g, trip, sm);
         }
+    }
 
+    /**
+     * draws normal dots when icon is not found
+     * */
+    private void drawDots(Graphics2D g, Trip trip, WorldSelectionModel sm) {
+        double s;
+        s = INDICATOR_SIZE;
+        g.setColor(Color.GREEN);
+        if (sm.getSelectedTrip() != null && sm.getSelectedTrip().equals(trip)) {
+            s *= 1.5;
+            paintSteps(g, trip);
+            g.setColor(Color.YELLOW);
+        }
+        Shape marker = new Ellipse2D.Double(trip.getCurrentPosition().getX() - s/2, trip.getCurrentPosition().getY()- s/2, s,s);
+        g.fill(marker);
+    }
+
+    /**
+     * @return the icon image but in 1.5 size
+     * */
+    private BufferedImage upscaleIcon(BufferedImage icon) {
+        int newWidth = (int) (icon.getWidth(null) * 1.5);
+        int newHeight = (int) (icon.getHeight(null) * 1.5);
+        BufferedImage scaledImage = new BufferedImage(newWidth, newHeight,BufferedImage.TYPE_INT_ARGB);
+        AffineTransform at = new AffineTransform();
+        at.scale(1.5, 1.5);
+        AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+        icon = scaleOp.filter(icon, scaledImage);
+        return icon;
     }
 
     /**

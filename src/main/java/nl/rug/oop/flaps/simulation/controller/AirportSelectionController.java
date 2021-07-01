@@ -20,7 +20,7 @@ import java.awt.geom.Point2D;
  */
 public class AirportSelectionController extends MouseAdapter {
     private static final int SELECTION_TOLERANCE = 1000;
-    private static final int RADIUS  = 8;
+    private static final int RADIUS  = 16;
     private final World world;
 
 
