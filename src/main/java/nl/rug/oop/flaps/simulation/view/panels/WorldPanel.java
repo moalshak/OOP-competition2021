@@ -2,6 +2,7 @@ package nl.rug.oop.flaps.simulation.view.panels;
 
 import lombok.Getter;
 import lombok.extern.java.Log;
+import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.FuelConfigPanel;
 import nl.rug.oop.flaps.simulation.controller.AirportSelectionController;
 import nl.rug.oop.flaps.simulation.controller.SpeedRateUp;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
@@ -73,10 +74,14 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
      * */
     private JPanel speedControlPanel() {
         JPanel temp = new JPanel();
-        temp.setLayout(new GridLayout(1,1));
+        GridBagConstraints c = new GridBagConstraints();
+        FuelConfigPanel.setLayoutOfDisplayPanel(temp, c);
         temp.add(new JLabel("Speed Rate : "));
+
         speedUpRate.setModel(new SpinnerNumberModel(1.0, 0.5, 4, 0.5));
         speedUpRate.addChangeListener(new SpeedRateUp(this));
+        c.ipadx = 5;
+        c.gridx = 1;
         temp.add(speedUpRate);
         return temp;
     }
