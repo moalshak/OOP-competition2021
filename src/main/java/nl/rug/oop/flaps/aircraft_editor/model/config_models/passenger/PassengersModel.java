@@ -55,17 +55,12 @@ public class PassengersModel {
         crewOnBoard = selectionModel.getSelectedAircraft().getCrewOnBoard();
 
         if (selectionModel.getSelectedAircraft().getTicketAdults() == 0) {
-            ticketAdults = (int) (Math.random()*(900-300+1)+300);
-            ticketKids12 = (int) (Math.random()*(300-200+1)+200);
-            ticketKids = (int) (Math.random()*(200-50+1)+50);
-            selectionModel.getSelectedAircraft().setTicketAdults(ticketAdults);
-            selectionModel.getSelectedAircraft().setTicketKids12(ticketKids12);
-            selectionModel.getSelectedAircraft().setTicketKids(ticketKids);
-        } else {
-            ticketAdults = selectionModel.getSelectedAircraft().getTicketAdults();
-            ticketKids12 = selectionModel.getSelectedAircraft().getTicketKids12();
-            ticketKids = selectionModel.getSelectedAircraft().getTicketKids();
+            selectionModel.getSelectedAircraft().generateTickets();
+            selectionModel.getSelectedAircraft().addCrewOnBoard(selectionModel.getSelectedAircraft().getType());
         }
+        ticketAdults = selectionModel.getSelectedAircraft().getTicketAdults();
+        ticketKids12 = selectionModel.getSelectedAircraft().getTicketKids12();
+        ticketKids = selectionModel.getSelectedAircraft().getTicketKids();
     }
 
     /**
@@ -124,6 +119,7 @@ public class PassengersModel {
         trip.getAircraft().setTicketAdults(0);
         trip.getAircraft().setTicketKids12(0);
         trip.getAircraft().setTicketKids(0);
+        trip.getAircraft().setCrewOnBoard(0);
     }
 
     /**

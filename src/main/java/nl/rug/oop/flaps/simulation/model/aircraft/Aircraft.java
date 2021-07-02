@@ -81,9 +81,23 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
         passengers.put("adults", 0);
         passengers.put("kidsTo12", 0);
         passengers.put("kidsUnder12", 0);
+        ticketAdults = ticketKids12 = ticketKids = 0;
+        crewOnBoard = 0;
+    }
 
-        AircraftType type = this.getType();
+    /**
+     * generates prices for the tickets
+     * */
+    public void generateTickets() {
+        ticketAdults = (int) (Math.random()*(900-300+1)+300);
+        ticketKids12 = (int) (Math.random()*(300-200+1)+200);
+        ticketKids = (int) (Math.random()*(200-50+1)+50);
+    }
 
+    /**
+     * adds random number of crew with respect to nr of seats
+     * */
+    public void addCrewOnBoard(AircraftType type) {
         switch (type.getName()) {
             case "Boeing 737-800BCF Freighter":
                 crewOnBoard = (int) (Math.random() * (5 - 2 + 1) + 2);
@@ -95,10 +109,6 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
                 crewOnBoard = (int) (Math.random() * (10 - 2 + 1) + 2);
                 break;
         }
-
-        ticketAdults = 0;
-        ticketKids12 = 0;
-        ticketKids = 0;
     }
 
     /**
