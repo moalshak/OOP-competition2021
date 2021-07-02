@@ -22,6 +22,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +40,6 @@ public class Trip {
     private final String flightsId;
     private Image bannerInAir;
     private BufferedImage icon;
-    private final ConcurrentHashMap<String, Boolean> directions;
 
     private final Airport originAirport;
     private final Airport destAirport;
@@ -71,7 +71,7 @@ public class Trip {
         destinationAirportLocation = getAirportAsPoint(destAirport);
         this.fuelTankFillStatuses = new HashMap<>(aircraft.getFuelTankFillStatuses());
         this.flightsId = generateId();
-        directions = new ConcurrentHashMap<>();
+
         setBannerImage();
         WorldPanel.getWorldPanel().addTrip(this);
 
@@ -84,12 +84,22 @@ public class Trip {
      * */
     @SneakyThrows
     private void rotateCw() {
-        icon = ImageIO.read(Path.of("data/flying_airplanes/flying_airplane_u.png").toFile());
-        rotationAngle = Math.toRadians(Math.toDegrees(Math.atan2( (destinationAirportLocation.y-originAirportLocation.y),
-                (destinationAirportLocation.x - originAirportLocation.x) )) + 90 );
-        AffineTransform tr = AffineTransform.getRotateInstance(rotationAngle, (double) icon.getWidth()/2, (double) icon.getHeight()/2);
-        AffineTransformOp op = new AffineTransformOp(tr, AffineTransformOp.TYPE_BILINEAR);
-        icon = op.filter(icon, null);
+        double newAngle = calcRotationAngle();
+        if(newAngle != rotationAngle) {
+            rotationAngle = newAngle;
+            icon = ImageIO.read(Path.of("data/flying_airplanes/flying_airplane_u.png").toFile());
+            AffineTransform tr = AffineTransform.getRotateInstance(rotationAngle, (double) icon.getWidth()/2, (double) icon.getHeight()/2);
+            AffineTransformOp op = new AffineTransformOp(tr, AffineTransformOp.TYPE_BILINEAR);
+            icon = op.filter(icon, null);
+        }
+    }
+
+    /**
+     * calculates the rotation angle required from current position
+     * */
+    private double calcRotationAngle() {
+        return Math.toRadians(Math.toDegrees(Math.atan2( (destinationAirportLocation.y-currentPosition.y),
+                (destinationAirportLocation.x - currentPosition.x) )) + 90 );
     }
 
     /**
@@ -108,34 +118,22 @@ public class Trip {
     public void cruise () {
         // update position
         double xDistance = currentPosition.x;
-
-        resetDirections();
-
         if (currentPosition.x < destinationAirportLocation.x) {
             xDistance += VELOCITY;
-            directions.put("right", true);
         } else if (currentPosition.x > destinationAirportLocation.x) {
             xDistance -= VELOCITY;
-            directions.put("left", true);
         }
-
-        double oldY = currentPosition.y;
-
         currentPosition.setLocation(xDistance, y(xDistance));
 
-        double newY = currentPosition.y;
-
-        if (oldY < newY) {
-            directions.put("down", true);
-        } else if (oldY > newY) {
-            directions.put("up", true);
-        }
         // update of checked destination (trip arrived when in range of the airport )
         reachedDestination = (int) currentPosition.distance(destinationAirportLocation) < icon.getWidth(null)/6;
         GeographicCoordinates end = getGeoPosition(currentPosition);
         setDistanceLeft(end);
         removedAndUpdateFuel(end);
+
         // repaint
+        rotateCw();
+
         WorldPanel.getWorldPanel().repaint();
 
         if(reachedDestination) aircraftArrived();
@@ -147,16 +145,6 @@ public class Trip {
      * */
     private double y (double x) {
         return slope * x + beginNumber;
-    }
-
-    /**
-     * resets the directions {@link #directions}
-     * */
-    private void resetDirections() {
-        directions.put("left", false);
-        directions.put("right", false);
-        directions.put("up", false);
-        directions.put("down", false);
     }
 
     /**
