@@ -30,8 +30,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 public class Trip {
     private static final double INDICATOR_SIZE = 8;
-    private final Point2D originAirportLocation;
-    private final Point2D destinationAirportLocation;
+    private final Point2D.Double originAirportLocation;
+    private final Point2D.Double destinationAirportLocation;
     @Getter
     private final static int revenue = (int) InfoPanelModel.getInfoPanelModel().getRevenue();
 
@@ -39,17 +39,16 @@ public class Trip {
     private Image bannerInAir;
     private BufferedImage icon;
     private final ConcurrentHashMap<String, Boolean> directions;
-    private final ConcurrentHashMap<Double, Double> steps;
 
     private final Airport originAirport;
     private final Airport destAirport;
 
     private final Aircraft aircraft;
-    private final Point2D currentPosition;
+    private final Point2D.Double currentPosition;
     boolean reachedDestination = false;
 
     private final WorldSelectionModel sm;
-    private static final double VELOCITY = 0.5;
+    private static final double VELOCITY = 0.3;
 
     private String distanceLeft;
 
@@ -71,7 +70,6 @@ public class Trip {
         destinationAirportLocation = getAirportAsPoint(destAirport);
         this.fuelTankFillStatuses = new HashMap<>(aircraft.getFuelTankFillStatuses());
         this.flightsId = generateId();
-        steps = new ConcurrentHashMap<>();
         directions = new ConcurrentHashMap<>();
         setBannerImage();
         WorldPanel.getWorldPanel().addTrip(this);
@@ -86,9 +84,8 @@ public class Trip {
     @SneakyThrows
     private void rotateCw() {
         icon = ImageIO.read(Path.of("data/flying_airplanes/flying_airplane_u.png").toFile());
-        //scaleImage();
-        rotationAngle = Math.toRadians(Math.toDegrees(Math.atan2( (destinationAirportLocation.getY()-originAirportLocation.getY()),
-                (destinationAirportLocation.getX() - originAirportLocation.getX()) )) + 90 );
+        rotationAngle = Math.toRadians(Math.toDegrees(Math.atan2( (destinationAirportLocation.y-originAirportLocation.y),
+                (destinationAirportLocation.x - originAirportLocation.x) )) + 90 );
         AffineTransform tr = AffineTransform.getRotateInstance(rotationAngle, (double) icon.getWidth()/2, (double) icon.getHeight()/2);
         AffineTransformOp op = new AffineTransformOp(tr, AffineTransformOp.TYPE_BILINEAR);
         icon = op.filter(icon, null);
@@ -98,9 +95,9 @@ public class Trip {
      * calculates the formula of the line crossing both origin and destination airport points
      * */
     private void calcLineEquation() {
-        slope = ( (destinationAirportLocation.getY() - originAirportLocation.getY()) /
-                (destinationAirportLocation.getX()-originAirportLocation.getX()));
-        beginNumber = ( destinationAirportLocation.getY() - (slope * destinationAirportLocation.getX()));
+        slope = ( (destinationAirportLocation.y - originAirportLocation.y) /
+                (destinationAirportLocation.x-originAirportLocation.x));
+        beginNumber = ( destinationAirportLocation.y - (slope * destinationAirportLocation.x));
     }
 
     /**
@@ -108,32 +105,29 @@ public class Trip {
      * */
     public void cruise () {
         // update position
-        double xDistance = currentPosition.getX();
+        double xDistance = currentPosition.x;
 
         resetDirections();
 
-        if (currentPosition.getX() < destinationAirportLocation.getX()) {
+        if (currentPosition.x < destinationAirportLocation.x) {
             xDistance += VELOCITY;
             directions.put("right", true);
-        } else if (currentPosition.getX() > destinationAirportLocation.getX()) {
+        } else if (currentPosition.x > destinationAirportLocation.x) {
             xDistance -= VELOCITY;
             directions.put("left", true);
         }
 
-        double oldY = currentPosition.getY();
+        double oldY = currentPosition.y;
 
         currentPosition.setLocation(xDistance, y(xDistance));
 
-        double newY = currentPosition.getY();
+        double newY = currentPosition.y;
 
         if (oldY < newY) {
             directions.put("down", true);
         } else if (oldY > newY) {
             directions.put("up", true);
         }
-
-        steps.put(currentPosition.getX(), currentPosition.getY());
-
         // update of checked destination (trip arrived when in range of the airport )
         reachedDestination = (int) currentPosition.distance(destinationAirportLocation) < icon.getWidth(null)/6;
         GeographicCoordinates end = getGeoPosition(currentPosition);
@@ -202,7 +196,7 @@ public class Trip {
                 originAirport.getGeographicCoordinates().distanceTo(destAirport.getGeographicCoordinates())));
 
         stringBuilder.append("Progress: 🏢");
-        stringBuilder.append("-".repeat(Math.max(0,percentage)));
+        stringBuilder.append("-".repeat(Math.max(0,percentage-1)));
         if (percentage > 0) {
             stringBuilder.append("✈");
         }
@@ -233,9 +227,9 @@ public class Trip {
     /**
      * @return the the geo position of a point drawn on the world map
      * */
-    public GeographicCoordinates getGeoPosition(Point2D currentPosition) {
+    public GeographicCoordinates getGeoPosition(Point2D.Double currentPosition) {
         var geo = ProjectionMapping.worldToMercator(World.getStaticDimensions()).
-                map(PointProvider.ofPoint(new Point2D.Double(currentPosition.getX(), currentPosition.getY())));
+                map(PointProvider.ofPoint(currentPosition));
         return new GeographicCoordinates(geo.getPointX(),geo.getPointY());
     }
 
@@ -276,8 +270,9 @@ public class Trip {
      * @param airport the airport to map on the world map
      * @return the airport as a 2D point mapped on the world map
      * */
-    private Point2D getAirportAsPoint(Airport airport) {
-        return ProjectionMapping.mercatorToWorld(World.getStaticDimensions())
-                .map(airport.getGeographicCoordinates()).asPoint();
+    private Point2D.Double getAirportAsPoint(Airport airport) {
+        var point =  ProjectionMapping.mercatorToWorld(World.getStaticDimensions())
+                .map(airport.getLocation());
+        return new Point2D.Double(point.getPointX(), point.getPointY());
     }
 }
