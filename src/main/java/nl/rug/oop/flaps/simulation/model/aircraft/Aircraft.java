@@ -87,18 +87,37 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
         AircraftType type = this.getType();
         geoEnt = new Point2D.Double();
 
-        if(type.getName().equals("Boeing 747-400F")) {
-            geoEnt.setLocation(4, 18);
-            nrOfSeats = 366;
-            crewOnBoard = (int)(Math.random()*(10-2+1)+2);
-        } else if (type.getName().equals("Boeing 737-800BCF Freighter")) {
-            geoEnt.setLocation(3, 10);
-            nrOfSeats = 120;
-            crewOnBoard = (int)(Math.random()*(5-2+1)+2);
-        } else {
-            geoEnt.setLocation(0.5, 2.1);
-            nrOfSeats = 9;
-            crewOnBoard = 2;
+        switch (type.getName()) {
+            case "Boeing 747-400F":
+                geoEnt.setLocation(4, 18);
+                nrOfSeats = 366;
+                crewOnBoard = (int) (Math.random() * (10 - 2 + 1) + 2);
+                break;
+            case "Boeing 737-800BCF Freighter":
+                geoEnt.setLocation(3, 10);
+                nrOfSeats = 120;
+                crewOnBoard = (int) (Math.random() * (5 - 2 + 1) + 2);
+                break;
+            case "Boeing 767-300F":
+                geoEnt.setLocation(3, 12);
+                nrOfSeats = 351;
+                crewOnBoard = (int) (Math.random() * (10 - 2 + 1) + 2);
+                break;
+            case "Lockheed C-5 Galaxy":
+                geoEnt.setLocation(3, 10);
+                nrOfSeats = 270;
+                crewOnBoard = (int) (Math.random() * (10 - 2 + 1) + 2);
+                break;
+            case "Airbus A330-200F":
+                geoEnt.setLocation(3, 13.5);
+                nrOfSeats = 406;
+                crewOnBoard = (int) (Math.random() * (10 - 2 + 1) + 2);
+                break;
+            default:
+                geoEnt.setLocation(0.5, 2.1);
+                nrOfSeats = 9;
+                crewOnBoard = 2;
+                break;
         }
     }
 
