@@ -97,7 +97,8 @@ public class Trip {
      * */
     private void calcLineEquation() {
         slope = ( (destinationAirportLocation.y - originAirportLocation.y) /
-                (destinationAirportLocation.x-originAirportLocation.x));
+                  (destinationAirportLocation.x - originAirportLocation.x)
+                );
         beginNumber = ( destinationAirportLocation.y - (slope * destinationAirportLocation.x));
     }
 
@@ -197,11 +198,11 @@ public class Trip {
                 originAirport.getGeographicCoordinates().distanceTo(destAirport.getGeographicCoordinates())));
 
         stringBuilder.append("Progress: 🏢");
-        stringBuilder.append("-".repeat(Math.max(0,percentage-1)));
+        stringBuilder.append("-".repeat(Math.max(0,percentage - 1)));
         if (percentage > 0) {
             stringBuilder.append("✈");
         }
-        stringBuilder.append("-".repeat(Math.max(0, 50 - percentage)));
+        stringBuilder.append("-".repeat(Math.max(0, 50 - percentage - 1)));
         stringBuilder.append("📌");
 
         if(reachedDestination) stringBuilder.append("   Arrived 🛬 ✅");

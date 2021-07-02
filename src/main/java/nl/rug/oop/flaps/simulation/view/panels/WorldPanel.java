@@ -99,12 +99,9 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
                 s *= 1.5;
                 paintSteps(g, trip);
             }
-            AffineTransform t = new AffineTransform();
-            double x = trip.getCurrentPosition().getX() - s;
-            double y = trip.getCurrentPosition().getY() - s;
-            t.translate(x, y);
-            t.scale(1,1);
-            g.drawImage(icon,t, null);
+            int x = (int) (trip.getCurrentPosition().getX() - s);
+            int y = (int) (trip.getCurrentPosition().getY() - s);
+            g.drawImage(icon,x,y, null);
         } else {
             drawDots(g, trip, sm);
         }

@@ -31,8 +31,6 @@ public class EditorFrame extends JFrame {
         super("Aircraft Editor");
         this.aircraft = aircraft;
 
-        System.out.println(aircraft.getType().getEntranceLocation().getX() + " " + aircraft.getType().getEntranceLocation().getY());
-
         /* if destination is not reachable with even full tanks. The user is asked if they want to configure it anyways*/
         if(!IsDestinationReachable.isDestinationReachable(aircraft, selectionModel)) {
             NotReachable choice = new NotReachable();
