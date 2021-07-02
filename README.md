@@ -69,7 +69,7 @@ We went for a slick design and decided to show the user the reason for no being 
   Of course the sum of theses tickets is added to the profit and the weight of the passengers.
    
 * ### DLC
-   Added the DLC aircraft with passenger functionality and also the airports.
+   Added the DLC airports and aircrafts with passenger functionality.
   
  <a name = "manager">
    
