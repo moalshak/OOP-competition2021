@@ -15,6 +15,7 @@
   * [Quick Info](#quick-info)
 - [Improvments](#upgrades-and-updates)
   * [Adding passengers on board](#passengers)
+  * [DLC](#dlc)
   * [Perfect un/re do](#manager)
 
 <a name = "mainupgrades">
@@ -66,7 +67,10 @@ We went for a slick design and decided to show the user the reason for no being 
   <br> ![Passengers](images/readme/PassengersChosen.PNG)<br>
   What I added is that the passengers from each category now get a randomized price for the ticket. Adults always have to pay more than 12+ and the latter more than 12-.
   Of course the sum of theses tickets is added to the profit and the weight of the passengers.
-
+   
+* ### DLC
+   Added the DLC aircraft with passenger functionality and also the airports.
+  
  <a name = "manager">
    
 * ### Undo/Redo manager
