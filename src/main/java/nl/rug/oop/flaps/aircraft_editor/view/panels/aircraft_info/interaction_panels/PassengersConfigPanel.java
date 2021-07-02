@@ -121,13 +121,13 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
             kidsUnder12 = new JSpinner();
         }
 
-        passengerInteraction.add(new JLabel("<html><h1>Adults: € ( "+ PassengersModel.getTicketAdults()+ ")</h1></html>"));
+        passengerInteraction.add(new JLabel("<html><h1>Adults:  ( € "+ PassengersModel.getTicketAdults()+ ")</h1></html>"));
         passengerInteraction.add(adults);
 
-        passengerInteraction.add(new JLabel("<html><h1>Kids older than 12: € ( "+ PassengersModel.getTicketKids12()+ ")</h1></html>"));
+        passengerInteraction.add(new JLabel("<html><h1>Kids older than 12:  ( € "+ PassengersModel.getTicketKids12()+ ")</h1></html>"));
         passengerInteraction.add(kidsTo12);
 
-        passengerInteraction.add(new JLabel("<html><h1>Kids younger than 12: € ( "+ PassengersModel.getTicketKids()+ ")</h1></html>"));
+        passengerInteraction.add(new JLabel("<html><h1>Kids younger than 12:  ( € "+ PassengersModel.getTicketKids()+ ")</h1></html>"));
         passengerInteraction.add(kidsUnder12);
 
         adults.setModel(adultNumberModel);

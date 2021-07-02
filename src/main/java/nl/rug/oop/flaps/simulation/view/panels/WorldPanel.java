@@ -85,19 +85,21 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
      * paints the trips on the world map
      * */
     private void paintTrips(Graphics2D g, Trip trip) {
-        double s;
-        s = 20;
         var sm = this.world.getSelectionModel();
         if (trip.getIcon() != null) {
             BufferedImage icon = trip.getIcon();
+            double s = icon.getWidth() / 2.0;
             if (sm.getSelectedTrip() != null && sm.getSelectedTrip().equals(trip)) {
                 icon = upscaleIcon(icon);
                 s *= 1.5;
                 paintSteps(g, trip);
             }
-            int x = (int) (trip.getCurrentPosition().getX() - s / 2);
-            int y = (int) (trip.getCurrentPosition().getY() - s / 2);
-            g.drawImage(icon,x,y, null);
+            AffineTransform t = new AffineTransform();
+            double x = trip.getCurrentPosition().getX() - s;
+            double y = trip.getCurrentPosition().getY() - s;
+            t.translate(x, y);
+            t.scale(1,1);
+            g.drawImage(icon,t, null);
         } else {
             drawDots(g, trip, sm);
         }
@@ -137,14 +139,12 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
      * paints the steps of the aircraft
      * */
     private void paintSteps(Graphics2D g, Trip trip) {
-        var steps = trip.getSteps();
+        var start = ProjectionMapping.mercatorToWorld(this.world.getDimensions())
+                .map(trip.getOriginAirport().getLocation());
+        var end = trip.getCurrentPosition();
         g.setColor(Color.CYAN);
-        double s = INDICATOR_SIZE;
-        s /= 3;
-        for(Double step : steps.keySet()) {
-            Shape marker = new Ellipse2D.Double(step - s/2, steps.get(step)- s/2, s,s);
-            g.fill(marker);
-        }
+        Line2D.Double line = new Line2D.Double(start.getPointX(), start.getPointY(), end.x, end.y);
+        g.draw(line);
     }
 
     private void drawAirportIndicator(Graphics2D g, Airport airport) {
