@@ -170,7 +170,6 @@ public class Trip {
     private void setBannerImage() {
         String aircraftType = aircraft.getType().getName();
         int nr = (int) (Math.random() * (4 - 1 + 1) + 1);
-
         switch (aircraftType) {
             case "Boeing 747-400F":
                 bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/747", "clouds747_" + nr + ".jpg").toFile());
@@ -182,10 +181,10 @@ public class Trip {
                 bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/767", "clouds767_" + nr + ".jpg").toFile());
                 break;
             case "Lockheed C-5 Galaxy":
-                bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/C5_galaxy", "cloudsC5galaxy.jpg").toFile());
+                bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/C5_galaxy", "cloudsC5galaxy_" + nr + ".jpg").toFile());
                 break;
             case "Airbus A330-200F":
-                bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/a330", "cloudsA330.jpg").toFile());
+                bannerInAir = ImageIO.read(Path.of("data/aircraft_types/jets/a330", "cloudsA330_" + nr + ".jpg").toFile());
                 break;
             default:
                 bannerInAir = ImageIO.read(Path.of("data/aircraft_types/general_aviation/grand_caravan", "cloudsGrandCarvan.jpg").toFile());
