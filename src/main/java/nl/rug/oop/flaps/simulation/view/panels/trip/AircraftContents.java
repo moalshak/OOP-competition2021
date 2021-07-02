@@ -1,6 +1,5 @@
 package nl.rug.oop.flaps.simulation.view.panels.trip;
 
-import nl.rug.oop.flaps.aircraft_editor.model.config_models.passenger.PassengersModel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoUnit;

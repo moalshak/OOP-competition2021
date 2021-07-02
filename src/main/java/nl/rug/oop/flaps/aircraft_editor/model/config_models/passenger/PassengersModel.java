@@ -7,7 +7,6 @@ import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_pa
 import nl.rug.oop.flaps.simulation.model.trips.Trip;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 
-import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;

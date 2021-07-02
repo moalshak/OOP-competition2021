@@ -1,7 +1,6 @@
 package nl.rug.oop.flaps.simulation.model.trips;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.model.config_models.InfoPanelModel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.InteractionPanel;
@@ -22,12 +21,10 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 public class Trip {
