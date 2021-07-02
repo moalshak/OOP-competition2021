@@ -52,9 +52,9 @@ public class AircraftContents extends JPanel {
     private JTable makePassengersTable(DefaultTableCellRenderer centerRenderer) {
         String[] colNames1 = {"Adults", "Kids 12+", "Kids Under 12", "Crew"};
         Object[][] data1 = {
-                {aircraft.getPassengers().get("adults") + " on board || Ticket: € " + PassengersModel.getTicketAdults(),
-                        aircraft.getPassengers().get("kidsTo12") + " on board || Ticket: € " + PassengersModel.getTicketKids12(),
-                        aircraft.getPassengers().get("kidsUnder12")+ " on board || Ticket: € " + PassengersModel.getTicketKids(),
+                {aircraft.getPassengers().get("adults") + " on board || Ticket: € " + aircraft.getTicketAdults(),
+                        aircraft.getPassengers().get("kidsTo12") + " on board || Ticket: € " + aircraft.getTicketKids12(),
+                        aircraft.getPassengers().get("kidsUnder12")+ " on board || Ticket: € " + aircraft.getTicketKids(),
                         aircraft.getCrewOnBoard() + " on board exc. (co-)pilot"
                 }
         };

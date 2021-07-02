@@ -1,6 +1,7 @@
 package nl.rug.oop.flaps.simulation.model.trips;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.model.config_models.InfoPanelModel;
 import nl.rug.oop.flaps.aircraft_editor.view.panels.aircraft_info.interaction_panels.InteractionPanel;

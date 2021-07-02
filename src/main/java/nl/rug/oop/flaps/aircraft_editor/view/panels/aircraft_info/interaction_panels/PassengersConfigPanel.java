@@ -72,9 +72,9 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
         this.displayPanel.add(passengerInteraction, BorderLayout.CENTER);
         this.displayPanel.add(new JLabel("<html><h1> Adding passengers aboard </h1></html>"), BorderLayout.NORTH);
 
-        adultNumberModel = new SpinnerNumberModel(0, 0, bluePrintModel.getAircraft().getNrOfSeats(), 1);
-        to12NumberModel = new SpinnerNumberModel(0, 0, bluePrintModel.getAircraft().getNrOfSeats(), 1);
-        under12NumberModel = new SpinnerNumberModel(0, 0, bluePrintModel.getAircraft().getNrOfSeats(), 1);
+        adultNumberModel = new SpinnerNumberModel(0, 0, bluePrintModel.getAircraft().getType().getNrOfSeats(), 1);
+        to12NumberModel = new SpinnerNumberModel(0, 0, bluePrintModel.getAircraft().getType().getNrOfSeats(), 1);
+        under12NumberModel = new SpinnerNumberModel(0, 0, bluePrintModel.getAircraft().getType().getNrOfSeats(), 1);
 
         initModels();
         intiLabels();
@@ -121,13 +121,13 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
             kidsUnder12 = new JSpinner();
         }
 
-        passengerInteraction.add(new JLabel("<html><h1>Adults:  ( € "+ PassengersModel.getTicketAdults()+ ")</h1></html>"));
+        passengerInteraction.add(new JLabel("<html><h1>Adults:  ( € "+ model.getTicketAdults()+ ")</h1></html>"));
         passengerInteraction.add(adults);
 
-        passengerInteraction.add(new JLabel("<html><h1>Kids older than 12:  ( € "+ PassengersModel.getTicketKids12()+ ")</h1></html>"));
+        passengerInteraction.add(new JLabel("<html><h1>Kids older than 12:  ( € "+ model.getTicketKids12()+ ")</h1></html>"));
         passengerInteraction.add(kidsTo12);
 
-        passengerInteraction.add(new JLabel("<html><h1>Kids younger than 12:  ( € "+ PassengersModel.getTicketKids()+ ")</h1></html>"));
+        passengerInteraction.add(new JLabel("<html><h1>Kids younger than 12:  ( € "+ model.getTicketKids()+ ")</h1></html>"));
         passengerInteraction.add(kidsUnder12);
 
         adults.setModel(adultNumberModel);
@@ -152,11 +152,11 @@ public class PassengersConfigPanel implements InfoPanelModelListener, Passengers
      * */
     public void updatePassengerLabel() {
         model.updatePassengersSum();
-        int remainingSeats = (bluePrintModel.getAircraft().getNrOfSeats() - model.getPassengersSum());
+        int remainingSeats = (bluePrintModel.getAircraft().getType().getNrOfSeats() - model.getPassengersSum());
 
         nrPassengersLabel.setText("<html><h1>Number of seats occupied: " + model.getPassengersSum() +" </h1></html>");
         nrPassengersLabel.updateUI();
-        seatsLabel.setText("<html><h3>Max number of seats: " + bluePrintModel.getAircraft().getNrOfSeats() + " || \t Free seats: " + remainingSeats +" </h3></html>");
+        seatsLabel.setText("<html><h3>Max number of seats: " + bluePrintModel.getAircraft().getType().getNrOfSeats() + " || \t Free seats: " + remainingSeats +" </h3></html>");
         seatsLabel.updateUI();
 
         if(remainingSeats >= 0) {

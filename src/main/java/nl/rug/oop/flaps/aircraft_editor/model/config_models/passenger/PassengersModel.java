@@ -23,11 +23,11 @@ public class PassengersModel {
     private final static int avgKidTo12Weight = 42;
     private final static int avgKidUnder12Weight = 22;
     @Getter
-    private final static int ticketAdults = (int) (Math.random()*(900-300+1)+300);
+    private int ticketAdults;
     @Getter
-    private final static int ticketKids12 = (int) (Math.random()*(300-200+1)+200);
+    private int ticketKids12;
     @Getter
-    private final static int ticketKids = (int) (Math.random()*(200-50+1)+50);
+    private int ticketKids;
 
     @Setter
     private PassengersConfigPanel panel;
@@ -40,7 +40,6 @@ public class PassengersModel {
     @Getter @Setter
     private int passengersSum;
 
-    private final Point2D entrance = new Point2D.Double();
     @Getter
     private static int nrOfSeats;
 
@@ -52,8 +51,21 @@ public class PassengersModel {
     public PassengersModel(WorldSelectionModel selectionModel) {
         this.selectionModel = selectionModel;
         passengers = selectionModel.getSelectedAircraft().getPassengers();
-        nrOfSeats = selectionModel.getSelectedAircraft().getNrOfSeats();
+        nrOfSeats = selectionModel.getSelectedAircraft().getType().getNrOfSeats();
         crewOnBoard = selectionModel.getSelectedAircraft().getCrewOnBoard();
+
+        if (selectionModel.getSelectedAircraft().getTicketAdults() == 0) {
+            ticketAdults = (int) (Math.random()*(900-300+1)+300);
+            ticketKids12 = (int) (Math.random()*(300-200+1)+200);
+            ticketKids = (int) (Math.random()*(200-50+1)+50);
+            selectionModel.getSelectedAircraft().setTicketAdults(ticketAdults);
+            selectionModel.getSelectedAircraft().setTicketKids12(ticketKids12);
+            selectionModel.getSelectedAircraft().setTicketKids(ticketKids);
+        } else {
+            ticketAdults = selectionModel.getSelectedAircraft().getTicketAdults();
+            ticketKids12 = selectionModel.getSelectedAircraft().getTicketKids12();
+            ticketKids = selectionModel.getSelectedAircraft().getTicketKids();
+        }
     }
 
     /**
@@ -109,6 +121,9 @@ public class PassengersModel {
         passengers.put("kidsUnder12", 0);
         trip.getAircraft().setPassengers(passengers);
         trip.getAircraft().setCrewOnBoard(crewOnBoard);
+        trip.getAircraft().setTicketAdults(0);
+        trip.getAircraft().setTicketKids12(0);
+        trip.getAircraft().setTicketKids(0);
     }
 
     /**

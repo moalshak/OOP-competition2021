@@ -15,8 +15,10 @@ public class IsDestinationReachable {
      * @return boolean ( the destination is reachable or not )
      * */
     public static boolean isDestinationReachable(Aircraft aircraft, WorldSelectionModel model) {
-        var distance = model.getSelectedAirport().getLocation().distanceTo(
-                model.getSelectedDestinationAirport().getLocation());
-        return (distance/1000) < aircraft.getType().getRange();
+        double maxCapacity = 0.0;
+        for(FuelTank tank : aircraft.getType().getFuelTanks()) {
+            maxCapacity += tank.getCapacity();
+        }
+        return (maxCapacity > aircraft.getFuelConsumption(model.getSelectedAirport(), model.getSelectedDestinationAirport()));
     }
 }

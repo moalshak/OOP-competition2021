@@ -11,6 +11,12 @@ emptyCgX: 0
 emptyCgY: 4
 cgTolerance: 0.75
 
+entranceLocation:
+  x: 0.5
+  y: 2.1
+
+nrOfSeats: 9
+
 cargoAreas:
   - name: Central Aft Compartment
     maxSize: 2.5

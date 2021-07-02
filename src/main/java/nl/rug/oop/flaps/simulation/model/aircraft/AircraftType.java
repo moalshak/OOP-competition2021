@@ -30,6 +30,16 @@ public class AircraftType implements Comparable<AircraftType> {
     private String description;
 
     /**
+     * the entrance location of the aircraft's type
+     * */
+    private Entrance entranceLocation;
+
+    /**
+     * number of seats in an aircraft type
+     * */
+    private int nrOfSeats;
+
+    /**
      * The weight of this aircraft, in Kg, when empty (no fuel or cargo).
      */
     private double emptyWeight;

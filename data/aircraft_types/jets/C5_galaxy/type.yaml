@@ -13,6 +13,12 @@ cgTolerance: 0.33
 fuelConsumption: 10743
 fuelTypeName: Jet A-1
 
+entranceLocation:
+  x: 3
+  y: 10
+
+nrOfSeats: 73
+
 cargoAreas:
   - name: Front Cargo Area
     maxSize: 20

@@ -29,26 +29,21 @@ import java.util.List;
  * </ol>
  *
  * */
-@Getter @Log
+@Getter @Setter @Log
 public class InfoPanelModel  {
     private final Aircraft aircraft;
     private final WorldSelectionModel selectionModel;
     private final Airport originAirport;
     private final Airport destinationAirport;
 
-    @Setter
+
     private double aircraftRange;
     @Getter @Setter
     private static Point2D centerOfGravity;
-    @Setter
     private double profitEstimation;
-    @Setter
     private double cost;
-    @Setter
     private double Revenue;
-    @Setter
     private double aircraftWeight;
-    @Setter
     private double tripDistance;
     @Getter
     private static List<InfoPanelModelListener> listeners;

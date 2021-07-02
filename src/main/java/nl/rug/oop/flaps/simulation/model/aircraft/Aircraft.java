@@ -7,8 +7,6 @@ import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoUnit;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 import nl.rug.oop.flaps.simulation.model.world.World;
-
-import java.awt.geom.Point2D;
 import java.util.*;
 
 /**
@@ -50,7 +48,12 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
      * */
     @Setter
     private HashMap<String, Integer> passengers;
-
+    @Setter
+    private int ticketAdults;
+    @Setter
+    private int ticketKids12;
+    @Setter
+    private int ticketKids;
     /**
      * number of crew on board
      * */
@@ -58,11 +61,6 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
     private int crewOnBoard;
     @Setter
     private int passengersWeight;
-    private int nrOfSeats;
-    /**
-     * place of entrance location on blueprint
-     * */
-    private Point2D geoEnt;
     /**
      * Aircraft's own {@link EditMenu}
      * */
@@ -85,40 +83,22 @@ public class Aircraft implements Comparable<Aircraft>, Cloneable {
         passengers.put("kidsUnder12", 0);
 
         AircraftType type = this.getType();
-        geoEnt = new Point2D.Double();
 
         switch (type.getName()) {
-            case "Boeing 747-400F":
-                geoEnt.setLocation(4, 18);
-                nrOfSeats = 366;
-                crewOnBoard = (int) (Math.random() * (10 - 2 + 1) + 2);
-                break;
             case "Boeing 737-800BCF Freighter":
-                geoEnt.setLocation(3, 10);
-                nrOfSeats = 120;
                 crewOnBoard = (int) (Math.random() * (5 - 2 + 1) + 2);
                 break;
-            case "Boeing 767-300F":
-                geoEnt.setLocation(3, 12);
-                nrOfSeats = 351;
-                crewOnBoard = (int) (Math.random() * (10 - 2 + 1) + 2);
-                break;
-            case "Lockheed C-5 Galaxy":
-                geoEnt.setLocation(3, 10);
-                nrOfSeats = 270;
-                crewOnBoard = (int) (Math.random() * (10 - 2 + 1) + 2);
-                break;
-            case "Airbus A330-200F":
-                geoEnt.setLocation(3, 13.5);
-                nrOfSeats = 406;
-                crewOnBoard = (int) (Math.random() * (10 - 2 + 1) + 2);
-                break;
-            default:
-                geoEnt.setLocation(0.5, 2.1);
-                nrOfSeats = 9;
+            case "Grand Caravan 208B":
                 crewOnBoard = 2;
                 break;
+            default:
+                crewOnBoard = (int) (Math.random() * (10 - 2 + 1) + 2);
+                break;
         }
+
+        ticketAdults = 0;
+        ticketKids12 = 0;
+        ticketKids = 0;
     }
 
     /**

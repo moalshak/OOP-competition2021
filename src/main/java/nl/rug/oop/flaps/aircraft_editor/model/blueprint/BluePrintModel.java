@@ -65,7 +65,7 @@ public class BluePrintModel {
     public BluePrintModel(Aircraft aircraft, BluePrintPanel bluePrintPanel) {
         this.bluePrintPanel = bluePrintPanel;
         this.aircraft = aircraft;
-        this.passengersEntrance = aircraft.getGeoEnt();
+        //this.passengersEntrance = aircraft.getGeoEnt();
 
         listeners = new HashSet<>();
 
@@ -73,8 +73,10 @@ public class BluePrintModel {
         setBluePrintImage();
         setPoints();
         setCenterOfGravity();
-
-        this.passengersEntrance = setOnBluePrint(passengersEntrance);
+        Point2D entrance = new Point2D.Double();
+        entrance.setLocation(aircraft.getType().getEntranceLocation().getX(),
+                aircraft.getType().getEntranceLocation().getY());
+        this.passengersEntrance = setOnBluePrint(entrance);
     }
     /**
      * sets the center of gravity in the {@link GravityCenterModel}

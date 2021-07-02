@@ -50,9 +50,9 @@ public class ProfitEstimationModel implements InfoPanelModelListener {
         double cargoRevenue = aircraft.getCargoRevenue();
         int ticketsRev = 0;
         var passengers = aircraft.getPassengers();
-        ticketsRev += passengers.get("adults") * PassengersModel.getTicketAdults();
-        ticketsRev += passengers.get("kidsTo12") * PassengersModel.getTicketKids12();
-        ticketsRev += passengers.get("kidsUnder12") * PassengersModel.getTicketKids();
+        ticketsRev += passengers.get("adults") * aircraft.getTicketAdults();
+        ticketsRev += passengers.get("kidsTo12") * aircraft.getTicketKids12();
+        ticketsRev += passengers.get("kidsUnder12") * aircraft.getTicketKids();
 
         double totRev = ticketsRev + cargoRevenue;
 
