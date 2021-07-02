@@ -1,0 +1,6 @@
+name: Logan International Airport
+geographicCoordinates:
+  latitude: 42.363056
+  longitude: -71.006389
+aircraftCapacity: 12 # max planes that can be here
+description: This airport is named after General Edward Lawrence Logan, who participated in the Spanish-American war and the first world war. It is the busiest airport in the northeastern U.S. (excluding New York) with over 42 million passengers in 2019. In addition to its six land runways, the harbor to the south of the airport also contains a water runway for seaplanes.

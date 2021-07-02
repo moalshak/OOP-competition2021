@@ -1,0 +1,45 @@
+name: Boeing 767-300F
+description: This is the freighter variant of Boeing's midsize wide-body airliner; FedEx's fleet alone accounts for one sixth of all aircraft of this type in service.
+
+emptyWeight: 90010
+maxTakeoffWeight: 186900
+maxLandingWeight: 179200
+cruiseSpeed: 875
+range: 11070
+length: 54.94
+emptyCgX: 0
+emptyCgY: 22
+cgTolerance: 0.25
+fuelConsumption: 5162
+fuelTypeName: Jet A-1
+
+cargoAreas:
+  - name: Front Lower-Deck Compartment
+    maxSize: 7
+    maxWeight: 36000
+    x: 0
+    y: 9
+  - name: Aft Lower-Deck Compartment
+    maxSize: 7
+    maxWeight: 36000
+    x: 0
+    y: 43
+  - name: Upper-Deck Main Compartment
+    maxSize: 11
+    maxWeight: 95000
+    x: 0
+    y: 20
+
+fuelTanks:
+  - name: Left Wing Main Tank
+    capacity: 26514
+    x: -9
+    y: 25
+  - name: Right Wing Main Tank
+    capacity: 26514
+    x: 9
+    y: 25
+  - name: Central Tank
+    capacity: 20000
+    x: 0
+    y: 25

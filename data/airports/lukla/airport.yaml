@@ -1,0 +1,6 @@
+name: Tenzing–Hillary Airport
+geographicCoordinates:
+  latitude: 27.687778
+  longitude: 86.731389
+aircraftCapacity: 2 # max planes that can be here
+description: This small domestic airport is located among the foothills of the Himalayas, in the Solukhumbu district of Nepal. It arguably the most dangerous airport to land at in the world, with an 11.7% inclined runway of only 527 meters, with unpredictable high winds. Nepal's civil aviation authority has set special skill requirements for pilots to even attempt landing at this airport. It is named after Sir Edmund Hillary and Tenzing Norgay, the two individuals to first reach the summit of Mount Everest on 29 May, 1953.

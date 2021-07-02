@@ -1,0 +1,6 @@
+name: Keflavík International Airport
+geographicCoordinates:
+  latitude: 63.985
+  longitude: -22.605556
+aircraftCapacity: 5 # max planes that can be here
+description: Reykjavik's international airport (Keflavíkurflugvöllur in icelandic) is the largest airport in Iceland, and a major hub for international transport, especially for budget airlines' trans-atlantic routes. The airport's two 3km runways are long enough to accomodate the Space Shuttle as an emergency alternative, and even today the airport stands out as the primary emergency landing site for trans-atlantic flights. From 1951 to 2006, the U.S. military maintained a base here on behalf of a NATO-sponsored defense agreement.

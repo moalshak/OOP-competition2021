@@ -1,0 +1,45 @@
+name: Airbus A330-200F
+description: An all-cargo derivative of Airbus' popular A330-200 passenger airliner. The normal A330 has a slight nose-down tilt when on the ground, so this cargo variant has a modified nose gear attachment to facilitate easier loading.
+
+emptyWeight: 109400
+maxTakeoffWeight: 233000
+maxLandingWeight: 225000
+cruiseSpeed: 871
+range: 7400
+length: 58.82
+emptyCgX: 0
+emptyCgY: 25
+cgTolerance: 0.12
+fuelConsumption: 5590
+fuelTypeName: Jet A-1
+
+cargoAreas:
+  - name: Front Lower-Deck Compartment
+    maxSize: 12
+    maxWeight: 40000
+    x: 0
+    y: 10
+  - name: Aft Lower-Deck Compartment
+    maxSize: 12
+    maxWeight: 40000
+    x: 0
+    y: 35
+  - name: Upper-Deck Main Compartment
+    maxSize: 10
+    maxWeight: 55000
+    x: 0
+    y: 20
+
+fuelTanks:
+  - name: Left Wing Main Tank
+    capacity: 39592
+    x: -9
+    y: 28
+  - name: Right Wing Main Tank
+    capacity: 39592
+    x: 9
+    y: 28
+  - name: Central Tank
+    capacity: 30000
+    x: 0
+    y: 23

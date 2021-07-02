@@ -1,0 +1,48 @@
+name: Lockheed C-5 Galaxy
+description: The largest military aircraft in the world was developed and produced by Lockheed starting in 1968, and has since flown missions for the United States Air Force in Vietnam, Iraq, Yugoslavia, Afghanistan, and Kuwait. It was also proposed to carry the Space Shuttle, but NASA opted for a 747 instead.
+
+emptyWeight: 172365
+maxTakeoffWeight: 417305
+maxLandingWeight: 405891
+cruiseSpeed: 830
+range: 8000
+length: 75.31
+emptyCgX: 0
+emptyCgY: 31
+cgTolerance: 0.33
+fuelConsumption: 10743
+fuelTypeName: Jet A-1
+
+cargoAreas:
+  - name: Front Cargo Area
+    maxSize: 20
+    maxWeight: 150000
+    x: 0
+    y: 15
+  - name: Rear Cargo Area
+    maxSize: 20
+    maxWeight: 150000
+    x: 0
+    y: 50
+
+fuelTanks:
+  - name: Left Wing Main Tank
+    capacity: 44000
+    x: -9
+    y: 30
+  - name: Left Wing Trim Tank
+    capacity: 18827
+    x: -30
+    y: 37
+  - name: Right Wing Main Tank
+    capacity: 44000
+    x: 9
+    y: 30
+  - name: Right Wing Trim Tank
+    capacity: 18827
+    x: 30
+    y: 37
+  - name: Central Tank
+    capacity: 30000
+    x: 0
+    y: 30
