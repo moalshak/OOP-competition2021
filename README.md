@@ -22,7 +22,7 @@
 <a name = "trips">
   
 ## TRIPS
-The main focus was adding flights/trips. After pressing 'depart' a dot shows on the world map. `Green dots in the picture` <br>
+The main focus was adding flights/trips. After pressing 'depart' a dot shows on the world map. <br>
 <br> ![trips](images/readme/Trips.PNG) <br>
 
 These dots will move to the chosen destination airport. The rate of which the dots moves is chosen by the user through a 'JSpinner'.
@@ -71,7 +71,7 @@ We went for a slick design and decided to show the user the reason for no being 
 * ### DLC
    Added the DLC airports and aircrafts with passenger functionality.
   
- <a name = "manager">
+ <a name = "manager"/>
    
 * ### Undo/Redo manager
    The un/re do manager is now perfected. Previously the manager was initiated when the editor frame was opened. Now however each aircraft that gets selected gets its own
