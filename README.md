@@ -22,13 +22,13 @@
 <a name = "trips">
   
 ## TRIPS
-The main focus was adding flights/trips. After pressing 'depart' a dot shows on the world map. <br>
+The main focus was adding flights/trips. After pressing 'depart' a airplane shows on the world map. <br>
 <br> ![trips](images/readme/Trips.PNG) <br>
 
-These dots will move to the chosen destination airport. The rate of which the dots moves is chosen by the user through a 'JSpinner'.
+These airplanes will move to the chosen destination airport. The rate of which the dots moves is chosen by the user through a 'JSpinner'.
 >Each type of aircraft has its own speed or "rate" at which it moves across the map. This was decided by the help of cruise speed of the aircraft. This way the boeing 747 is faster than the 737. When adjusting the `JSpinner` the rate changes accordingly.
 
-The dots/trips are select-able. When selected, the steps taken so far are painted and the new panel is shown. This panel views real time fuel status and the progress of the
+The airplanes/trips are select-able. When selected, the steps taken so far are painted and the new panel is shown. This panel views real time fuel status and the progress of the
 trips. Of course some more info about trip itself and the content of the aircraft. In addition to a cool randomized image (dependent on type of aircraft).
   <br> ![](images/readme/TripDotChosen.PNG)<br>
 ## The trips info panel
